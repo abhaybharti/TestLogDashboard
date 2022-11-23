@@ -35,8 +35,8 @@ app.post(
   db.updateTestCaseFailureReason
 );
 app.get("/getTestHistory/:testcasename", db.getTestHistory);
-app.post("/createMaintenance:testcasename", db.createMaintenance);
-app.post("/createDefect:testcasename", db.createDefect);
+app.post("/createMaintenance", db.createMaintenance);
+app.post("/createDefect", db.createDefect);
 app.post("/updateTestCaseExecution", db.updateTestCaseExecution);
 
 app.listen(port, () => {

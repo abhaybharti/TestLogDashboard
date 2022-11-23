@@ -21,7 +21,6 @@ INSERT INTO testcase
 VALUES
 ('Chrome','UX_TestCase_Device','PASS','QE','Login failure','20',':/txt',123456);
 
-
 select \* from testcase;
 
 DROP TABLE defects;
@@ -30,7 +29,8 @@ ID SERIAL PRIMARY KEY,
 suite VARCHAR(200) NOT NULL,
 testcase VARCHAR(200),
 jirakey VARCHAR(30),
-env VARCHAR(10),
+env VARCHAR(30),
+failurereason VARCHAR(300),
 timestamp timestamp not null default current_timestamp
 );
 select \* from defects;
@@ -42,7 +42,10 @@ ID SERIAL PRIMARY KEY,
 suite VARCHAR(200) NOT NULL,
 testcase VARCHAR(200),
 env VARCHAR(10),
+failurereason VARCHAR(300),
 timestamp timestamp not null default current_timestamp
 );
 select \* from maintenance;
 insert into maintenance (suite,testcase,env) VALUES ('Touch','ABC_Test','QE');
+
+https://jasonwatmore.com/post/2020/02/01/react-fetch-http-post-request-examples

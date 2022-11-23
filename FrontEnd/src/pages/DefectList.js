@@ -3,7 +3,7 @@ import { TheList, ListItem, MyDeleteOutline } from "../styles/styled-element";
 import { DataGrid } from "@material-ui/data-grid";
 import { defectList } from "../dummyData";
 import { Link } from "react-router-dom";
-import { API_URL } from "../Utils/Config.js";
+import { BASE_API_URL } from "../Utils/Config.js";
 
 const DefectList = () => {
   const [data, setData] = useState(defectList);
@@ -11,7 +11,7 @@ const DefectList = () => {
   useEffect(() => {
     const defectList = async () => {
       try {
-        const response = await fetch(API_URL + "/getDefectList");
+        const response = await fetch(BASE_API_URL + "/getDefectList");
         const json = await response.json();
 
         setData(json);
@@ -53,7 +53,14 @@ const DefectList = () => {
         return <ListItem>{params.row.env}</ListItem>;
       },
     },
-
+    {
+      field: "failureReason",
+      headerName: "Failure Reason",
+      width: 200,
+      renderCell: (params) => {
+        return <ListItem>{params.row.failurereason}</ListItem>;
+      },
+    },
     {
       field: "Date",
       headerName: "Date",

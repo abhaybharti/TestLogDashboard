@@ -54,8 +54,7 @@ const updateTestCaseExecution = (request, response) => {
     reportpath,
     subscriptionkey,
   } = request.body;
-  console.log(suite);
-  // VALUES("Chrome", "UX_TestCase_Device", "PASS", "QE", "Login failure", "20");
+
   pool.query(
     "INSERT INTO testcase(suite, testcasename, status, env, failurereason, duration,reportpath,subscriptionkey) VALUES ($1,$2, $3, $4,$5,$6, $7, $8) Returning *",
     [
@@ -95,35 +94,37 @@ const getTestHistory = (request, response) => {
 };
 
 const createDefect = (request, response) => {
-  const { testcasename, jirakey } = request.body;
+  console.log("createDefect start");
+  const { suite, testcase, jirakey, env, failurereason } = request.body;
+
   pool.query(
-    "INSERT INTO defects (testcasename, jirakey)  VALUES ($1, $2) RETURNING *",
-    [testcasename, jirakey],
+    "INSERT INTO defects(suite, testcase, jirakey, env, failurereason) VALUES ($1,$2, $3, $4,$5) Returning *",
+    [suite, testcase, jirakey, env, failurereason],
     (error, results) => {
       if (error) {
         throw error;
       }
-      response
-        .status(201)
-        .send(`defect added with testcasename : ${results.row[0].id}`);
+      response.status(200).json(results.rows);
     }
   );
+  console.log("Inside createDefect stop");
 };
 
 const createMaintenance = (request, response) => {
-  const { testcasename } = request.body;
+  console.log("createMaintenance start", request.body);
+  const { suite, testcase, env, failurereason } = request.body;
+
   pool.query(
-    "INSERT INTO maintenance (testcasename)  VALUES ($1) RETURNING *",
-    [testcasename],
+    "INSERT INTO maintenance(suite, testcase,  env, failurereason) VALUES ($1,$2, $3, $4) Returning *",
+    [suite, testcase, env, failurereason],
     (error, results) => {
       if (error) {
         throw error;
       }
-      response
-        .status(201)
-        .send(`defect added with testcasename : ${results.row[0].id}`);
+      response.status(200).json(results.rows);
     }
   );
+  console.log("createMaintenance stop");
 };
 
 const updateTestCaseFailureReason = (request, response) => {

@@ -8,16 +8,15 @@ import {
 import { DataGrid } from "@material-ui/data-grid";
 import { productRows } from "../dummyData";
 import { Link } from "react-router-dom";
-import { API_URL } from "../Utils/Config.js";
+import { BASE_API_URL } from "../Utils/Config.js";
 
 const MaintenanceTasks = () => {
   const [data, setData] = useState(productRows);
-  const [defectItem, deleteDefect] = useState(productRows);
 
   useEffect(() => {
     const maintenanceList = async () => {
       try {
-        const response = await fetch(API_URL + "/getMaintenanceTracker");
+        const response = await fetch(BASE_API_URL + "/getMaintenanceTracker");
         const json = await response.json();
 
         setData(json);
@@ -29,7 +28,7 @@ const MaintenanceTasks = () => {
   }, []);
 
   const handleDelete = (id) => {
-    deleteDefect(data.filter((item) => item.id !== id));
+    //deleteDefect(data.filter((item) => item.id !== id));
   };
 
   const columns = [
@@ -57,6 +56,22 @@ const MaintenanceTasks = () => {
       width: 160,
       renderCell: (params) => {
         return <ListItem>{params.row.env}</ListItem>;
+      },
+    },
+    {
+      field: "failureReason",
+      headerName: "Failure Reason",
+      width: 200,
+      renderCell: (params) => {
+        return <ListItem>{params.row.failurereason}</ListItem>;
+      },
+    },
+    {
+      field: "Date",
+      headerName: "Date",
+      width: 110,
+      renderCell: (params) => {
+        return <ListItem>{params.row.timestamp.substring(0, 10)}</ListItem>;
       },
     },
     {

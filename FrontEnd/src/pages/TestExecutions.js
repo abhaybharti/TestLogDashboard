@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   TheList,
   ListItem,
   MyBugOutline,
   MyFixOutline,
   MyIntermittentOutline,
+  MyDeleteOutline,
 } from "../styles/styled-element";
 import { DataGrid } from "@material-ui/data-grid";
 import { productRows } from "../dummyData";
-
 import { Tooltip } from "@material-ui/core";
-import { API_URL } from "../Utils/Config.js";
+
+import { BASE_API_URL } from "../Utils/Config.js";
 
 const TestExecutions = () => {
   const [data, setData] = useState(productRows);
@@ -18,9 +20,9 @@ const TestExecutions = () => {
   useEffect(() => {
     const testcasedata = async () => {
       try {
-        const response = await fetch(API_URL + "/getTestCaseExecution");
+        const response = await fetch(BASE_API_URL + "/getTestCaseExecution");
         const json = await response.json();
-        console.log(json);
+
         setData(json);
       } catch (error) {
         console.log("error", error);
@@ -29,19 +31,75 @@ const TestExecutions = () => {
     testcasedata();
   }, []);
 
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+  const addToMaintenanceTracker = (suite, testCaseName, env, failureReason) => {
+    console.log(suite, testCaseName, env, failureReason);
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        suite: suite,
+        testcase: testCaseName,
+        env: env,
+        failurereason: failureReason,
+      }),
+    };
+    fetch(BASE_API_URL + "/createMaintenance", requestOptions)
+      .then((response) => response.json())
+      .then((data) => console.log("successfully added in maintenanceTracker "));
   };
 
-  const addToMaintenanceTracker = (id) => {};
-
-  const addToProductDefectTracker = (id) => {
-    //Add code to add test case in defect list
+  const addToProductDefectTracker = (
+    suite,
+    testCaseName,
+    env,
+    failureReason
+  ) => {
+    const jirakey = "XIOCloud-123";
+    console.log(
+      "suite : ",
+      suite,
+      "testcasname : ",
+      testCaseName,
+      "jirakey",
+      jirakey,
+      "env",
+      env,
+      "failureason",
+      failureReason
+    );
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        suite: suite,
+        testcase: testCaseName,
+        jirakey: jirakey,
+        env: env,
+        failurereason: failureReason,
+      }),
+    };
+    fetch(BASE_API_URL + "/createDefect", requestOptions)
+      .then((response) => response.json())
+      .then((data) => console.log("successfully added in defectList "));
   };
 
-  const intermittentFailure = (id) => {
-    //TBD
+  const intermittentFailure = (suite, testCaseName, env, failureReason) => {
+    console.log(suite, testCaseName, env, failureReason);
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        suite: suite,
+        testcase: testCaseName,
+        env: env,
+        failurereason: "Intermittent Failure",
+      }),
+    };
+    fetch(BASE_API_URL + "/createMaintenance", requestOptions)
+      .then((response) => response.json())
+      .then((data) => console.log("successfully added in maintenanceTracker "));
   };
+
   const columns = [
     // { field: "id", headerName: "ID", width: 50 },
     {
@@ -57,7 +115,11 @@ const TestExecutions = () => {
       headerName: "Test Case Name",
       width: 500,
       renderCell: (params) => {
-        return <ListItem>{params.row.testcasename}</ListItem>;
+        return (
+          <>
+            <ListItem>{params.row.testcasename}</ListItem>
+          </>
+        );
       },
     },
     {
@@ -109,17 +171,38 @@ const TestExecutions = () => {
           <>
             <Tooltip title="Add to Maintenance">
               <MyFixOutline
-                onClick={() => addToMaintenanceTracker(params.row.id)}
+                onClick={() =>
+                  addToMaintenanceTracker(
+                    params.row.suite,
+                    params.row.testcasename,
+                    params.row.env,
+                    params.row.failurereason
+                  )
+                }
               />
             </Tooltip>
             <Tooltip title="Add to Product defect">
               <MyBugOutline
-                onClick={() => addToProductDefectTracker(params.row.id)}
+                onClick={() =>
+                  addToProductDefectTracker(
+                    params.row.suite,
+                    params.row.testcasename,
+                    params.row.env,
+                    params.row.failurereason
+                  )
+                }
               />
             </Tooltip>
             <Tooltip title="Mark as Intermittent Failure">
               <MyIntermittentOutline
-                onClick={() => intermittentFailure(params.row.id)}
+                onClick={() =>
+                  intermittentFailure(
+                    params.row.suite,
+                    params.row.testcasename,
+                    params.row.env,
+                    "Intermittent Failure"
+                  )
+                }
               />
             </Tooltip>
           </>
@@ -134,7 +217,7 @@ const TestExecutions = () => {
         rows={data}
         disableSelectionOnClick
         columns={columns}
-        pageSize={8}
+        pageSize={50}
         checkboxSelection
       />
     </TheList>
