@@ -1,0 +1,22 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;700&display=swap");
+
+* {
+  font-family: "Poppins", "Arial,Helvetica,sans-serif";
+  margin: 0;
+  padding: 0;
+}
+
+.TopRight {
+  display: flex;
+}
+
+.container {
+  display: flex;
+  margin-top: 10px;
+}
+
+/* will not show hyperlink & color: inherit will show color of parent */
+.link {
+  text-decoration: none;
+  color: inherit;
+}
