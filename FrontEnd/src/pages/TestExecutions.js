@@ -8,10 +8,9 @@ import {
 } from "../styles/styled-element";
 import { DataGrid } from "@material-ui/data-grid";
 import { productRows } from "../dummyData";
-import { Link } from "react-router-dom";
+
 import { Tooltip } from "@material-ui/core";
-import bugIcon from "../static/images/bug.png";
-import repairIcon from "../static/images/repair.png";
+import { API_URL } from "../Utils/Config.js";
 
 const TestExecutions = () => {
   const [data, setData] = useState(productRows);
@@ -19,9 +18,7 @@ const TestExecutions = () => {
   useEffect(() => {
     const testcasedata = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/getTestCaseExecution"
-        );
+        const response = await fetch(API_URL + "/getTestCaseExecution");
         const json = await response.json();
         console.log(json);
         setData(json);
@@ -36,10 +33,7 @@ const TestExecutions = () => {
     setData(data.filter((item) => item.id !== id));
   };
 
-  const addToMaintenanceTracker = (id) => {
-    //add code to add test case in maintenance tracker
-    console.log("addToMaintenanceTracker");
-  };
+  const addToMaintenanceTracker = (id) => {};
 
   const addToProductDefectTracker = (id) => {
     //Add code to add test case in defect list

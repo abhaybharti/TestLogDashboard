@@ -8,6 +8,7 @@ import {
 import { DataGrid } from "@material-ui/data-grid";
 import { productRows } from "../dummyData";
 import { Link } from "react-router-dom";
+import { API_URL } from "../Utils/Config.js";
 
 const MaintenanceTasks = () => {
   const [data, setData] = useState(productRows);
@@ -16,9 +17,7 @@ const MaintenanceTasks = () => {
   useEffect(() => {
     const maintenanceList = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/getMaintenanceTracker"
-        );
+        const response = await fetch(API_URL + "/getMaintenanceTracker");
         const json = await response.json();
 
         setData(json);

@@ -14,7 +14,7 @@ const getTestCaseExecution = (request, response) => {
   console.log("getTestCaseExecution");
   //where order_date > now() - interval '24 hours';
   pool.query(
-    `select * from xio_testcase where timestamp > now() - interval '48 hours'`,
+    `select * from testcase where timestamp > now() - interval '48 hours'`,
     (error, results) => {
       if (error) {
         throw error;
@@ -25,7 +25,7 @@ const getTestCaseExecution = (request, response) => {
 };
 
 const getDefectList = (request, response) => {
-  pool.query(`select * from xio_defects`, (error, results) => {
+  pool.query(`select * from defects`, (error, results) => {
     if (error) {
       throw error;
     }
@@ -34,7 +34,7 @@ const getDefectList = (request, response) => {
 };
 
 const getMaintenanceTracker = (request, response) => {
-  pool.query(`select * from xio_maintenance`, (error, results) => {
+  pool.query(`select * from maintenance`, (error, results) => {
     if (error) {
       throw error;
     }
@@ -57,7 +57,7 @@ const updateTestCaseExecution = (request, response) => {
   console.log(suite);
   // VALUES("Chrome", "UX_TestCase_Device", "PASS", "QE", "Login failure", "20");
   pool.query(
-    "INSERT INTO xio_testcase(suite, testcasename, status, env, failurereason, duration,reportpath,subscriptionkey) VALUES ($1,$2, $3, $4,$5,$6, $7, $8) Returning *",
+    "INSERT INTO testcase(suite, testcasename, status, env, failurereason, duration,reportpath,subscriptionkey) VALUES ($1,$2, $3, $4,$5,$6, $7, $8) Returning *",
     [
       suite,
       testcasename,
@@ -83,7 +83,7 @@ const getTestHistory = (request, response) => {
   const testcasename = request.params.testcasename.slice(1);
   console.log("testcasename", testcasename);
   let query =
-    "select * from xio_testcase where testcasename = '" + testcasename + "'";
+    "select * from testcase where testcasename = '" + testcasename + "'";
   console.log(query);
   pool.query(query, (error, results) => {
     if (error) {
@@ -97,7 +97,7 @@ const getTestHistory = (request, response) => {
 const createDefect = (request, response) => {
   const { testcasename, jirakey } = request.body;
   pool.query(
-    "INSERT INTO xio_defects (testcasename, jirakey)  VALUES ($1, $2) RETURNING *",
+    "INSERT INTO defects (testcasename, jirakey)  VALUES ($1, $2) RETURNING *",
     [testcasename, jirakey],
     (error, results) => {
       if (error) {
@@ -113,7 +113,7 @@ const createDefect = (request, response) => {
 const createMaintenance = (request, response) => {
   const { testcasename } = request.body;
   pool.query(
-    "INSERT INTO xio_maintenance (testcasename)  VALUES ($1) RETURNING *",
+    "INSERT INTO maintenance (testcasename)  VALUES ($1) RETURNING *",
     [testcasename],
     (error, results) => {
       if (error) {
@@ -129,7 +129,7 @@ const createMaintenance = (request, response) => {
 const updateTestCaseFailureReason = (request, response) => {
   const testcasename = request.params.testcasename;
   pool.query(
-    "Update xio_testcase set failurereason = $2 where testcasename = $1",
+    "Update testcase set failurereason = $2 where testcasename = $1",
     [testcasename, failurereason],
     (error, results) => {
       if (error) {
@@ -147,7 +147,7 @@ const deleteDefect = (request, response) => {
   const testcasename = request.params.testcasename;
 
   pool.query(
-    "DELETE FROM xio_defects WHERE id = $1",
+    "DELETE FROM defects WHERE id = $1",
     [testcasename],
     (error, results) => {
       if (error) {
@@ -162,7 +162,7 @@ const deleteMaintenance = (request, response) => {
   const testcasename = request.params.testcasename;
 
   pool.query(
-    "DELETE FROM xio_maintenance WHERE id = $1",
+    "DELETE FROM maintenance WHERE id = $1",
     [testcasename],
     (error, results) => {
       if (error) {

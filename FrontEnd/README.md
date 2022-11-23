@@ -1,9 +1,9 @@
 https://www.youtube.com/watch?v=KcTqDEy0BA4&list=PLaIfT4YsrqUkqsRRnA4-yEd9B4h5Pj5m9&index=1&t=186s
 1.00.15 minute
 
-DROP TABLE xio_testcase;
+DROP TABLE testcase;
 
-CREATE TABLE xio_testcase (
+CREATE TABLE testcase (
 ID SERIAL PRIMARY KEY,
 suite VARCHAR(200) NOT NULL,
 testcasename VARCHAR(200) NOT NULL,
@@ -16,15 +16,16 @@ reportpath VARCHAR(300),
 subscriptionkey integer
 );
 
-INSERT INTO xio_testcase
-(suite,testcasename, status, env,failurereason,duration)
+INSERT INTO testcase
+(suite,testcasename, status, env,failurereason,duration,reportpath,subscriptionkey)
 VALUES
-('Chrome','UX_TestCase_Device','PASS','QE','Login failure','20');
+('Chrome','UX_TestCase_Device','PASS','QE','Login failure','20',':/txt',123456);
 
-select \* from xio_testcase;
 
-DROP TABLE xio_defects;
-CREATE TABLE xio_defects (
+select \* from testcase;
+
+DROP TABLE defects;
+CREATE TABLE defects (
 ID SERIAL PRIMARY KEY,
 suite VARCHAR(200) NOT NULL,
 testcase VARCHAR(200),
@@ -32,16 +33,16 @@ jirakey VARCHAR(30),
 env VARCHAR(10),
 timestamp timestamp not null default current_timestamp
 );
-select \* from xio_defects;
-insert into xio_defects (suite,testcase,jirakey,env) VALUES ('Touch','ABC_Test','ABC','QE');
+select \* from defects;
+insert into defects (suite,testcase,jirakey,env) VALUES ('Touch','ABC_Test','ABC','QE');
 
-DROP TABLE xio_maintenance;
-CREATE TABLE xio_maintenance (
+DROP TABLE maintenance;
+CREATE TABLE maintenance (
 ID SERIAL PRIMARY KEY,
 suite VARCHAR(200) NOT NULL,
 testcase VARCHAR(200),
 env VARCHAR(10),
 timestamp timestamp not null default current_timestamp
 );
-select \* from xio_maintenance;
-insert into xio_maintenance (suite,testcase,env) VALUES ('Touch','ABC_Test','QE');
+select \* from maintenance;
+insert into maintenance (suite,testcase,env) VALUES ('Touch','ABC_Test','QE');
