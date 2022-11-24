@@ -69,9 +69,12 @@ const MaintenanceTasks = () => {
     {
       field: "Date",
       headerName: "Date",
-      width: 110,
+      width: 120,
       renderCell: (params) => {
-        return <ListItem>{params.row.timestamp.substring(0, 10)}</ListItem>;
+        let timestampVal = params.row.timestamp;
+        const finalTimeStamp =
+          typeof str === "string" ? timestampVal.substring(10) : "";
+        return <ListItem>{finalTimeStamp}</ListItem>;
       },
     },
     {
