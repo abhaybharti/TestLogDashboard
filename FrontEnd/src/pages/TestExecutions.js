@@ -159,7 +159,10 @@ const TestExecutions = () => {
       headerName: "Date",
       width: 120,
       renderCell: (params) => {
-        return <ListItem>{params.row.timestamp}</ListItem>;
+        let timestampVal = params.row.failurereason;
+        const finalTimeStamp =
+          typeof str === "string" ? timestampVal.substring(10) : "";
+        return <ListItem>{finalTimeStamp}</ListItem>;
       },
     },
     {

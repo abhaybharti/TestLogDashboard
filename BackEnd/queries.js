@@ -43,27 +43,29 @@ const getMaintenanceTracker = (request, response) => {
 };
 
 const updateTestCaseExecution = (request, response) => {
-  console.log("Inside updateTestCaseExecution start");
+  console.log("Inside updateTestCaseExecution start", request.body);
   const {
     suite,
-    testcasename,
+    testCaseName,
     status,
     env,
-    failurereason,
-    duration,
+    failureCause,
+    executionDuration,
     reportpath,
     subscriptionkey,
+    
   } = request.body;
+  console.log('suite',suite,'testcasename',testCaseName,'status',status,'env',env,'failurereason',failureCause,'duration',executionDuration,'reportpath',reportpath,'subscriptionkey',subscriptionkey);
 
   pool.query(
     "INSERT INTO testcase(suite, testcasename, status, env, failurereason, duration,reportpath,subscriptionkey) VALUES ($1,$2, $3, $4,$5,$6, $7, $8) Returning *",
     [
       suite,
-      testcasename,
+      testCaseName,
       status,
       env,
-      failurereason,
-      duration,
+      failureCause,
+      executionDuration,
       reportpath,
       subscriptionkey,
     ],

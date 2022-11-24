@@ -66,7 +66,7 @@ const DefectList = () => {
       headerName: "Date",
       width: 120,
       renderCell: (params) => {
-        return <ListItem>{params.row.timestamp}</ListItem>;
+        return <ListItem>{params.row.timestamp.substring(0, 10)}</ListItem>;
       },
     },
     {
