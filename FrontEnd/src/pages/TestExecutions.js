@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+
 import {
   TheList,
   ListItem,
@@ -13,6 +13,7 @@ import { productRows } from "../dummyData";
 import { Tooltip } from "@material-ui/core";
 
 import { BASE_API_URL } from "../Utils/Config.js";
+import ModalDialog from "../components/ModalDialog";
 
 const TestExecutions = () => {
   const [data, setData] = useState(productRows);
@@ -105,7 +106,7 @@ const TestExecutions = () => {
     {
       field: "suite",
       headerName: "Suite",
-      width: 500,
+      width: 200,
       renderCell: (params) => {
         return <ListItem>{params.row.suite}</ListItem>;
       },
@@ -117,7 +118,9 @@ const TestExecutions = () => {
       renderCell: (params) => {
         return (
           <>
-            <ListItem>{params.row.testcasename}</ListItem>
+            <ListItem cellClick={() => <ModalDialog />}>
+              {params.row.testcasename}
+            </ListItem>
           </>
         );
       },
@@ -138,31 +141,16 @@ const TestExecutions = () => {
         return <ListItem>{params.row.env}</ListItem>;
       },
     },
-    {
-      field: "failureReason",
-      headerName: "Failure Reason",
-      width: 160,
-      renderCell: (params) => {
-        return <ListItem>{params.row.failurereason}</ListItem>;
-      },
-    },
-    {
-      field: "executionTime",
-      headerName: "Duration",
-      width: 140,
-      renderCell: (params) => {
-        return <ListItem>{params.row.duration}</ListItem>;
-      },
-    },
+
     {
       field: "Date",
       headerName: "Date",
-      width: 120,
+      width: 145,
       renderCell: (params) => {
         let timestampVal = params.row.timestamp;
         const finalTimeStamp =
-          typeof str === "string" ? timestampVal.substring(10) : "";
-        return <ListItem>{finalTimeStamp}</ListItem>;
+          typeof str === "string" ? timestampVal.slice(0, 10) : "";
+        return <ListItem>{params.row.timestamp}</ListItem>;
       },
     },
     {
@@ -210,6 +198,22 @@ const TestExecutions = () => {
             </Tooltip>
           </>
         );
+      },
+    },
+    {
+      field: "failureReason",
+      headerName: "Failure Reason",
+      width: 200,
+      renderCell: (params) => {
+        return <ListItem>{params.row.failurereason}</ListItem>;
+      },
+    },
+    {
+      field: "executionTime",
+      headerName: "Duration",
+      width: 140,
+      renderCell: (params) => {
+        return <ListItem>{params.row.duration}</ListItem>;
       },
     },
   ];
