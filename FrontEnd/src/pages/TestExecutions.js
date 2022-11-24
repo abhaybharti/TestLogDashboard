@@ -108,7 +108,13 @@ const TestExecutions = () => {
       headerName: "Suite",
       width: 200,
       renderCell: (params) => {
-        return <ListItem>{params.row.suite}</ListItem>;
+        return (
+          <>
+            <Tooltip title={params.row.suite}>
+              <ListItem>{params.row.suite}</ListItem>
+            </Tooltip>
+          </>
+        );
       },
     },
     {
@@ -118,9 +124,11 @@ const TestExecutions = () => {
       renderCell: (params) => {
         return (
           <>
-            <ListItem cellClick={() => <ModalDialog />}>
-              {params.row.testcasename}
-            </ListItem>
+            <Tooltip title={params.row.testcasename}>
+              <ListItem cellClick={() => <ModalDialog />}>
+                {params.row.testcasename}
+              </ListItem>
+            </Tooltip>
           </>
         );
       },
@@ -145,12 +153,12 @@ const TestExecutions = () => {
     {
       field: "Date",
       headerName: "Date",
-      width: 145,
+      width: 148,
       renderCell: (params) => {
         let timestampVal = params.row.timestamp;
         const finalTimeStamp =
-          typeof str === "string" ? timestampVal.slice(0, 10) : "";
-        return <ListItem>{params.row.timestamp}</ListItem>;
+          typeof timestampVal === "string" ? timestampVal.slice(0, 16) : "";
+        return <ListItem>{finalTimeStamp}</ListItem>;
       },
     },
     {
@@ -205,7 +213,13 @@ const TestExecutions = () => {
       headerName: "Failure Reason",
       width: 200,
       renderCell: (params) => {
-        return <ListItem>{params.row.failurereason}</ListItem>;
+        return (
+          <>
+            <Tooltip title={params.row.failurereason}>
+              <ListItem>{params.row.failurereason}</ListItem>
+            </Tooltip>
+          </>
+        );
       },
     },
     {
@@ -213,7 +227,13 @@ const TestExecutions = () => {
       headerName: "Duration",
       width: 140,
       renderCell: (params) => {
-        return <ListItem>{params.row.duration}</ListItem>;
+        return (
+          <>
+            <Tooltip title="in minutes">
+              <ListItem>{params.row.duration}</ListItem>
+            </Tooltip>
+          </>
+        );
       },
     },
   ];
