@@ -53,9 +53,25 @@ const updateTestCaseExecution = (request, response) => {
     executionDuration,
     reportpath,
     subscriptionkey,
-    
   } = request.body;
-  console.log('suite',suite,'testcasename',testCaseName,'status',status,'env',env,'failurereason',failureCause,'duration',executionDuration,'reportpath',reportpath,'subscriptionkey',subscriptionkey);
+  console.log(
+    "suite",
+    suite,
+    "testcasename",
+    testCaseName,
+    "status",
+    status,
+    "env",
+    env,
+    "failurereason",
+    failureCause,
+    "duration",
+    executionDuration,
+    "reportpath",
+    reportpath,
+    "subscriptionkey",
+    subscriptionkey
+  );
 
   pool.query(
     "INSERT INTO testcase(suite, testcasename, status, env, failurereason, duration,reportpath,subscriptionkey) VALUES ($1,$2, $3, $4,$5,$6, $7, $8) Returning *",
