@@ -128,6 +128,18 @@ export const productRows = [
   },
 ];
 
+export const testHistoryDummy = [
+  {
+    id: 1,
+    testcasename: "validate_UX_Device_level",
+    img: "https://picsum.photos/200/300/?random=1",
+    status: "PASS",
+    failureReason: "login",
+    env: "QE",
+    timestamp: "2022-11-25",
+  },
+];
+
 export const productData = [
   {
     name: "Jan",

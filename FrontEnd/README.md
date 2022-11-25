@@ -27,25 +27,25 @@ DROP TABLE defects;
 CREATE TABLE defects (
 ID SERIAL PRIMARY KEY,
 suite VARCHAR(200) NOT NULL,
-testcase VARCHAR(200),
+testcasename VARCHAR(200),
 jirakey VARCHAR(30),
 env VARCHAR(30),
 failurereason VARCHAR(300),
 timestamp timestamp not null default current_timestamp
 );
 select \* from defects;
-insert into defects (suite,testcase,jirakey,env) VALUES ('Touch','ABC_Test','ABC','QE');
+insert into defects (suite,testcasename,jirakey,env) VALUES ('Touch','ABC_Test','ABC','QE');
 
 DROP TABLE maintenance;
 CREATE TABLE maintenance (
 ID SERIAL PRIMARY KEY,
 suite VARCHAR(200) NOT NULL,
-testcase VARCHAR(200),
+testcasename VARCHAR(200),
 env VARCHAR(10),
 failurereason VARCHAR(300),
 timestamp timestamp not null default current_timestamp
 );
 select \* from maintenance;
-insert into maintenance (suite,testcase,env) VALUES ('Touch','ABC_Test','QE');
+insert into maintenance (suite,testcasename,env) VALUES ('Touch','ABC_Test','QE');
 
 https://jasonwatmore.com/post/2020/02/01/react-fetch-http-post-request-examples

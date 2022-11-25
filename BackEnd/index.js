@@ -28,13 +28,13 @@ app.get("/", (request, response) => {
 app.get("/getTestCaseExecution", db.getTestCaseExecution);
 app.get("/getDefectList", db.getDefectList);
 app.get("/getMaintenanceTracker", db.getMaintenanceTracker);
-app.post("/deleteMaintenance:testcasename", db.deleteMaintenance);
-app.post("/deleteDefect:testcasename", db.deleteDefect);
+app.delete("/deleteMaintenance", db.deleteMaintenance);
+app.delete("/deleteDefect", db.deleteDefect);
 app.post(
   "/updateTestCaseFailureReason:testcasename",
   db.updateTestCaseFailureReason
 );
-app.get("/getTestHistory/:testcasename", db.getTestHistory);
+app.post("/getTestHistory", db.getTestHistory);
 app.post("/createMaintenance", db.createMaintenance);
 app.post("/createDefect", db.createDefect);
 app.post("/updateTestCaseExecution", db.updateTestCaseExecution);

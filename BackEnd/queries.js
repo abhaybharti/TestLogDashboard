@@ -1,5 +1,5 @@
 const { response, request } = require("express");
-
+require("log-timestamp");
 const Pool = require("pg").Pool;
 
 const pool = new Pool({
@@ -46,7 +46,7 @@ const updateTestCaseExecution = (request, response) => {
   console.log("Inside updateTestCaseExecution start", request.body);
   const {
     suite,
-    testcase,
+    testcasename,
     status,
     env,
     failureCause,
@@ -57,8 +57,8 @@ const updateTestCaseExecution = (request, response) => {
   console.log(
     "suite",
     suite,
-    "testcase",
-    testcase,
+    "testcasename",
+    testcasename,
     "status",
     status,
     "env",
@@ -77,7 +77,7 @@ const updateTestCaseExecution = (request, response) => {
     "INSERT INTO testcase(suite, testcasename, status, env, failurereason, duration,reportpath,subscriptionkey) VALUES ($1,$2, $3, $4,$5,$6, $7, $8) Returning *",
     [
       suite,
-      testcase,
+      testcasename,
       status,
       env,
       failureCause,
@@ -96,11 +96,15 @@ const updateTestCaseExecution = (request, response) => {
 };
 
 const getTestHistory = (request, response) => {
-  console.log("getTestHistory");
-  const testcasename = request.params.testcasename.slice(1);
-  console.log("testcasename", testcasename);
+  console.log("getTestHistory", request.body);
+  const { suite, testcasename } = request.body;
+  console.log("suite", suite, ", testcasename", testcasename);
   let query =
-    "select * from testcase where testcasename = '" + testcasename + "'";
+    "select * from testcase where testcasename = '" +
+    testcasename +
+    "' and suite='" +
+    suite +
+    "'";
   console.log(query);
   pool.query(query, (error, results) => {
     if (error) {
@@ -116,8 +120,8 @@ const createDefect = (request, response) => {
   const { suite, testcase, jirakey, env, failurereason } = request.body;
 
   pool.query(
-    "INSERT INTO defects(suite, testcase, jirakey, env, failurereason) VALUES ($1,$2, $3, $4,$5) Returning *",
-    [suite, testcase, jirakey, env, failurereason],
+    "INSERT INTO defects(suite, testcasename, jirakey, env, failurereason) VALUES ($1,$2, $3, $4,$5) Returning *",
+    [suite, testcasename, jirakey, env, failurereason],
     (error, results) => {
       if (error) {
         throw error;
@@ -130,11 +134,11 @@ const createDefect = (request, response) => {
 
 const createMaintenance = (request, response) => {
   console.log("createMaintenance start", request.body);
-  const { suite, testcase, env, failurereason } = request.body;
+  const { suite, testcasename, env, failurereason } = request.body;
 
   pool.query(
-    "INSERT INTO maintenance(suite, testcase,  env, failurereason) VALUES ($1,$2, $3, $4) Returning *",
-    [suite, testcase, env, failurereason],
+    "INSERT INTO maintenance(suite, testcasename,  env, failurereason) VALUES ($1,$2, $3, $4) Returning *",
+    [suite, testcasename, env, failurereason],
     (error, results) => {
       if (error) {
         throw error;
@@ -149,7 +153,7 @@ const updateTestCaseFailureReason = (request, response) => {
   const testcasename = request.params.testcasename;
   pool.query(
     "Update testcase set failurereason = $2 where testcasename = $1",
-    [testcasename, failurereason],
+    [testcase, failurereason],
     (error, results) => {
       if (error) {
         throw error;
@@ -163,33 +167,49 @@ const updateTestCaseFailureReason = (request, response) => {
 };
 
 const deleteDefect = (request, response) => {
-  const testcasename = request.params.testcasename;
-
-  pool.query(
-    "DELETE FROM defects WHERE id = $1",
-    [testcasename],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      response.status(200).send(`User deleted with ID: ${testcasename}`);
+  console.log("deleteDefect", request.body);
+  const { suite, testcasename, env } = request.body;
+  console.log("suite", suite, ", testcase", testcasename, " , env", env);
+  let query =
+    "DELETE from defects where testcasename = '" +
+    testcasename +
+    "' and suite='" +
+    suite +
+    "' and env='" +
+    env +
+    "'";
+  console.log(query);
+  pool.query(query, (error, results) => {
+    if (error) {
+      console.log(error);
+      throw error;
     }
-  );
+    response.status(200).json(results.rows);
+  });
 };
 
 const deleteMaintenance = (request, response) => {
-  const testcasename = request.params.testcasename;
-
-  pool.query(
-    "DELETE FROM maintenance WHERE id = $1",
-    [testcasename],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      response.status(200).send(`User deleted with ID: ${testcasename}`);
+  console.log("deleteMaintenance start", request.body);
+  const { suite, testcasename, env } = request.body;
+  console.log("suite", suite, ", testcase", testcasename, " , env", env);
+  let query =
+    "DELETE from maintenance where testcasename = '" +
+    testcasename +
+    "' and suite='" +
+    suite +
+    "' and env='" +
+    env +
+    "'";
+  console.log(query);
+  pool.query(query, (error, results) => {
+    if (error) {
+      console.log(error);
+      throw error;
     }
-  );
+    response.status(200).json(results.rows);
+    console.log(results.rows);
+  });
+  console.log("deleteMaintenance stop");
 };
 
 module.exports = {

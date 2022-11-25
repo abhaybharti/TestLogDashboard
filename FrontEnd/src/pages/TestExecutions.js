@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-
+import { Link } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Modal from "@material-ui/core/Modal";
 import {
   TheList,
   ListItem,
@@ -13,7 +16,7 @@ import { productRows } from "../dummyData";
 import { Tooltip } from "@material-ui/core";
 
 import { BASE_API_URL } from "../Utils/Config.js";
-import ModalDialog from "../components/ModalDialog";
+import SimpleModal from "../components/SimpleModal";
 
 const TestExecutions = () => {
   const [data, setData] = useState(productRows);
@@ -73,7 +76,7 @@ const TestExecutions = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         suite: suite,
-        testcase: testCaseName,
+        testcasename: testCaseName,
         jirakey: jirakey,
         env: env,
         failurereason: failureReason,
@@ -91,7 +94,7 @@ const TestExecutions = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         suite: suite,
-        testcase: testCaseName,
+        testcasename: testCaseName,
         env: env,
         failurereason: "Intermittent Failure",
       }),
@@ -125,8 +128,12 @@ const TestExecutions = () => {
         return (
           <>
             <Tooltip title={params.row.testcasename}>
-              <ListItem cellClick={() => <ModalDialog />}>
-                {params.row.testcasename}
+              <ListItem>
+                <SimpleModal
+                  testcasename={params.row.testcasename}
+                  suite={params.row.suite}
+                  env={params.row.env}
+                ></SimpleModal>
               </ListItem>
             </Tooltip>
           </>

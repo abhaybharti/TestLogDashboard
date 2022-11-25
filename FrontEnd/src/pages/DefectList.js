@@ -22,8 +22,25 @@ const DefectList = () => {
     defectList();
   }, []);
 
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+  const handleDelete = async (suite, testCaseName, env) => {
+    console.log(suite, testCaseName, env);
+    const requestOptions = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        suite: suite,
+        testcasename: testCaseName,
+        env: env,
+      }),
+    };
+
+    const response = await fetch(
+      BASE_API_URL + "/deleteDefect",
+      requestOptions
+    );
+    const json = await response.json();
+    console.log("json", json);
+    setData(json);
   };
 
   const columns = [
@@ -31,7 +48,7 @@ const DefectList = () => {
     {
       field: "suite",
       headerName: "Suite",
-      width: 500,
+      width: 200,
       renderCell: (params) => {
         return <ListItem>{params.row.suite}</ListItem>;
       },
@@ -41,7 +58,11 @@ const DefectList = () => {
       headerName: "Test Case Name",
       width: 500,
       renderCell: (params) => {
-        return <ListItem>{params.row.testcase}</ListItem>;
+        return (
+          <>
+            <ListItem>{params.row.testcasename}</ListItem>
+          </>
+        );
       },
     },
 
@@ -76,8 +97,15 @@ const DefectList = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/product/" + params.row.id}></Link>
-            <MyDeleteOutline onClick={() => handleDelete(params.row.id)} />
+            <MyDeleteOutline
+              onClick={() =>
+                handleDelete(
+                  params.row.suite,
+                  params.row.testcasename,
+                  params.row.env
+                )
+              }
+            />
           </>
         );
       },
