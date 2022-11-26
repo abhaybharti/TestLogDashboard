@@ -43,13 +43,13 @@ const getMaintenanceTracker = (request, response) => {
 };
 
 const updateTestCaseExecution = (request, response) => {
-  console.log("Inside updateTestCaseExecution start", request.body);
+  console.log("updateTestCaseExecution start --- ", request.body);
   const {
     suite,
     testcasename,
     status,
     env,
-    failureCause,
+    failurereason,
     duration,
     reportpath,
     subscriptionkey,
@@ -64,7 +64,7 @@ const updateTestCaseExecution = (request, response) => {
     "env",
     env,
     "failurereason",
-    failureCause,
+    failurereason,
     "duration",
     duration,
     "reportpath",
@@ -72,26 +72,30 @@ const updateTestCaseExecution = (request, response) => {
     "subscriptionkey",
     subscriptionkey
   );
-
-  pool.query(
-    "INSERT INTO testcase(suite, testcasename, status, env, failurereason, duration,reportpath,subscriptionkey) VALUES ($1,$2, $3, $4,$5,$6, $7, $8) Returning *",
-    [
-      suite,
-      testcasename,
-      status,
-      env,
-      failureCause,
-      duration,
-      reportpath,
-      subscriptionkey,
-    ],
-    (error, results) => {
-      if (error) {
-        throw error;
+  try {
+    pool.query(
+      "INSERT INTO testcase(suite, testcasename, status, env, failurereason, duration,reportpath,subscriptionkey) VALUES ($1,$2, $3, $4,$5,$6, $7, $8) Returning *",
+      [
+        suite,
+        testcasename,
+        status,
+        env,
+        failurereason,
+        duration,
+        reportpath,
+        subscriptionkey,
+      ],
+      (error, results) => {
+        if (error) {
+          throw error
+        } else {
+          response.status(200).json(results.rows);
+        }
       }
-      response.status(200).json(results.rows);
-    }
-  );
+    );
+  } catch (err) {
+    console.log("updateTestCaseExecution error =>", err);
+  }
   console.log("Inside updateTestCaseExecution stop");
 };
 
