@@ -145,7 +145,15 @@ const TestExecutions = () => {
       headerName: "Status",
       width: 130,
       renderCell: (params) => {
-        return <ListItem>{params.row.status}</ListItem>;
+        return (
+          <>
+            <ListItem>
+              <a href={params.row.reportpath} target="_blank">
+                {params.row.status}
+              </a>
+            </ListItem>
+          </>
+        );
       },
     },
     {
