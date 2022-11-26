@@ -10,6 +10,7 @@ import { productRows } from "../dummyData";
 import { Link } from "react-router-dom";
 import { BASE_API_URL } from "../Utils/Config.js";
 import { CenterFocusStrong } from "@material-ui/icons";
+import { Tooltip } from "@material-ui/core";
 
 const MaintenanceTasks = () => {
   const [data, setData] = useState(productRows);
@@ -56,16 +57,28 @@ const MaintenanceTasks = () => {
       headerName: "Suite",
       width: 120,
       renderCell: (params) => {
-        return <ListItem>{params.row.suite}</ListItem>;
+        return (
+          <>
+            <Tooltip title={params.row.suite}>
+              <ListItem>{params.row.suite}</ListItem>
+            </Tooltip>
+          </>
+        );
       },
     },
 
     {
       field: "testcase",
       headerName: "Test Case",
-      width: 200,
+      width: 500,
       renderCell: (params) => {
-        return <ListItem>{params.row.testcasename}</ListItem>;
+        return (
+          <>
+            <Tooltip title={params.row.testcasename}>
+              <ListItem>{params.row.testcasename}</ListItem>
+            </Tooltip>
+          </>
+        );
       },
     },
     {
@@ -111,9 +124,15 @@ const MaintenanceTasks = () => {
     {
       field: "failureReason",
       headerName: "Failure Reason",
-      width: 200,
+      width: 400,
       renderCell: (params) => {
-        return <ListItem>{params.row.failurereason}</ListItem>;
+        return (
+          <>
+            <Tooltip title={params.row.failurereason}>
+              <ListItem>{params.row.failurereason}</ListItem>
+            </Tooltip>
+          </>
+        );
       },
     },
   ];

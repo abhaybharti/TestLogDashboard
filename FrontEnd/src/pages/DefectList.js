@@ -4,6 +4,7 @@ import { DataGrid } from "@material-ui/data-grid";
 import { defectList } from "../dummyData";
 import { Link } from "react-router-dom";
 import { BASE_API_URL } from "../Utils/Config.js";
+import { Tooltip } from "@material-ui/core";
 
 const DefectList = () => {
   const [data, setData] = useState(defectList);
@@ -50,7 +51,13 @@ const DefectList = () => {
       headerName: "Suite",
       width: 200,
       renderCell: (params) => {
-        return <ListItem>{params.row.suite}</ListItem>;
+        return (
+          <>
+            <Tooltip title={params.row.suite}>
+              <ListItem>{params.row.suite}</ListItem>
+            </Tooltip>
+          </>
+        );
       },
     },
     {
@@ -60,7 +67,9 @@ const DefectList = () => {
       renderCell: (params) => {
         return (
           <>
-            <ListItem>{params.row.testcasename}</ListItem>
+            <Tooltip title={params.row.testcasename}>
+              <ListItem>{params.row.testcasename}</ListItem>
+            </Tooltip>
           </>
         );
       },
@@ -74,14 +83,7 @@ const DefectList = () => {
         return <ListItem>{params.row.env}</ListItem>;
       },
     },
-    {
-      field: "failureReason",
-      headerName: "Failure Reason",
-      width: 200,
-      renderCell: (params) => {
-        return <ListItem>{params.row.failurereason}</ListItem>;
-      },
-    },
+
     {
       field: "Date",
       headerName: "Date",
@@ -97,15 +99,31 @@ const DefectList = () => {
       renderCell: (params) => {
         return (
           <>
-            <MyDeleteOutline
-              onClick={() =>
-                handleDelete(
-                  params.row.suite,
-                  params.row.testcasename,
-                  params.row.env
-                )
-              }
-            />
+            <Tooltip title="Delete defect">
+              <MyDeleteOutline
+                onClick={() =>
+                  handleDelete(
+                    params.row.suite,
+                    params.row.testcasename,
+                    params.row.env
+                  )
+                }
+              />
+            </Tooltip>
+          </>
+        );
+      },
+    },
+    {
+      field: "failureReason",
+      headerName: "Failure Reason",
+      width: 400,
+      renderCell: (params) => {
+        return (
+          <>
+            <Tooltip title={params.row.failurereason}>
+              <ListItem>{params.row.failurereason}</ListItem>
+            </Tooltip>
           </>
         );
       },
