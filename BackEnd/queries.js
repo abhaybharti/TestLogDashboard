@@ -87,7 +87,7 @@ const updateTestCaseExecution = (request, response) => {
       ],
       (error, results) => {
         if (error) {
-          throw error
+          throw error;
         } else {
           response.status(200).json(results.rows);
         }
@@ -121,7 +121,7 @@ const getTestHistory = (request, response) => {
 
 const createDefect = (request, response) => {
   console.log("createDefect start");
-  const { suite, testcase, jirakey, env, failurereason } = request.body;
+  const { suite, testcasename, jirakey, env, failurereason } = request.body;
 
   pool.query(
     "INSERT INTO defects(suite, testcasename, jirakey, env, failurereason) VALUES ($1,$2, $3, $4,$5) Returning *",
