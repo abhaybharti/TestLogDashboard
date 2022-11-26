@@ -42,7 +42,7 @@ const TestExecutions = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         suite: suite,
-        testcase: testCaseName,
+        testcasename: testCaseName,
         env: env,
         failurereason: failureReason,
       }),
