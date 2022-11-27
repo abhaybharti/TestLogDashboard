@@ -1,39 +1,86 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Modal from "@material-ui/core/Modal";
 import {
   TheList,
   ListItem,
   MyBugOutline,
   MyFixOutline,
   MyIntermittentOutline,
-  MyDeleteOutline,
 } from "../styles/styled-element";
 import { DataGrid } from "@material-ui/data-grid";
 import { productRows } from "../dummyData";
 import { Tooltip } from "@material-ui/core";
+import "react-date-range/dist/styles.css"; // main css file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import Button from "@material-ui/core/Button";
+
+import moment from "moment";
 
 import { BASE_API_URL } from "../Utils/Config.js";
 import SimpleModal from "../components/SimpleModal";
+import DateRangeFilter from "../components/DateRangeFilter";
+import "../App.css";
+import { Stack } from "@mui/material";
 
 const TestExecutions = () => {
   const [data, setData] = useState(productRows);
+  const [open, setOpen] = useState(false);
+  let startDate, endDate;
+
+  const onChange = (ranges) => {
+    if (
+      moment(ranges.startDate).format("MM-DD-YYYY") !==
+      moment(ranges.endDate).format("MM-DD-YYYY")
+    ) {
+      setOpen(false);
+    } else if (ranges.startDate === "" && ranges.endDate === "") {
+      setOpen(false);
+    }
+    startDate = moment(ranges.startDate).format("MM-DD-YYYY");
+    endDate = moment(ranges.endDate).format("MM-DD-YYYY");
+    console.log(startDate, endDate);
+    if (endDate === "Invalid date") {
+      endDate = startDate;
+    }
+    getTestResultsForGivenDateRange(startDate, endDate);
+  };
+
+  const testcasedata = async () => {
+    try {
+      const response = await fetch(BASE_API_URL + "/getTestCaseExecution");
+      const json = await response.json();
+
+      setData(json);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   useEffect(() => {
-    const testcasedata = async () => {
-      try {
-        const response = await fetch(BASE_API_URL + "/getTestCaseExecution");
-        const json = await response.json();
-
-        setData(json);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
     testcasedata();
   }, []);
+
+  const getTestResultsForGivenDateRange = async (startDate, endDate) => {
+    console.log(startDate, endDate);
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          startDate: startDate,
+          endDate: endDate,
+        }),
+      };
+      const response = await fetch(
+        BASE_API_URL + "/getTestResultsForGivenDateRange",
+        requestOptions
+      );
+      const json = await response.json();
+
+      setData(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const addToMaintenanceTracker = (suite, testCaseName, env, failureReason) => {
     console.log(suite, testCaseName, env, failureReason);
@@ -148,7 +195,7 @@ const TestExecutions = () => {
         return (
           <>
             <ListItem>
-              <a href={params.row.reportpath} target="_blank">
+              <a href={params.row.reportpath} target="_blank" rel="noreferrer">
                 {params.row.status}
               </a>
             </ListItem>
@@ -173,7 +220,12 @@ const TestExecutions = () => {
         let timestampVal = params.row.timestamp;
         const finalTimeStamp =
           typeof timestampVal === "string" ? timestampVal.slice(0, 16) : "";
-        return <ListItem>{finalTimeStamp}</ListItem>;
+
+        return (
+          <ListItem>
+            {moment(finalTimeStamp).format("MM-DD-YYYY  hh:mm")}
+          </ListItem>
+        );
       },
     },
     {
@@ -254,15 +306,33 @@ const TestExecutions = () => {
   ];
 
   return (
-    <TheList>
-      <DataGrid
-        rows={data}
-        disableSelectionOnClick
-        columns={columns}
-        pageSize={50}
-        checkboxSelection
-      />
-    </TheList>
+    <>
+      <TheList>
+        <div className="daterange">
+          <Stack spacing={2} direction="row">
+            <DateRangeFilter
+              onChange={onChange}
+              open={open}
+              setOpen={setOpen}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => testcasedata()}
+            >
+              Clear Filter
+            </Button>
+          </Stack>
+        </div>
+        <DataGrid
+          rows={data}
+          disableSelectionOnClick
+          columns={columns}
+          pageSize={50}
+          checkboxSelection
+        />
+      </TheList>
+    </>
   );
 };
 

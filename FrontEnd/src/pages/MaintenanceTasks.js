@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { BASE_API_URL } from "../Utils/Config.js";
 import { CenterFocusStrong } from "@material-ui/icons";
 import { Tooltip } from "@material-ui/core";
+import moment from "moment";
 
 const MaintenanceTasks = () => {
   const [data, setData] = useState(productRows);
@@ -96,8 +97,10 @@ const MaintenanceTasks = () => {
       renderCell: (params) => {
         let timestampVal = params.row.timestamp;
         const finalTimeStamp =
-          typeof str === "string" ? timestampVal.substring(10) : "";
-        return <ListItem>{params.row.timestamp}</ListItem>;
+          typeof str === "string" ? timestampVal.substring(16) : "";
+        return (
+          <ListItem>{moment(finalTimeStamp).format("MM-DD-YYYY")}</ListItem>
+        );
       },
     },
     {

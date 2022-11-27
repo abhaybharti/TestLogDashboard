@@ -38,6 +38,10 @@ app.post("/getTestHistory", db.getTestHistory);
 app.post("/createMaintenance", db.createMaintenance);
 app.post("/createDefect", db.createDefect);
 app.post("/updateTestCaseExecution", db.updateTestCaseExecution);
+app.post(
+  "/getTestResultsForGivenDateRange",
+  db.getTestResultsForGivenDateRange
+);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);

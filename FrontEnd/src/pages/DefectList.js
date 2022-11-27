@@ -5,6 +5,7 @@ import { defectList } from "../dummyData";
 import { Link } from "react-router-dom";
 import { BASE_API_URL } from "../Utils/Config.js";
 import { Tooltip } from "@material-ui/core";
+import moment from "moment";
 
 const DefectList = () => {
   const [data, setData] = useState(defectList);
@@ -89,7 +90,12 @@ const DefectList = () => {
       headerName: "Date",
       width: 120,
       renderCell: (params) => {
-        return <ListItem>{params.row.timestamp.substring(0, 10)}</ListItem>;
+        let timestampVal = params.row.timestamp;
+        const finalTimeStamp =
+          typeof str === "string" ? timestampVal.substring(16) : "";
+        return (
+          <ListItem>{moment(finalTimeStamp).format("MM-DD-YYYY")}</ListItem>
+        );
       },
     },
     {

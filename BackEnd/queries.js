@@ -119,6 +119,28 @@ const getTestHistory = (request, response) => {
   });
 };
 
+const getTestResultsForGivenDateRange = (request, response) => {
+  console.log("getTestResultsForGivenDateRange() start ---", request.body);
+  const { startDate, endDate } = request.body;
+  console.log("startDate", startDate, ", endDate", endDate);
+  let query =
+    "select * from testcase where timestamp between '" +
+    startDate +
+    "' and '" +
+    endDate +
+    "'";
+  console.log(query);
+  pool.query(query, (error, results) => {
+    if (error) {
+      console.log(error);
+      throw error;
+    }
+    response.status(200).json(results.rows);
+    console.log(results.rows);
+  });
+  console.log("getTestResultsForGivenDateRange() end ---", request.body);
+};
+
 const createDefect = (request, response) => {
   console.log("createDefect start");
   const { suite, testcasename, jirakey, env, failurereason } = request.body;
@@ -228,4 +250,5 @@ module.exports = {
   createMaintenance,
   createDefect,
   updateTestCaseExecution,
+  getTestResultsForGivenDateRange,
 };
