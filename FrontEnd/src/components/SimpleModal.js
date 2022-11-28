@@ -41,6 +41,9 @@ export default function SimpleModal(props) {
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
   const [testhistory, setTestHistory] = useState(testHistoryDummy);
+  const [subscriptionkey, setSubscriptionKey] = useState(
+    localStorage.getItem("subscriptionkey")
+  );
 
   const handleOpen = () => {
     setOpen(true);
@@ -59,6 +62,7 @@ export default function SimpleModal(props) {
         suite: props.suite,
         testcasename: props.testcasename,
         env: props.env,
+        subscriptionkey: subscriptionkey,
       }),
     };
 
