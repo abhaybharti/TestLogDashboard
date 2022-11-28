@@ -19,29 +19,30 @@ const MaintenanceTasks = () => {
     localStorage.getItem("subscriptionkey")
   );
 
-  useEffect(() => {
-    const maintenanceList = async () => {
-      try {
-        const requestOptions = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            subscriptionkey: subscriptionkey,
-          }),
-        };
-        const response = await fetch(
-          BASE_API_URL + "/getMaintenanceTracker",
-          requestOptions
-        );
-        const json = await response.json();
+  const maintenanceList = async () => {
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subscriptionkey: subscriptionkey,
+        }),
+      };
+      const response = await fetch(
+        BASE_API_URL + "/getMaintenanceTracker",
+        requestOptions
+      );
+      const json = await response.json();
 
-        setData(json);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
+      setData(json);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  useEffect(() => {
     maintenanceList();
-  }, []);
+  }, [data]);
 
   const handleDelete = async (suite, testCaseName, env) => {
     console.log(suite, testCaseName, env);
@@ -63,6 +64,7 @@ const MaintenanceTasks = () => {
     const json = await response.json();
     console.log("json", json);
     setData(json);
+    maintenanceList();
   };
 
   const columns = [

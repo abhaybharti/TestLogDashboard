@@ -64,7 +64,7 @@ const LoginPage = () => {
             container
             spacing={3}
             direction={"column"}
-            justify={"center"}
+            justify-content={"center"}
             alignItems={"center"}
           >
             <Grid item xs={12}>

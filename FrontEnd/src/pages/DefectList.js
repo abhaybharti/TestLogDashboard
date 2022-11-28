@@ -1,41 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { TheList, ListItem, MyDeleteOutline } from "../styles/styled-element";
 import { DataGrid } from "@material-ui/data-grid";
-import { defectList } from "../dummyData";
+import { defectList, productRows } from "../dummyData";
 import { Link } from "react-router-dom";
 import { BASE_API_URL } from "../Utils/Config.js";
 import { Tooltip } from "@material-ui/core";
 import moment from "moment";
 
 const DefectList = () => {
-  const [data, setData] = useState(defectList);
+  const [data, setData] = useState(productRows);
   const [subscriptionkey, setSubscriptionKey] = useState(
     localStorage.getItem("subscriptionkey")
   );
 
-  useEffect(() => {
-    const defectList = async () => {
-      try {
-        const requestOptions = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            subscriptionkey: subscriptionkey,
-          }),
-        };
-        const response = await fetch(
-          BASE_API_URL + "/getDefectList",
-          requestOptions
-        );
-        const json = await response.json();
+  const defectList = async () => {
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subscriptionkey: subscriptionkey,
+        }),
+      };
+      const response = await fetch(
+        BASE_API_URL + "/getDefectList",
+        requestOptions
+      );
+      const json = await response.json();
 
-        setData(json);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
+      setData(json);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  useEffect(() => {
     defectList();
-  }, []);
+  }, [data]);
 
   const handleDelete = async (suite, testCaseName, env) => {
     console.log(suite, testCaseName, env);
@@ -57,6 +58,7 @@ const DefectList = () => {
     const json = await response.json();
     console.log("json", json);
     setData(json);
+    defectList();
   };
 
   const columns = [
