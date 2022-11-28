@@ -21,10 +21,33 @@
   color: inherit;
 }
 
+/* TestExecution.js elements styling */
 .daterange {
   display: flex;
-  align-items: center;
-  margin-left: 50px;
+  flex-direction: row;
+  align-items: flex-start;
+
+  margin-left: 5px;
   gap: 20px;
-  margin-bottom: 0px;
+  margin-bottom: 5px;
+}
+
+#status {
+  font-family: "Poppins", "Arial,Helvetica,sans-serif";
+  font-size: 12px;
+}
+
+#env {
+  font-family: "Poppins", "Arial,Helvetica,sans-serif";
+  font-size: 12px;
+}
+
+#clearfilter {
+  font-family: "Poppins", "Arial,Helvetica,sans-serif";
+  font-size: 12px;
+}
+
+#suitename {
+  font-family: "Poppins", "Arial,Helvetica,sans-serif";
+  font-size: 12px;
 }

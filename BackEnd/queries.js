@@ -150,8 +150,20 @@ const getTestHistory = (request, response) => {
 
 const getTestResultsForGivenDateRange = (request, response) => {
   console.log("getTestResultsForGivenDateRange() start ---", request.body);
-  const { startDate, endDate, subscriptionkey } = request.body;
-  console.log("startDate", startDate, ", endDate", endDate);
+  const { startDate, endDate, subscriptionkey, suitename, env, status } =
+    request.body;
+  console.log(
+    "startDate",
+    startDate,
+    ", endDate",
+    endDate,
+    "suitename",
+    suitename,
+    "env",
+    env,
+    "status",
+    status
+  );
   let query =
     "select * from testcase where timestamp between '" +
     startDate +
@@ -159,6 +171,18 @@ const getTestResultsForGivenDateRange = (request, response) => {
     endDate +
     "' and subscriptionkey=" +
     subscriptionkey;
+
+  if (typeof suitename !== "undefined" && suitename.length !== 0) {
+    query = query + " and suite like '%" + suitename + "%'";
+  }
+  if (typeof env !== "undefined" && !env.length == 0) {
+    query = query + " and env like '%" + env + "%'";
+  }
+
+  if (typeof status !== "undefined" && status.length !== 0) {
+    query = query + " and status like '%" + status + "%'";
+  }
+
   console.log(query);
   try {
     pool.query(query, (error, results) => {

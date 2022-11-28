@@ -8,18 +8,19 @@ import {
 } from "../styles/styled-element";
 import { DataGrid } from "@material-ui/data-grid";
 import { productRows } from "../dummyData";
-import { Tooltip } from "@material-ui/core";
+import { TextField, Tooltip } from "@material-ui/core";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import Button from "@material-ui/core/Button";
 
 import moment from "moment";
-
+import MenuItem from "@mui/material/MenuItem";
 import { BASE_API_URL } from "../Utils/Config.js";
 import SimpleModal from "../components/SimpleModal";
 import DateRangeFilter from "../components/DateRangeFilter";
 import "../App.css";
 import { Stack } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
 const TestExecutions = () => {
   const [data, setData] = useState(productRows);
@@ -27,9 +28,68 @@ const TestExecutions = () => {
   const [subscriptionkey, setSubscriptionKey] = useState(
     localStorage.getItem("subscriptionkey")
   );
+  const [env, setEnv] = React.useState("");
+  const [testcasestatus, setTestStatus] = React.useState("");
+  const [suitename, setSuiteName] = React.useState("");
+
   let startDate, endDate;
 
+  const envs = [
+    {
+      value: "NE1",
+      label: "NE1",
+    },
+    {
+      value: "PROD",
+      label: "PROD",
+    },
+    {
+      value: "PreProd",
+      label: "PreProd",
+    },
+    {
+      value: "QE",
+      label: "QE",
+    },
+  ];
+
+  const testStatus = [
+    {
+      value: "FAIL",
+      label: "FAIL",
+    },
+    {
+      value: "PASS",
+      label: "PASS",
+    },
+    {
+      value: "SKIPPED",
+      label: "SKIPPED",
+    },
+  ];
+
+  const handleEnvChange = (event) => {
+    setEnv(event.target.value);
+  };
+
+  const handleSuiteNameChange = (event) => {
+    setSuiteName(event.target.value);
+  };
+
+  const handleTestStatusChange = (event) => {
+    setTestStatus(event.target.value);
+  };
+
   const onChange = (ranges) => {
+    console.log(
+      "suitename",
+      suitename,
+      "env",
+      env,
+      "testcasestatus",
+      testcasestatus
+    );
+
     if (
       moment(ranges.startDate).format("MM-DD-YYYY") !==
       moment(ranges.endDate).format("MM-DD-YYYY")
@@ -44,10 +104,19 @@ const TestExecutions = () => {
     if (endDate === "Invalid date") {
       endDate = startDate;
     }
-    getTestResultsForGivenDateRange(startDate, endDate);
+    getTestResultsForGivenDateRange(
+      startDate,
+      endDate,
+      suitename,
+      env,
+      testcasestatus
+    );
   };
 
   const testcasedata = async () => {
+    setTestStatus("");
+    setEnv("");
+    setSuiteName("");
     try {
       const requestOptions = {
         method: "POST",
@@ -73,7 +142,7 @@ const TestExecutions = () => {
   }, []);
 
   const getTestResultsForGivenDateRange = async (startDate, endDate) => {
-    console.log(startDate, endDate);
+    console.log(startDate, endDate, suitename, env, testcasestatus);
     try {
       const requestOptions = {
         method: "POST",
@@ -82,6 +151,9 @@ const TestExecutions = () => {
           startDate: startDate,
           endDate: endDate,
           subscriptionkey: subscriptionkey,
+          suite: suitename,
+          env: env,
+          status: testcasestatus,
         }),
       };
       const response = await fetch(
@@ -188,6 +260,7 @@ const TestExecutions = () => {
       field: "testcasename",
       headerName: "Test Case Name",
       width: 500,
+
       renderCell: (params) => {
         return (
           <>
@@ -327,17 +400,59 @@ const TestExecutions = () => {
       <TheList>
         <div className="daterange">
           <Stack spacing={2} direction="row">
+            <TextField
+              id="suitename"
+              label="Suite Name"
+              variant="outlined"
+              size="small"
+              helperText="Enter Partial suite name"
+              onChange={handleSuiteNameChange}
+            />
+            <TextField
+              id="env"
+              select
+              label="Env"
+              value={env}
+              onChange={handleEnvChange}
+              helperText="Please select env"
+              size="small"
+            >
+              {" "}
+              {envs.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              id="status"
+              select
+              label="Status"
+              value={testcasestatus}
+              onChange={handleTestStatusChange}
+              helperText="PASS/FAIL/SKIPPED"
+              size="small"
+            >
+              {testStatus.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
             <DateRangeFilter
               onChange={onChange}
               open={open}
               setOpen={setOpen}
+              className="size"
             />
             <Button
+              id="clearfilter"
               variant="contained"
               color="primary"
               onClick={() => testcasedata()}
+              style={{ maxWidth: "140px", maxHeight: "38px" }}
             >
-              Clear Filter
+              <strong> Clear Filter</strong>
             </Button>
           </Stack>
         </div>
@@ -347,6 +462,7 @@ const TestExecutions = () => {
           columns={columns}
           pageSize={50}
           checkboxSelection
+          autoHeight={true}
         />
       </TheList>
     </>
