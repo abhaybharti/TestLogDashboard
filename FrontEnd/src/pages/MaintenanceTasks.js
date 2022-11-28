@@ -42,7 +42,7 @@ const MaintenanceTasks = () => {
 
   useEffect(() => {
     maintenanceList();
-  }, [data]);
+  }, []);
 
   const handleDelete = async (suite, testCaseName, env) => {
     console.log(suite, testCaseName, env);

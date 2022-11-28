@@ -36,7 +36,7 @@ const DefectList = () => {
 
   useEffect(() => {
     defectList();
-  }, [data]);
+  }, []);
 
   const handleDelete = async (suite, testCaseName, env) => {
     console.log(suite, testCaseName, env);
