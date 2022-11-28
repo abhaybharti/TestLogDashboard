@@ -5,6 +5,7 @@ import Featured from "../components/Featured";
 import LgWidget from "../components/LgWidget";
 import SmWidget from "../components/SmWidget";
 import { userData } from "../dummyData";
+import LoginPage from "./LoginPage";
 
 const HomeContainer = styled.div`
   flex: 4;

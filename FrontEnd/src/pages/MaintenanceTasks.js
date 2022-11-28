@@ -15,11 +15,24 @@ import moment from "moment";
 
 const MaintenanceTasks = () => {
   const [data, setData] = useState(productRows);
+  const [subscriptionkey, setSubscriptionKey] = useState(
+    localStorage.getItem("subscriptionkey")
+  );
 
   useEffect(() => {
     const maintenanceList = async () => {
       try {
-        const response = await fetch(BASE_API_URL + "/getMaintenanceTracker");
+        const requestOptions = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            subscriptionkey: subscriptionkey,
+          }),
+        };
+        const response = await fetch(
+          BASE_API_URL + "/getMaintenanceTracker",
+          requestOptions
+        );
         const json = await response.json();
 
         setData(json);
@@ -39,6 +52,7 @@ const MaintenanceTasks = () => {
         suite: suite,
         testcasename: testCaseName,
         env: env,
+        subscriptionkey: subscriptionkey,
       }),
     };
 

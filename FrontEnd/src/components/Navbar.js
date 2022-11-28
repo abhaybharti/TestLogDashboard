@@ -2,6 +2,8 @@ import React from "react";
 import { NotificationsNone, Language, Settings } from "@material-ui/icons";
 import sytled from "styled-components";
 import "../App.css";
+import { Button } from "@material-ui/core";
+import LoginPage from "../pages/LoginPage";
 
 const NavbarContainer = sytled.div`
   width: 100%;
@@ -66,6 +68,14 @@ const Avatar = sytled.img`
 
 const Navbar = () => {
   const rndNmr = () => Math.floor(Math.random() * 90) + 1;
+
+  const LogOut = () => {
+    console.log(localStorage.getItem("loginStatus"));
+    console.log(localStorage.getItem("subscriptionkey"));
+    localStorage.removeItem("loginStatus");
+    localStorage.removeItem("subscriptionkey");
+    window.location.reload();
+  };
   return (
     <NavbarContainer>
       <NavbarWrapper>
@@ -84,10 +94,15 @@ const Navbar = () => {
           <IconContainer>
             <Settings />
           </IconContainer> */}
-          <Avatar
+          {/* <Avatar
             src={`https://randomuser.me/api/portraits/women/${rndNmr()}.jpg`}
             alt="avatar"
-          />
+          /> */}
+          <IconContainer>
+            <Button variant="contained" color="inherit" onClick={LogOut}>
+              LogOut
+            </Button>
+          </IconContainer>
         </TopRight>
       </NavbarWrapper>
     </NavbarContainer>

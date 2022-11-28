@@ -24,6 +24,9 @@ import { Stack } from "@mui/material";
 const TestExecutions = () => {
   const [data, setData] = useState(productRows);
   const [open, setOpen] = useState(false);
+  const [subscriptionkey, setSubscriptionKey] = useState(
+    localStorage.getItem("subscriptionkey")
+  );
   let startDate, endDate;
 
   const onChange = (ranges) => {
@@ -46,7 +49,17 @@ const TestExecutions = () => {
 
   const testcasedata = async () => {
     try {
-      const response = await fetch(BASE_API_URL + "/getTestCaseExecution");
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subscriptionkey: subscriptionkey,
+        }),
+      };
+      const response = await fetch(
+        BASE_API_URL + "/getTestCaseExecution",
+        requestOptions
+      );
       const json = await response.json();
 
       setData(json);
@@ -68,6 +81,7 @@ const TestExecutions = () => {
         body: JSON.stringify({
           startDate: startDate,
           endDate: endDate,
+          subscriptionkey: subscriptionkey,
         }),
       };
       const response = await fetch(
@@ -92,6 +106,7 @@ const TestExecutions = () => {
         testcasename: testCaseName,
         env: env,
         failurereason: failureReason,
+        subscriptionkey: subscriptionkey,
       }),
     };
     fetch(BASE_API_URL + "/createMaintenance", requestOptions)
@@ -101,7 +116,7 @@ const TestExecutions = () => {
 
   const addToProductDefectTracker = (
     suite,
-    testCaseName,
+    testcasename,
     env,
     failureReason
   ) => {
@@ -110,7 +125,7 @@ const TestExecutions = () => {
       "suite : ",
       suite,
       "testcasname : ",
-      testCaseName,
+      testcasename,
       "jirakey",
       jirakey,
       "env",
@@ -123,10 +138,11 @@ const TestExecutions = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         suite: suite,
-        testcasename: testCaseName,
+        testcasename: testcasename,
         jirakey: jirakey,
         env: env,
         failurereason: failureReason,
+        subscriptionkey: subscriptionkey,
       }),
     };
     fetch(BASE_API_URL + "/createDefect", requestOptions)
@@ -144,6 +160,7 @@ const TestExecutions = () => {
         testcasename: testCaseName,
         env: env,
         failurereason: "Intermittent Failure",
+        subscriptionkey: subscriptionkey,
       }),
     };
     fetch(BASE_API_URL + "/createMaintenance", requestOptions)

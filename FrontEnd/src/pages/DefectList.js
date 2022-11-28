@@ -9,11 +9,24 @@ import moment from "moment";
 
 const DefectList = () => {
   const [data, setData] = useState(defectList);
+  const [subscriptionkey, setSubscriptionKey] = useState(
+    localStorage.getItem("subscriptionkey")
+  );
 
   useEffect(() => {
     const defectList = async () => {
       try {
-        const response = await fetch(BASE_API_URL + "/getDefectList");
+        const requestOptions = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            subscriptionkey: subscriptionkey,
+          }),
+        };
+        const response = await fetch(
+          BASE_API_URL + "/getDefectList",
+          requestOptions
+        );
         const json = await response.json();
 
         setData(json);
@@ -33,6 +46,7 @@ const DefectList = () => {
         suite: suite,
         testcasename: testCaseName,
         env: env,
+        subscriptionkey: subscriptionkey,
       }),
     };
 

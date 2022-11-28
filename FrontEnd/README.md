@@ -43,9 +43,10 @@ suite VARCHAR(200) NOT NULL,
 testcasename VARCHAR(200),
 env VARCHAR(10),
 failurereason VARCHAR(300),
-timestamp timestamp not null default current_timestamp
+timestamp timestamp not null default current_timestamp,
+subscriptionkey integer
 );
 select \* from maintenance;
-insert into maintenance (suite,testcasename,env) VALUES ('Touch','ABC_Test','QE');
+insert into maintenance (suite,testcasename,env,subscriptionkey) VALUES ('Touch','ABC_Test','QE',123456);
 
 https://jasonwatmore.com/post/2020/02/01/react-fetch-http-post-request-examples

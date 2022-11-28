@@ -25,9 +25,9 @@ app.get("/", (request, response) => {
   response.json({ info: "node.JS, Express and PostGres API" });
 });
 
-app.get("/getTestCaseExecution", db.getTestCaseExecution);
-app.get("/getDefectList", db.getDefectList);
-app.get("/getMaintenanceTracker", db.getMaintenanceTracker);
+app.post("/getTestCaseExecution", db.getTestCaseExecution);
+app.post("/getDefectList", db.getDefectList);
+app.post("/getMaintenanceTracker", db.getMaintenanceTracker);
 app.delete("/deleteMaintenance", db.deleteMaintenance);
 app.delete("/deleteDefect", db.deleteDefect);
 app.post(
