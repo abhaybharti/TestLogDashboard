@@ -240,7 +240,7 @@ const TestExecutions = () => {
 
         return (
           <ListItem>
-            {moment(finalTimeStamp).format("MM-DD-YYYY  hh:mm")}
+            {moment(finalTimeStamp).format("MM-DD-YYYY hh:mm")}
           </ListItem>
         );
       },

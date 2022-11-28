@@ -108,8 +108,11 @@ const DefectList = () => {
       renderCell: (params) => {
         let timestampVal = params.row.timestamp;
         const finalTimeStamp =
-          typeof str === "string" ? timestampVal.substring(16) : "";
-        return <ListItem>{params.row.timestamp}</ListItem>;
+          typeof timestampVal === "string" ? timestampVal.slice(0, 16) : "";
+
+        return (
+          <ListItem>{moment(finalTimeStamp).format("MM-DD-YYYY")}</ListItem>
+        );
       },
     },
     {
