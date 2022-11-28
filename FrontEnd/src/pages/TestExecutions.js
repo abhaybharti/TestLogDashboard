@@ -96,14 +96,14 @@ const TestExecutions = () => {
     }
   };
 
-  const addToMaintenanceTracker = (suite, testCaseName, env, failureReason) => {
-    console.log(suite, testCaseName, env, failureReason);
+  const addToMaintenanceTracker = (suite, testcasename, env, failureReason) => {
+    console.log(suite, testcasename, env, failureReason);
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         suite: suite,
-        testcasename: testCaseName,
+        testcasename: testcasename,
         env: env,
         failurereason: failureReason,
         subscriptionkey: subscriptionkey,
@@ -150,14 +150,14 @@ const TestExecutions = () => {
       .then((data) => console.log("successfully added in defectList "));
   };
 
-  const intermittentFailure = (suite, testCaseName, env, failureReason) => {
-    console.log(suite, testCaseName, env, failureReason);
+  const intermittentFailure = (suite, testcasename, env, failureReason) => {
+    console.log(suite, testcasename, env, failureReason);
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         suite: suite,
-        testcasename: testCaseName,
+        testcasename: testcasename,
         env: env,
         failurereason: "Intermittent Failure",
         subscriptionkey: subscriptionkey,
@@ -185,7 +185,7 @@ const TestExecutions = () => {
       },
     },
     {
-      field: "testCaseName",
+      field: "testcasename",
       headerName: "Test Case Name",
       width: 500,
       renderCell: (params) => {
