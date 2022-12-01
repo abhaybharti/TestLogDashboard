@@ -16,8 +16,9 @@ const getTestCaseExecution = (request, response) => {
   //where order_date > now() - interval '24 hours';
   let queryString =
     "select * from testcase where timestamp > now() - interval '48 hours' and subscriptionkey=" +
-    subscriptionkey;
-  console.log("queryString", queryString);
+    subscriptionkey +
+    " order by timestamp desc";
+  console.log("queryString : ", queryString);
   try {
     pool.query(queryString, (error, results) => {
       if (error) {
