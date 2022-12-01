@@ -16,6 +16,7 @@ import DefectList from "./DefectList";
 import MaintenanceTasks from "./MaintenanceTasks";
 import TestExecutions from "./TestExecutions";
 import Analytics from "./Analytics";
+import SuiteView from "./SuiteView";
 
 const LoginPage = () => {
   const [checked, setChecked] = React.useState(true);
@@ -45,6 +46,11 @@ const LoginPage = () => {
       localStorage.setItem("loginStatus", true);
       localStorage.setItem("subscriptionkey", "123456");
     } else if (username === "xio@crestron.com" && password === "xio123") {
+      console.log("Login Success, loginStatus " + loginStatus);
+      setloginStatus(true);
+      localStorage.setItem("loginStatus", true);
+      localStorage.setItem("subscriptionkey", "132456");
+    } else if (username === "raptor@crestron.com" && password === "raptor123") {
       console.log("Login Success, loginStatus " + loginStatus);
       setloginStatus(true);
       localStorage.setItem("loginStatus", true);
@@ -120,8 +126,8 @@ const LoginPage = () => {
             <Route path="/testExecution">
               <TestExecutions />
             </Route>
-            <Route path="/analytics">
-              <Analytics />
+            <Route path="/suiteview">
+              <SuiteView />
             </Route>
           </Switch>
         </div>

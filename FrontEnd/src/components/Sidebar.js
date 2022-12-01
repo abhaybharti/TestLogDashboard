@@ -139,10 +139,10 @@ const Sidebar = () => {
         <SidebarMenu>
           <SidebarTitle>QE</SidebarTitle>
           <SidebarList>
-            <Link to="/analytics" className="link">
+            <Link to="/suiteview" className="link">
               <SidebarListItem>
                 <MyPermIdentity />
-                Analytics
+                Test Suite View
               </SidebarListItem>
             </Link>
             <Link to="/testExecution" className="link">

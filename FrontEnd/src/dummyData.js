@@ -31,6 +31,18 @@ export const userData = [
   { name: "10-25-2022", "Active User": 3200 },
 ];
 
+export const suiteViewData = [
+  {
+    id: 1,
+    suite: "PREPROD_CHECKLIST_East_DMPS200C",
+    pass: 0,
+    fail: 0,
+    skip: 0,
+    defect: 0,
+    maintainance: 0,
+  },
+];
+
 export const newMemberRows = [
   {
     id: 1,
