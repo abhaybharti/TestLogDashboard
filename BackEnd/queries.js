@@ -336,6 +336,48 @@ const deleteMaintenance = (request, response) => {
   console.log("deleteMaintenance stop");
 };
 
+const getDailyTestExecutionCount = (request, response) => {
+  console.log("getDailyTestExecutionCount start", request.body);
+  const { subscriptionkey } = request.body;
+  console.log("subscriptionkey", subscriptionkey);
+  let query = `SELECT DATE_TRUNC('day', "timestamp") AS "Date", COUNT("timestamp") AS "TestCaseExecuted" FROM testcase where subscriptionkey=123456 GROUP BY DATE_TRUNC('day', "timestamp") limit 10;`;
+  console.log(query);
+  try {
+    pool.query(query, (error, results) => {
+      if (error) {
+        console.log(error);
+        throw error;
+      }
+      response.status(200).json(results.rows);
+      console.log(results.rows);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  console.log("getDailyTestExecutionCount stop");
+};
+
+const getSuiteSummary = (request, response) => {
+  console.log("getSuiteSummary start", request.body);
+  const { subscriptionkey } = request.body;
+  console.log("subscriptionkey", subscriptionkey);
+  let query = `select suite, count(CASE WHEN status = 'PASS' THEN status end) as PASS, count(CASE WHEN status = 'FAIL' THEN status end) as FAIL, count(CASE WHEN status = 'SKIP' THEN status end) as SKIP, count(CASE WHEN status = 'DEFECT' THEN status end) as DEFECT, count(CASE WHEN status = 'MAINTAINANCE' THEN status end) as MAINTAINANCE from testcase where subscriptionkey=132456 and timestamp > now() - interval '48 hours' group by suite;`;
+  console.log(query);
+  try {
+    pool.query(query, (error, results) => {
+      if (error) {
+        console.log(error);
+        throw error;
+      }
+      response.status(200).json(results.rows);
+      console.log(results.rows);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  console.log("getSuiteSummary stop");
+};
+
 module.exports = {
   getTestCaseExecution,
   getDefectList,
@@ -349,4 +391,6 @@ module.exports = {
   createDefect,
   updateTestCaseExecution,
   getTestResultsForGivenDateRange,
+  getDailyTestExecutionCount,
+  getSuiteSummary,
 };

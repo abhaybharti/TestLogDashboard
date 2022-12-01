@@ -42,6 +42,8 @@ app.post(
   "/getTestResultsForGivenDateRange",
   db.getTestResultsForGivenDateRange
 );
+app.post("/getDailyTestExecutionCount", db.getDailyTestExecutionCount);
+app.post("/getSuiteSummary", db.getSuiteSummary);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);

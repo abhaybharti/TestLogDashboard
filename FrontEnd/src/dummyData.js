@@ -16,13 +16,10 @@ export const featureData = [
   },
 ];
 
-export const userData = [
-  { name: "10-20-2022", "Active User": 4000 },
-  { name: "10-21-2022", "Active User": 3000 },
-  { name: "10-22-2022", "Active User": 3500 },
-  { name: "10-23-2022", "Active User": 2000 },
-  { name: "10-24-2022", "Active User": 1100 },
-  { name: "10-25-2022", "Active User": 3200 },
+export const dailyTestExecutionData = [
+  { Date: "10-20-2022", "Test Case Executed": 4000 },
+  { Date: "10-21-2022", "Test Case Executed": 4500 },
+  { Date: "10-22-2022", "Test Case Executed": 3500 },
 ];
 
 export const newMemberRows = [
