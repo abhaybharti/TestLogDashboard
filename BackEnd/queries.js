@@ -361,7 +361,7 @@ const getSuiteSummary = (request, response) => {
   console.log("getSuiteSummary start", request.body);
   const { subscriptionkey } = request.body;
   console.log("subscriptionkey", subscriptionkey);
-  let query = `select row_number() OVER () as id, suite, count(CASE WHEN status = 'PASS' THEN status end) as PASS, count(CASE WHEN status = 'FAIL' THEN status end) as FAIL, count(CASE WHEN status = 'SKIP' THEN status end) as SKIP, count(CASE WHEN status = 'DEFECT' THEN status end) as DEFECT, count(CASE WHEN status = 'MAINTAINANCE' THEN status end) as MAINTAINANCE from testcase where subscriptionkey=132456 and timestamp > now() - interval '48 hours' group by suite;`;
+  let query = `select row_number() OVER () as id, suite, count(CASE WHEN status = 'PASS' THEN status end) as PASS, count(CASE WHEN status = 'FAIL' THEN status end) as FAIL, count(CASE WHEN status = 'SKIP' THEN status end) as SKIP, count(CASE WHEN status = 'DEFECT' THEN status end) as DEFECT, count(CASE WHEN status = 'MAINTAINANCE' THEN status end) as MAINTAINANCE from testcase where subscriptionkey=${subscriptionkey} and timestamp > now() - interval '48 hours' group by suite;`;
   console.log(query);
   try {
     pool.query(query, (error, results) => {
