@@ -14,6 +14,10 @@ import { TextField, Tooltip } from "@material-ui/core";
 import moment from "moment";
 import MenuItem from "@mui/material/MenuItem";
 import DateRangeFilter from "../components/DateRangeFilter";
+import {
+  getStringCountInArrayOfObjects,
+  getSumByKey,
+} from "../Utils/GeneralFunctions";
 
 const SuiteView = () => {
   const [data, setData] = useState(suiteViewData);
@@ -28,8 +32,23 @@ const SuiteView = () => {
 
   const [testcasestatus, setTestStatus] = React.useState("");
   const [suitename, setSuiteName] = React.useState("");
+  const [pass, setPass] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [fail, setFail] = useState(0);
+  const [skip, setSkip] = useState(0);
+  const [maintainance, setMaintainance] = useState(0);
+  const [defect, setDefect] = useState(0);
 
   let startDate, endDate;
+
+  function getTestTotalPassFailCount() {
+    setPass(getSumByKey(data, "pass"));
+    setFail(getSumByKey(data, "fail"));
+    setSkip(getSumByKey(data, "skip"));
+    setDefect(getSumByKey(data, "defect"));
+    setMaintainance(getSumByKey(data, "maintainance"));
+    setTotal(data.length);
+  }
 
   const searchCriteria = [
     {
@@ -207,6 +226,7 @@ const SuiteView = () => {
         const json = await response.json();
         console.log("ApiCall->getApiResponse() end :", json);
         setData(json);
+        getTestTotalPassFailCount();
       } catch (error) {
         console.log(error);
       }
@@ -219,7 +239,8 @@ const SuiteView = () => {
 
   useEffect(() => {
     getTestSuiteData();
-  }, []);
+    getTestTotalPassFailCount();
+  }, [data]);
 
   const testcasedata = async () => {
     setTestStatus("");
@@ -401,6 +422,48 @@ const SuiteView = () => {
               <strong> Clear Filter</strong>
             </Button>
           </Tooltip>
+          <h4
+            style={{
+              color: "gray",
+            }}
+          >
+            Suite Count : {total}
+          </h4>
+          <h4
+            style={{
+              color: "green",
+            }}
+          >
+            Pass : {pass}
+          </h4>
+          <h4
+            style={{
+              color: "red",
+            }}
+          >
+            Fail : {fail}
+          </h4>
+          <h4
+            style={{
+              color: "Violet",
+            }}
+          >
+            Skipped : {skip}
+          </h4>
+          <h4
+            style={{
+              color: "IndianRed",
+            }}
+          >
+            Known Defect : {defect}
+          </h4>
+          <h4
+            style={{
+              color: "LightSalmon",
+            }}
+          >
+            Known Script Issue : {maintainance}
+          </h4>
         </Stack>
       </div>
       <DataGrid

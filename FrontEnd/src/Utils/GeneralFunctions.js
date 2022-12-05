@@ -9,6 +9,14 @@ function getStringCountInArrayOfObjects(arrayOfObjects, keyName, value) {
   return countOfValue;
 }
 
+const getSumByKey = (data, key) => {
+  return data.reduce(
+    (accumulator, current) => accumulator + Number(current[key]),
+    0
+  );
+};
+
 module.exports = {
   getStringCountInArrayOfObjects,
+  getSumByKey,
 };

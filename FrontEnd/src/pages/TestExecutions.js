@@ -172,6 +172,7 @@ const TestExecutions = () => {
       );
       const json = await response.json();
       setData(json);
+      getTestTotalPassFailCount();
     } catch (error) {
       console.log("error", error);
     }
@@ -180,7 +181,7 @@ const TestExecutions = () => {
   useEffect(() => {
     testcasedata();
     getTestTotalPassFailCount();
-  }, []);
+  }, [data]);
 
   const getTestResultsForGivenDateRange = async (startDate, endDate) => {
     console.log(startDate, endDate, suitename, env, testcasestatus);
