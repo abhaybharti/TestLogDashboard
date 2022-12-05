@@ -20,7 +20,7 @@ import SimpleModal from "../components/SimpleModal";
 import DateRangeFilter from "../components/DateRangeFilter";
 import "../App.css";
 import { Stack } from "@mui/material";
-import { getApiResponse } from "../Utils/ApiCall";
+
 import { getStringCountInArrayOfObjects } from "../Utils/GeneralFunctions";
 
 const TestExecutions = () => {
