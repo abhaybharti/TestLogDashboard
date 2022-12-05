@@ -25,7 +25,7 @@ const getTestCaseExecution = (request, response) => {
         throw error;
       }
       response.status(200).json(results.rows);
-      console.log(results.rows);
+      //console.log(results.rows);
     });
   } catch (error) {
     console.log(error);
@@ -60,7 +60,7 @@ const getMaintenanceTracker = (request, response) => {
         throw error;
       }
       response.status(200).json(results.rows);
-      console.log(results.rows);
+      //console.log(results.rows);
     });
   } catch (error) {
     console.log(error);
@@ -187,7 +187,7 @@ const getTestResultsForGivenDateRange = (request, response) => {
         throw error;
       }
       response.status(200).json(results.rows);
-      console.log(results.rows);
+      //console.log(results.rows);
     });
   } catch (error) {
     console.log(error);
@@ -323,7 +323,7 @@ const deleteMaintenance = (request, response) => {
         throw error;
       }
       response.status(200).json(results.rows);
-      console.log(results.rows);
+      //console.log(results.rows);
     });
   } catch (error) {
     console.log(error);
@@ -344,7 +344,7 @@ const getDailyTestExecutionCount = (request, response) => {
         throw error;
       }
       response.status(200).json(results.rows);
-      console.log(results.rows);
+      //console.log(results.rows);
     });
   } catch (error) {
     console.log(error);
@@ -365,7 +365,7 @@ const getSuiteSummary = (request, response) => {
         throw error;
       }
       response.status(200).json(results.rows);
-      console.log(results.rows);
+      //console.log(results.rows);
     });
   } catch (error) {
     console.log(error);
@@ -383,7 +383,7 @@ const getTestSuiteDataForGivenDateRange = (request, response) => {
         throw error;
       }
       response.status(200).json(results.rows);
-      console.log(results.rows);
+      //console.log(results.rows);
     });
   } catch (error) {
     console.log(error);
