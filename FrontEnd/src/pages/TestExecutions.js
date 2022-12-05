@@ -181,7 +181,7 @@ const TestExecutions = () => {
   useEffect(() => {
     testcasedata();
     getTestTotalPassFailCount();
-  }, [data]);
+  }, []);
 
   const getTestResultsForGivenDateRange = async (startDate, endDate) => {
     console.log(startDate, endDate, suitename, env, testcasestatus);

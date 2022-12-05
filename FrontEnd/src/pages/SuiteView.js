@@ -240,7 +240,7 @@ const SuiteView = () => {
   useEffect(() => {
     getTestSuiteData();
     getTestTotalPassFailCount();
-  }, [data]);
+  }, []);
 
   const testcasedata = async () => {
     setTestStatus("");
@@ -282,7 +282,7 @@ const SuiteView = () => {
     {
       field: "executed",
       headerName: "Executed",
-      width: 135,
+      width: 155,
 
       renderCell: (params) => {
         return (
