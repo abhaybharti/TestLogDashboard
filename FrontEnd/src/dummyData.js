@@ -17,9 +17,9 @@ export const featureData = [
 ];
 
 export const dailyTestExecutionData = [
-  { Date: "10-20-2022", "Test Case Executed": 4000 },
-  { Date: "10-21-2022", "Test Case Executed": 4500 },
-  { Date: "10-22-2022", "Test Case Executed": 3500 },
+  { Date: "10-20-2022", TestCaseExecuted: 4000 },
+  { Date: "10-21-2022", TestCaseExecuted: 4500 },
+  { Date: "10-22-2022", TestCaseExecuted: 3500 },
 ];
 
 export const userData = [
@@ -139,7 +139,7 @@ export const productRows = [
     testcasename: "validate_UX_Device_level",
     img: "https://picsum.photos/200/300/?random=1",
     stock: 143,
-    status: "PASS",
+    status: "PASS1",
     price: "$999.00",
     failureReason: "login",
     env: "QE",
@@ -194,5 +194,43 @@ export const defectList = [
     timestamp: "",
     jirakey: "",
     id: "3",
+  },
+];
+
+const searchCriteria = [
+  {
+    value: "Equal",
+    label: "Equal",
+  },
+  {
+    value: "Contains",
+    label: "Contains",
+  },
+];
+
+const envs = [
+  {
+    value: "ne1",
+    label: "NE1",
+  },
+  {
+    value: "prod",
+    label: "PROD",
+  },
+  {
+    value: "preprod",
+    label: "PreProd",
+  },
+  {
+    value: "qe",
+    label: "QE",
+  },
+  {
+    value: "Mac",
+    label: "Mac",
+  },
+  {
+    value: "Windows",
+    label: "Windows",
   },
 ];

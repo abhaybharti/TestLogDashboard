@@ -151,38 +151,33 @@ const getTestHistory = (request, response) => {
 
 const getTestResultsForGivenDateRange = (request, response) => {
   console.log("getTestResultsForGivenDateRange() start ---", request.body);
-  const { startDate, endDate, subscriptionkey, suitename, env, status } =
-    request.body;
+  const { query, endpoint, subscriptionkey } = request.body;
   console.log(
-    "startDate",
-    startDate,
-    ", endDate",
-    endDate,
-    "suitename",
-    suitename,
-    "env",
-    env,
-    "status",
-    status
+    "query",
+    query,
+    ", endpoint",
+    endpoint,
+    "subscriptionkey",
+    subscriptionkey
   );
-  let query =
-    "select * from testcase where timestamp between '" +
-    startDate +
-    "' and '" +
-    endDate +
-    "' and subscriptionkey=" +
-    subscriptionkey;
+  // let query =
+  //   "select * from testcase where timestamp between '" +
+  //   startDate +
+  //   "' and '" +
+  //   endDate +
+  //   "' and subscriptionkey=" +
+  //   subscriptionkey;
 
-  if (typeof suitename !== "undefined" && suitename.length !== 0) {
-    query = query + " and suite like '%" + suitename + "%'";
-  }
-  if (typeof env !== "undefined" && !env.length == 0) {
-    query = query + " and env like '%" + env + "%'";
-  }
+  // if (typeof suitename !== "undefined" && suitename.length !== 0) {
+  //   query = query + " and suite like '%" + suitename + "%'";
+  // }
+  // if (typeof env !== "undefined" && !env.length == 0) {
+  //   query = query + " and env like '%" + env + "%'";
+  // }
 
-  if (typeof status !== "undefined" && status.length !== 0) {
-    query = query + " and status like '%" + status + "%'";
-  }
+  // if (typeof status !== "undefined" && status.length !== 0) {
+  //   query = query + " and status like '%" + status + "%'";
+  // }
 
   console.log(query);
   try {
@@ -340,7 +335,7 @@ const getDailyTestExecutionCount = (request, response) => {
   console.log("getDailyTestExecutionCount start", request.body);
   const { subscriptionkey } = request.body;
   console.log("subscriptionkey", subscriptionkey);
-  let query = `SELECT DATE_TRUNC('day', "timestamp") AS "Date", COUNT("timestamp") AS "TestCaseExecuted" FROM testcase where subscriptionkey=123456 GROUP BY DATE_TRUNC('day', "timestamp") limit 10;`;
+  let query = `SELECT to_char(timestamp, 'dd-mm-yyyy') as "Date",COUNT("timestamp") AS "TestCaseExecuted" FROM testcase where subscriptionkey=123456 GROUP BY timestamp limit 10;`;
   console.log(query);
   try {
     pool.query(query, (error, results) => {
@@ -378,6 +373,24 @@ const getSuiteSummary = (request, response) => {
   console.log("getSuiteSummary stop");
 };
 
+const getTestSuiteDataForGivenDateRange = (request, response) => {
+  console.log("getTestSuiteDataForGivenDateRange start", request.body);
+  const { query, subscriptionkey } = request.body;
+  try {
+    pool.query(query, (error, results) => {
+      if (error) {
+        console.log(error);
+        throw error;
+      }
+      response.status(200).json(results.rows);
+      console.log(results.rows);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  console.log("getTestSuiteDataForGivenDateRange stop");
+};
+
 module.exports = {
   getTestCaseExecution,
   getDefectList,
@@ -393,4 +406,5 @@ module.exports = {
   getTestResultsForGivenDateRange,
   getDailyTestExecutionCount,
   getSuiteSummary,
+  getTestSuiteDataForGivenDateRange,
 };

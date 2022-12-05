@@ -4,7 +4,7 @@ import Chart from "../components/Chart";
 import Featured from "../components/Featured";
 import LgWidget from "../components/LgWidget";
 import SmWidget from "../components/SmWidget";
-import { userData } from "../dummyData";
+import { dailyTestExecutionData } from "../dummyData";
 
 const HomeContainer = styled.div`
   flex: 4;
@@ -19,7 +19,7 @@ const Analytics = () => {
     <HomeContainer>
       <Featured />
       <Chart
-        data={userData}
+        data={dailyTestExecutionData}
         title="Execution History"
         grid
         dataKey="Active User"

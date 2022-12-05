@@ -20,7 +20,8 @@ import SimpleModal from "../components/SimpleModal";
 import DateRangeFilter from "../components/DateRangeFilter";
 import "../App.css";
 import { Stack } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { getApiResponse } from "../Utils/ApiCall";
+import { getStringCountInArrayOfObjects } from "../Utils/GeneralFunctions";
 
 const TestExecutions = () => {
   const [data, setData] = useState(productRows);
@@ -29,27 +30,53 @@ const TestExecutions = () => {
     localStorage.getItem("subscriptionkey")
   );
   const [env, setEnv] = React.useState("");
+  const [searchType, setSearchCriteria] = React.useState("");
+
   const [testcasestatus, setTestStatus] = React.useState("");
   const [suitename, setSuiteName] = React.useState("");
 
+  const [pass, setPass] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [fail, setFail] = useState(0);
+  const [skip, setSkip] = useState(0);
+
   let startDate, endDate;
+
+  const searchCriteria = [
+    {
+      value: "Equal",
+      label: "Equal",
+    },
+    {
+      value: "Contains",
+      label: "Contains",
+    },
+  ];
 
   const envs = [
     {
-      value: "NE1",
+      value: "ne1",
       label: "NE1",
     },
     {
-      value: "PROD",
+      value: "prod",
       label: "PROD",
     },
     {
-      value: "PreProd",
+      value: "preprod",
       label: "PreProd",
     },
     {
-      value: "QE",
+      value: "qe",
       label: "QE",
+    },
+    {
+      value: "Mac",
+      label: "Mac",
+    },
+    {
+      value: "Windows",
+      label: "Windows",
     },
   ];
 
@@ -68,11 +95,17 @@ const TestExecutions = () => {
     },
   ];
 
+  const handleSearchCriteriaChange = (event) => {
+    console.log(event.target.value);
+    setSearchCriteria(event.target.value);
+  };
+
   const handleEnvChange = (event) => {
     setEnv(event.target.value);
   };
 
   const handleSuiteNameChange = (event) => {
+    console.log(event.target.value);
     setSuiteName(event.target.value);
   };
 
@@ -82,6 +115,8 @@ const TestExecutions = () => {
 
   const onChange = (ranges) => {
     console.log(
+      "selectType",
+      searchType,
       "suitename",
       suitename,
       "env",
@@ -104,19 +139,25 @@ const TestExecutions = () => {
     if (endDate === "Invalid date") {
       endDate = startDate;
     }
-    getTestResultsForGivenDateRange(
-      startDate,
-      endDate,
-      suitename,
-      env,
-      testcasestatus
-    );
+    getTestResultsForGivenDateRange(startDate, endDate);
+    getTestTotalPassFailCount();
   };
+
+  function getTestTotalPassFailCount() {
+    setPass(getStringCountInArrayOfObjects(data, "status", "PASS"));
+    setFail(getStringCountInArrayOfObjects(data, "status", "FAIL"));
+    setSkip(getStringCountInArrayOfObjects(data, "status", "SKIP"));
+    setTotal(data.length);
+  }
 
   const testcasedata = async () => {
     setTestStatus("");
     setEnv("");
     setSuiteName("");
+    setPass(0);
+    setFail(0);
+    setSkip(0);
+    setTotal(0);
     try {
       const requestOptions = {
         method: "POST",
@@ -130,7 +171,6 @@ const TestExecutions = () => {
         requestOptions
       );
       const json = await response.json();
-
       setData(json);
     } catch (error) {
       console.log("error", error);
@@ -139,33 +179,74 @@ const TestExecutions = () => {
 
   useEffect(() => {
     testcasedata();
+    getTestTotalPassFailCount();
   }, []);
 
   const getTestResultsForGivenDateRange = async (startDate, endDate) => {
     console.log(startDate, endDate, suitename, env, testcasestatus);
-    try {
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          startDate: startDate,
-          endDate: endDate,
-          subscriptionkey: subscriptionkey,
-          suite: suitename,
-          env: env,
-          status: testcasestatus,
-        }),
-      };
-      const response = await fetch(
-        BASE_API_URL + "/getTestResultsForGivenDateRange",
-        requestOptions
-      );
-      const json = await response.json();
+    let query =
+      "select * from testcase where timestamp between '" +
+      startDate +
+      "' and '" +
+      endDate +
+      "' and subscriptionkey=" +
+      subscriptionkey;
+    console.log("Initial query", query);
 
-      setData(json);
+    if (
+      typeof suitename !== "undefined" &&
+      suitename.length !== 0 &&
+      typeof searchType !== "undefined" &&
+      searchType.length !== 0 &&
+      searchType === "Contains"
+    ) {
+      query = query + " and suite like '%" + suitename + "%'";
+    }
+
+    if (
+      typeof suitename !== "undefined" &&
+      suitename.length !== 0 &&
+      typeof searchType !== "undefined" &&
+      searchType.length !== 0 &&
+      searchType === "Equal"
+    ) {
+      query = query + " and suite ='" + suitename + "'";
+    }
+
+    if (typeof env !== "undefined" && !env.length == 0) {
+      query = query + " and env like '%" + env + "%'";
+    }
+
+    if (typeof testcasestatus !== "undefined" && testcasestatus.length !== 0) {
+      query = query + " and status ='" + testcasestatus + "'";
+    }
+    console.log("final query", query);
+    try {
+      try {
+        const requestOptions = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            query: query,
+            subscriptionkey: subscriptionkey,
+          }),
+        };
+        const response = await fetch(
+          BASE_API_URL + "/getTestResultsForGivenDateRange",
+          requestOptions
+        );
+        const json = await response.json();
+        console.log("ApiCall->getApiResponse() end :", json);
+        setData(json);
+        getTestTotalPassFailCount();
+      } catch (error) {
+        console.log(error);
+      }
     } catch (error) {
       console.log(error);
     }
+
+    console.log("TestExections->getTestResultsForGivenDateRange() stop");
   };
 
   const addToMaintenanceTracker = (suite, testcasename, env, failureReason) => {
@@ -399,6 +480,22 @@ const TestExecutions = () => {
     <>
       <TheList>
         <div className="daterange">
+          <TextField
+            id="search"
+            select
+            label="Select"
+            value={searchType}
+            onChange={handleSearchCriteriaChange}
+            helperText="Contains or Equal"
+            size="small"
+          >
+            {searchCriteria.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+
           <Stack spacing={2} direction="row">
             <TextField
               id="suitename"
@@ -445,17 +542,48 @@ const TestExecutions = () => {
               setOpen={setOpen}
               className="size"
             />
-            <Button
-              id="clearfilter"
-              variant="contained"
-              color="primary"
-              onClick={() => testcasedata()}
-              style={{ maxWidth: "140px", maxHeight: "38px" }}
+            <Tooltip title="Fetch data for last 48 hours duration">
+              <Button
+                id="clearfilter"
+                variant="contained"
+                color="primary"
+                onClick={() => testcasedata()}
+                style={{ maxWidth: "140px", maxHeight: "38px" }}
+              >
+                <strong> Clear Filter</strong>
+              </Button>
+            </Tooltip>
+            <h4
+              style={{
+                color: "gray",
+              }}
             >
-              <strong> Clear Filter</strong>
-            </Button>
+              Total : {total}
+            </h4>
+            <h4
+              style={{
+                color: "green",
+              }}
+            >
+              Pass : {pass}
+            </h4>
+            <h4
+              style={{
+                color: "red",
+              }}
+            >
+              Fail : {fail}
+            </h4>
+            <h4
+              style={{
+                color: "Violet",
+              }}
+            >
+              Skipped : {skip}
+            </h4>
           </Stack>
         </div>
+
         <DataGrid
           rows={data}
           disableSelectionOnClick

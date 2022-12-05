@@ -76,6 +76,18 @@ const Navbar = () => {
     localStorage.removeItem("subscriptionkey");
     window.location.reload();
   };
+  function showLoggedInUser() {
+    console.log("inside showLoggedInUser");
+    const subscriptionKey = localStorage.getItem("subscriptionkey");
+    console.log(subscriptionKey);
+    if (subscriptionKey === "123456") {
+      console.log("omni");
+      return "Omni";
+    } else if (subscriptionKey === "132456") {
+      console.log("xio");
+      return "xio";
+    }
+  }
   return (
     <NavbarContainer>
       <NavbarWrapper>
@@ -90,10 +102,13 @@ const Navbar = () => {
           {/* <IconContainer>
             <Language />
             <IconBadge>3</IconBadge>
-          </IconContainer>
+          </IconContainer>*/}
           <IconContainer>
-            <Settings />
-          </IconContainer> */}
+            Hi,{" "}
+            <strong>
+              <i>{showLoggedInUser()}</i>
+            </strong>
+          </IconContainer>
           {/* <Avatar
             src={`https://randomuser.me/api/portraits/women/${rndNmr()}.jpg`}
             alt="avatar"
