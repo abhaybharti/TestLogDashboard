@@ -9,7 +9,7 @@ suite VARCHAR(200) NOT NULL,
 testcasename VARCHAR(200) NOT NULL,
 status VARCHAR(30) NOT NULL,
 env VARCHAR(10),
-failurereason VARCHAR(300),
+failurereason VARCHAR(500),
 duration VARCHAR(20),
 timestamp timestamp not null default current_timestamp,
 reportpath VARCHAR(300),
@@ -30,7 +30,7 @@ suite VARCHAR(200) NOT NULL,
 testcasename VARCHAR(200),
 jirakey VARCHAR(30),
 env VARCHAR(30),
-failurereason VARCHAR(300),
+failurereason VARCHAR(500),
 timestamp timestamp not null default current_timestamp
 );
 select \* from defects;
@@ -42,7 +42,7 @@ ID SERIAL PRIMARY KEY,
 suite VARCHAR(200) NOT NULL,
 testcasename VARCHAR(200),
 env VARCHAR(10),
-failurereason VARCHAR(300),
+failurereason VARCHAR(500),
 timestamp timestamp not null default current_timestamp,
 subscriptionkey integer
 );

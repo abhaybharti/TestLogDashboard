@@ -146,7 +146,7 @@ const TestExecutions = () => {
   function getTestTotalPassFailCount() {
     setPass(getStringCountInArrayOfObjects(data, "status", "PASS"));
     setFail(getStringCountInArrayOfObjects(data, "status", "FAIL"));
-    setSkip(getStringCountInArrayOfObjects(data, "status", "SKIP"));
+    setSkip(getStringCountInArrayOfObjects(data, "status", "SKIPPED"));
     setTotal(data.length);
   }
 
