@@ -39,6 +39,10 @@ const TestExecutions = () => {
   const [total, setTotal] = useState(0);
   const [fail, setFail] = useState(0);
   const [skip, setSkip] = useState(0);
+  const [maintainance, setMaintainance] = useState(0);
+  const [defect, setDefect] = useState(0);
+  const [defectlist, setDefectList] = useState(productRows);
+  const [scriptmaintainlist, setScriptMaintainList] = useState(productRows);
 
   let startDate, endDate;
 
@@ -147,6 +151,8 @@ const TestExecutions = () => {
     setPass(getStringCountInArrayOfObjects(data, "status", "PASS"));
     setFail(getStringCountInArrayOfObjects(data, "status", "FAIL"));
     setSkip(getStringCountInArrayOfObjects(data, "status", "SKIPPED"));
+    setDefect(getStringCountInArrayOfObjects(data, "status", "defect"));
+    setMaintainance(getStringCountInArrayOfObjects(data, "status", "script"));
     setTotal(data.length);
   }
 
@@ -181,6 +187,8 @@ const TestExecutions = () => {
   useEffect(() => {
     testcasedata();
     getTestTotalPassFailCount();
+    defectList();
+    scriptMaintainList();
   }, []);
 
   const getTestResultsForGivenDateRange = async (startDate, endDate) => {
@@ -322,6 +330,105 @@ const TestExecutions = () => {
       .then((data) => console.log("successfully added in maintenanceTracker "));
   };
 
+  const defectList = async () => {
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subscriptionkey: subscriptionkey,
+        }),
+      };
+      const response = await fetch(
+        BASE_API_URL + "/getDefectList",
+        requestOptions
+      );
+      const json = await response.json();
+      setDefectList(json);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const scriptMaintainList = async () => {
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subscriptionkey: subscriptionkey,
+        }),
+      };
+      const response = await fetch(
+        BASE_API_URL + "/getMaintenanceTracker",
+        requestOptions
+      );
+      const json = await response.json();
+      setScriptMaintainList(json);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  /**
+   * UpdateTestCaseStatus is a function that takes a query as a parameter and then makes a POST request
+   * to the API endpoint updateTestCaseFailureReason with the query as the body of the request.
+   * @param query -
+   */
+  const updateTestCaseStatus = async (query) => {
+    console.log("updateTestCaseStatus() start query : ", query);
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: query,
+        }),
+      };
+      const response = await fetch(
+        BASE_API_URL + "/updateTestCaseFailureReason",
+        requestOptions
+      );
+    } catch (error) {
+      console.log("error", error);
+    }
+    console.log("updateTestCaseStatus() end");
+  };
+
+  const autoAnalysis = async () => {
+    console.log("autoAnalysis start() --");
+
+    /* Updating the status of the test case to defect. */
+    defectlist.forEach((defectelement) => {
+      for (let key in defectelement) {
+        let suite = defectelement["suite"];
+        let testcasename = defectelement["testcasename"];
+        let env = defectelement["env"];
+        let timestamp = defectelement["timestamp"];
+        console.log(`${suite} : ${testcasename} : ${env} : ${timestamp}`);
+        let query = `update testcase set status='defect' where subscriptionkey=${subscriptionkey} and suite='${suite}' and status='FAIL' and env ='${env}' and testcasename='${testcasename}' and timestamp >='${timestamp}';`;
+        updateTestCaseStatus(query);
+        query = "";
+      }
+    });
+
+    /* Updating the status of the test case to 'script' if the test case is failed and the timestamp is
+    greater than the timestamp in the scriptmaintainlist. */
+    scriptmaintainlist.forEach((scriptelement) => {
+      for (let key in scriptelement) {
+        let suite = scriptelement["suite"];
+        let testcasename = scriptelement["testcasename"];
+        let env = scriptelement["env"];
+        let timestamp = scriptelement["timestamp"];
+        console.log(`${suite} : ${testcasename} : ${env} : ${timestamp}`);
+        let query = `update testcase set status='script' where subscriptionkey=${subscriptionkey} and suite='${suite}' and status='FAIL' and env ='${env}' and testcasename='${testcasename}' and timestamp >='${timestamp}';`;
+        updateTestCaseStatus(query);
+        query = "";
+      }
+    });
+    console.log("autoAnalysis stop() --");
+  };
+
   const columns = [
     // { field: "id", headerName: "ID", width: 50 },
     {
@@ -392,12 +499,8 @@ const TestExecutions = () => {
         let timestampVal = params.row.timestamp;
         const finalTimeStamp =
           typeof timestampVal === "string" ? timestampVal.slice(0, 16) : "";
-
-        return (
-          <ListItem>
-            {moment(finalTimeStamp).format("MM-DD-YYYY hh:mm")}
-          </ListItem>
-        );
+        // let istDate = moment(params.row.timestamp).tz("Asia/Kolkata");
+        return <ListItem>{params.row.timestamp}</ListItem>;
       },
     },
     {
@@ -554,6 +657,15 @@ const TestExecutions = () => {
                 <strong> Clear Filter</strong>
               </Button>
             </Tooltip>
+            <Button
+              id="autoanlysis"
+              variant="contained"
+              color="primary"
+              onClick={() => autoAnalysis()}
+              style={{ maxWidth: "160px", maxHeight: "38px" }}
+            >
+              <strong>Auto Analyze</strong>
+            </Button>
             <h4
               style={{
                 color: "gray",
@@ -581,6 +693,20 @@ const TestExecutions = () => {
               }}
             >
               Skipped : {skip}
+            </h4>
+            <h4
+              style={{
+                color: "IndianRed",
+              }}
+            >
+              Known Defect : {defect}
+            </h4>
+            <h4
+              style={{
+                color: "LightSalmon",
+              }}
+            >
+              Known Script Issue : {maintainance}
             </h4>
           </Stack>
         </div>

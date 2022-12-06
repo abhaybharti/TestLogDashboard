@@ -128,13 +128,7 @@ const getTestHistory = (request, response) => {
   console.log("getTestHistory", request.body);
   const { suite, testcasename, subscriptionkey } = request.body;
   console.log("suite", suite, ", testcasename", testcasename);
-  let query =
-    "select * from testcase where testcasename = '" +
-    testcasename +
-    "' and suite='" +
-    suite +
-    "' and subscriptionkey=" +
-    subscriptionkey;
+  let query = `select * from testcase where testcasename = '${testcasename}' and suite='${suite}' and subscriptionkey=${subscriptionkey} Limit 10`;
   console.log(query);
   try {
     pool.query(query, (error, results) => {
@@ -240,21 +234,30 @@ const createMaintenance = (request, response) => {
   console.log("createMaintenance stop");
 };
 
+/**
+ * It updates the failurereason column in the testcase table with the value of the failurereason
+ * variable.
+ * @param request - The request object represents the HTTP request and has properties for the request
+ * query string, parameters, body, HTTP headers, and so on.
+ * @param response - The response object represents the HTTP response that an Express app sends when it
+ * gets an HTTP request.
+ */
 const updateTestCaseFailureReason = (request, response) => {
-  const { testcasename, subscriptionkey } = request.body;
-  pool.query(
-    "Update testcase set failurereason = $2 where testcasename = $1",
-    [testcase, failurereason],
-    (error, results) => {
+  console.log("updateTestCaseFailureReason() start");
+  const { query } = request.body;
+  console.log(query);
+  try {
+    pool.query(query, (error, results) => {
       if (error) {
+        console.log(error);
         throw error;
       }
-
-      response
-        .status(200)
-        .send(`Test Case failure reason update ${testcasename}`);
-    }
-  );
+      response.status(200).json(results.rows);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  console.log("updateTestCaseFailureReason() stop");
 };
 
 const deleteDefect = (request, response) => {
@@ -356,7 +359,7 @@ const getSuiteSummary = (request, response) => {
   console.log("getSuiteSummary start", request.body);
   const { subscriptionkey } = request.body;
   console.log("subscriptionkey", subscriptionkey);
-  let query = `select row_number() OVER () as id, suite, count(CASE WHEN status = 'PASS' THEN status end) as PASS, count(CASE WHEN status = 'FAIL' THEN status end) as FAIL, count(CASE WHEN status = 'SKIP' THEN status end) as SKIP, count(CASE WHEN status = 'DEFECT' THEN status end) as DEFECT, count(CASE WHEN status = 'MAINTAINANCE' THEN status end) as MAINTAINANCE from testcase where subscriptionkey=${subscriptionkey} and timestamp > now() - interval '48 hours' group by suite;`;
+  let query = `select row_number() OVER () as id, suite, count(CASE WHEN status = 'PASS' THEN status end) as PASS, count(CASE WHEN status = 'FAIL' THEN status end) as FAIL, count(CASE WHEN status = 'SKIPPED' THEN status end) as SKIP, count(CASE WHEN status = 'defect' THEN status end) as DEFECT, count(CASE WHEN status = 'script' THEN status end) as MAINTAINANCE from testcase where subscriptionkey=${subscriptionkey} and timestamp > now() - interval '48 hours' group by suite;`;
   console.log(query);
   try {
     pool.query(query, (error, results) => {

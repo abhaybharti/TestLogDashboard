@@ -30,10 +30,7 @@ app.post("/getDefectList", db.getDefectList);
 app.post("/getMaintenanceTracker", db.getMaintenanceTracker);
 app.delete("/deleteMaintenance", db.deleteMaintenance);
 app.delete("/deleteDefect", db.deleteDefect);
-app.post(
-  "/updateTestCaseFailureReason:testcasename",
-  db.updateTestCaseFailureReason
-);
+app.post("/updateTestCaseFailureReason", db.updateTestCaseFailureReason);
 app.post("/getTestHistory", db.getTestHistory);
 app.post("/createMaintenance", db.createMaintenance);
 app.post("/createDefect", db.createDefect);

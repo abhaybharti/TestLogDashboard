@@ -167,6 +167,7 @@ const SuiteView = () => {
       );
       const json = await response.json();
       setData(json);
+      getTestTotalPassFailCount();
     } catch (error) {
       console.log("error", error);
     }
