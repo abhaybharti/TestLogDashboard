@@ -652,7 +652,7 @@ const TestExecutions = () => {
                 variant="contained"
                 color="primary"
                 onClick={() => testcasedata()}
-                style={{ maxWidth: "140px", maxHeight: "38px" }}
+                style={{ maxWidth: "100px", maxHeight: "38px" }}
               >
                 <strong> Clear Filter</strong>
               </Button>
@@ -662,52 +662,52 @@ const TestExecutions = () => {
               variant="contained"
               color="primary"
               onClick={() => autoAnalysis()}
-              style={{ maxWidth: "160px", maxHeight: "38px" }}
+              style={{ maxWidth: "120px", maxHeight: "38px" }}
             >
               <strong>Auto Analyze</strong>
             </Button>
-            <h4
+            <h5
               style={{
                 color: "gray",
               }}
             >
-              Total : {total}
-            </h4>
-            <h4
+              Total: {total}
+            </h5>
+            <h5
               style={{
                 color: "green",
               }}
             >
-              Pass : {pass}
-            </h4>
-            <h4
+              Pass: {pass}
+            </h5>
+            <h5
               style={{
                 color: "red",
               }}
             >
-              Fail : {fail}
-            </h4>
-            <h4
+              Fail: {fail}
+            </h5>
+            <h5
               style={{
                 color: "Violet",
               }}
             >
-              Skipped : {skip}
-            </h4>
-            <h4
+              Skipped: {skip}
+            </h5>
+            <h5
               style={{
                 color: "IndianRed",
               }}
             >
-              Known Defect : {defect}
-            </h4>
-            <h4
+              Defect: {defect}
+            </h5>
+            <h5
               style={{
                 color: "LightSalmon",
               }}
             >
-              Known Script Issue : {maintainance}
-            </h4>
+              Script Issue: {maintainance}
+            </h5>
           </Stack>
         </div>
 

@@ -423,48 +423,48 @@ const SuiteView = () => {
               <strong> Clear Filter</strong>
             </Button>
           </Tooltip>
-          <h4
+          <h5
             style={{
               color: "gray",
             }}
           >
             Suite Count : {total}
-          </h4>
-          <h4
+          </h5>
+          <h5
             style={{
               color: "green",
             }}
           >
             Pass : {pass}
-          </h4>
-          <h4
+          </h5>
+          <h5
             style={{
               color: "red",
             }}
           >
             Fail : {fail}
-          </h4>
-          <h4
+          </h5>
+          <h5
             style={{
               color: "Violet",
             }}
           >
             Skipped : {skip}
-          </h4>
-          <h4
+          </h5>
+          <h5
             style={{
               color: "IndianRed",
             }}
           >
-            Known Defect : {defect}
-          </h4>
-          <h4
+            Defect : {defect}
+          </h5>
+          <h5
             style={{
               color: "LightSalmon",
             }}
           >
-            Known Script Issue : {maintainance}
-          </h4>
+            Script Issue : {maintainance}
+          </h5>
         </Stack>
       </div>
       <DataGrid
