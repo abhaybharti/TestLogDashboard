@@ -26,6 +26,7 @@ const LgWidgetButton = styled.button`
 const LgWidgetTable = styled.table`
   width: 100%;
   border-spacing: 20px;
+  border: 2px;
 `;
 
 const LgWidgetTh = styled.th`
@@ -85,7 +86,7 @@ const LgWidget = () => {
 
   return (
     <LgWidgetContainer>
-      <LgWidgetTitle>Top Failures Reason</LgWidgetTitle>
+      <LgWidgetTitle>Top 10 Failures Reason</LgWidgetTitle>
       <LgWidgetTable>
         <tr>
           <LgWidgetTh>Reason</LgWidgetTh>
