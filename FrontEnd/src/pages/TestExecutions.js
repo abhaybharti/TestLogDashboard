@@ -671,7 +671,7 @@ const TestExecutions = () => {
                 color: "gray",
               }}
             >
-              Total: {total}
+              Run: {total}
             </h5>
             <h5
               style={{
