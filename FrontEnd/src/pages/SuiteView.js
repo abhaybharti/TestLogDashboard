@@ -286,9 +286,15 @@ const SuiteView = () => {
       width: 155,
 
       renderCell: (params) => {
+        let totalExecuted =
+          Number(params.row.pass) +
+          Number(params.row.fail) +
+          Number(params.row.skip) +
+          Number(params.row.defect) +
+          Number(params.row.maintainance);
         return (
           <>
-            <ListItem>{params.row.executed}</ListItem>
+            <ListItem>{totalExecuted}</ListItem>
           </>
         );
       },
@@ -428,7 +434,14 @@ const SuiteView = () => {
               color: "gray",
             }}
           >
-            Suite Count : {total}
+            Suite : {total}
+          </h5>
+          <h5
+            style={{
+              color: "gray",
+            }}
+          >
+            Run : {pass + fail + skip + defect + maintainance}
           </h5>
           <h5
             style={{

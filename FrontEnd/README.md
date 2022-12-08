@@ -31,7 +31,8 @@ testcasename VARCHAR(200),
 jirakey VARCHAR(30),
 env VARCHAR(30),
 failurereason VARCHAR(500),
-timestamp timestamp not null default current_timestamp
+timestamp timestamp not null default current_timestamp,
+subscriptionkey integer
 );
 select \* from defects;
 insert into defects (suite,testcasename,jirakey,env) VALUES ('Touch','ABC_Test','ABC','QE');
