@@ -338,7 +338,7 @@ const getDailyTestExecutionCount = (request, response) => {
   console.log("getDailyTestExecutionCount start", request.body);
   const { subscriptionkey } = request.body;
   console.log("subscriptionkey", subscriptionkey);
-  let query = `SELECT to_char(timestamp, 'dd-mm-yyyy') as "Date",COUNT("timestamp") AS "TestCaseExecuted" FROM testcase where subscriptionkey=123456 GROUP BY timestamp limit 10;`;
+  let query = `SELECT Date(timestamp) as "Date",COUNT("timestamp") AS "TestCaseExecuted" FROM testcase where subscriptionkey=123456 GROUP BY timestamp limit 10;`;
   console.log(query);
   try {
     pool.query(query, (error, results) => {
@@ -394,6 +394,24 @@ const getTestSuiteDataForGivenDateRange = (request, response) => {
   console.log("getTestSuiteDataForGivenDateRange stop");
 };
 
+const getTopFailureReason = (request, response) => {
+  console.log("getTopFailureReason start", request.body);
+  const { query } = request.body;
+  try {
+    pool.query(query, (error, results) => {
+      if (error) {
+        console.log(error);
+        throw error;
+      }
+      response.status(200).json(results.rows);
+      //console.log(results.rows);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  console.log("getTopFailureReason stop");
+};
+
 module.exports = {
   getTestCaseExecution,
   getDefectList,
@@ -410,4 +428,5 @@ module.exports = {
   getDailyTestExecutionCount,
   getSuiteSummary,
   getTestSuiteDataForGivenDateRange,
+  getTopFailureReason,
 };

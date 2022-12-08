@@ -50,20 +50,32 @@ const Home = () => {
   };
 
   return (
-    
     <HomeContainer>
-      <Featured />
+      {/* <Featured /> */}
       <Chart
         data={data}
         title="Test Execution Trends"
         grid
-        dataKey="Test Case Executed"
+        dataKey="TestCaseExecuted"
       />
       <HomeWidgets>
-        <SmWidget></SmWidget>
+        {/* <SmWidget></SmWidget> */}
         <LgWidget></LgWidget>
       </HomeWidgets>
     </HomeContainer>
+    // <HomeContainer>
+    //   <Featured />
+    //   <Chart
+    //     data={data}
+    //     title="Test Execution Trends"
+    //     grid
+    //     dataKey="Test Case Executed"
+    //   />
+    //   <HomeWidgets>
+    //     <SmWidget></SmWidget>
+    //     <LgWidget></LgWidget>
+    //   </HomeWidgets>
+    // </HomeContainer>
   );
 };
 

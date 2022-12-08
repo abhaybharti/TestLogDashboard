@@ -31,7 +31,7 @@ testcasename VARCHAR(200),
 jirakey VARCHAR(30),
 env VARCHAR(30),
 failurereason VARCHAR(500),
-timestamp timestamp not null default current_timestamp,
+timestamp DATE not null default CURRENT_DATE,
 subscriptionkey integer
 );
 select \* from defects;

@@ -6,6 +6,11 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  BarChart,
+  Bar,
+  YAxis,
+  Cell,
+  Legend,
 } from "recharts";
 import styled from "styled-components";
 
@@ -25,7 +30,7 @@ const Chart = ({ title, data, dataKey, grid }) => {
     <ChartContainer>
       <ChartTitle>{title}</ChartTitle>
       <ResponsiveContainer width="100%" height={300} aspect={4 / 1}>
-        <LineChart data={data}>
+        {/* <LineChart data={data}>
           <XAxis dataKey="Date" stroke="#5550bd" />
           <Line
             type="monotone"
@@ -35,7 +40,13 @@ const Chart = ({ title, data, dataKey, grid }) => {
           />
           <Tooltip />
           {grid && <CartesianGrid stroke="#e0dfdf" strokeDasharray="5 5" />}
-        </LineChart>
+        </LineChart> */}
+        <BarChart width={700} height={500} data={data}>
+          <XAxis dataKey="Date" />
+          <YAxis dataKey={dataKey} />
+          <Bar dataKey="TestCaseExecuted" fill="green" />
+          <CartesianGrid stroke="#ccc" />
+        </BarChart>
       </ResponsiveContainer>
     </ChartContainer>
   );

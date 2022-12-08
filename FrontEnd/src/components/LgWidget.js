@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { lastTransactionRows } from "../dummyData";
 import styled from "styled-components";
+import { BASE_API_URL } from "../Utils/Config";
 
 const LgWidgetContainer = styled.div`
   flex: 2;
@@ -50,31 +51,51 @@ const LightTd = styled.td`
 `;
 
 const LgWidget = () => {
+  const [data, setFailureReason] = useState(lastTransactionRows);
+  const [subscriptionkey, setSubscriptionKey] = useState(
+    localStorage.getItem("subscriptionkey")
+  );
+
+  useEffect(() => {
+    getTopFailureReason();
+  }, []);
+
+  const getTopFailureReason = async () => {
+    console.log("getTopFailureReason() start");
+    let query = `select failurereason, count(CASE WHEN failurereason <> '' THEN failurereason end) testcasecount from testcase where timestamp > now() - interval '48 hours' and subscriptionkey=${subscriptionkey} group by failurereason having  COUNT(failurereason) >= 1 order by testcasecount desc `;
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: query,
+        }),
+      };
+      const response = await fetch(
+        BASE_API_URL + "/getTopFailureReason",
+        requestOptions
+      );
+      const json = await response.json();
+      setFailureReason(json);
+    } catch (error) {
+      console.log("error", error);
+    }
+    console.log("getTopFailureReason() end");
+  };
+
   return (
     <LgWidgetContainer>
-      <LgWidgetTitle>Last Transaction</LgWidgetTitle>
+      <LgWidgetTitle>Top Failures Reason</LgWidgetTitle>
       <LgWidgetTable>
         <tr>
-          <LgWidgetTh>Customer</LgWidgetTh>
-          <LgWidgetTh>Date</LgWidgetTh>
-          <LgWidgetTh>Amount</LgWidgetTh>
-          <LgWidgetTh>Status</LgWidgetTh>
+          <LgWidgetTh>Reason</LgWidgetTh>
+          <LgWidgetTh>Test Case Count</LgWidgetTh>
         </tr>
-        {lastTransactionRows &&
-          lastTransactionRows.map((item) => (
+        {data &&
+          data.map((item) => (
             <tr key={item.id}>
-              <LgWidgetUser>
-                <LgWidgetImg src={item.avatar} alt={item.username} />
-                <span>{item.username}</span>
-              </LgWidgetUser>
-              <LightTd>{item.date}</LightTd>
-              <LightTd>{item.transaction}</LightTd>
-              <LightTd>{item.date}</LightTd>
-              <td>
-                <LgWidgetButton bgColor={item.bgColor} fdColor={item.fdColor}>
-                  {item.type}
-                </LgWidgetButton>
-              </td>
+              <LightTd>{item.failurereason}</LightTd>
+              <LightTd>{item.testcasecount}</LightTd>
             </tr>
           ))}
       </LgWidgetTable>
@@ -82,4 +103,4 @@ const LgWidget = () => {
   );
 };
 
- export default LgWidget;
+export default LgWidget;

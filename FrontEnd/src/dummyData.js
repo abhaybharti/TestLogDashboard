@@ -17,9 +17,10 @@ export const featureData = [
 ];
 
 export const dailyTestExecutionData = [
-  { Date: "10-20-2022", TestCaseExecuted: 4000 },
+  { Date: "10-20-2022", TestCaseExecuted: "4000" },
   { Date: "10-21-2022", TestCaseExecuted: 4500 },
   { Date: "10-22-2022", TestCaseExecuted: 3500 },
+  { Date: "10-23-2022", TestCaseExecuted: 3500 },
 ];
 
 export const userData = [
@@ -67,34 +68,8 @@ export const newMemberRows = [
 export const lastTransactionRows = [
   {
     id: 1,
-    username: "Hawa Singh",
-    avatar: "https://randomuser.me/api/portraits/women/5.jpg",
-    date: "2 Jun 2021",
-    type: "Approved",
-    bgColor: "#e5faf2",
-    fdColor: "#3bb077",
-    transaction: "$243",
-  },
-  {
-    id: 2,
-    username: "Pari Sharma",
-    avatar: "https://randomuser.me/api/portraits/women/6.jpg",
-    date: "3 Jun 2021",
-    type: "Approved",
-    bgColor: "#e5faf2",
-    fdColor: "#3bb077",
-    transaction: "$243",
-  },
-
-  {
-    id: 3,
-    username: "Shanvi Sharma",
-    avatar: "https://randomuser.me/api/portraits/women/18.jpg",
-    date: "4 Jun 2021",
-    type: "Declined",
-    bgColor: "#e5faf2",
-    fdColor: "#d95087",
-    transaction: "$243",
+    failurereason: "Hawa Singh",
+    testcasecount: "3",
   },
 ];
 
