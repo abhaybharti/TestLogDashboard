@@ -652,7 +652,7 @@ const TestExecutions = () => {
                 variant="contained"
                 color="primary"
                 onClick={() => testcasedata()}
-                style={{ maxWidth: "100px", maxHeight: "38px" }}
+                style={{ maxWidth: "100px", maxHeight: "42px" }}
               >
                 <strong> Clear Filter</strong>
               </Button>
@@ -662,7 +662,7 @@ const TestExecutions = () => {
               variant="contained"
               color="primary"
               onClick={() => autoAnalysis()}
-              style={{ maxWidth: "120px", maxHeight: "38px" }}
+              style={{ maxWidth: "120px", maxHeight: "42px" }}
             >
               <strong>Auto Analyze</strong>
             </Button>
