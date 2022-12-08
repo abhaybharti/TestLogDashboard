@@ -62,7 +62,7 @@ const LgWidget = () => {
 
   const getTopFailureReason = async () => {
     console.log("getTopFailureReason() start");
-    let query = `select failurereason, count(CASE WHEN failurereason <> '' THEN failurereason end) testcasecount from testcase where timestamp > now() - interval '48 hours' and subscriptionkey=${subscriptionkey} group by failurereason having  COUNT(failurereason) >= 1 order by testcasecount desc `;
+    let query = `select failurereason, count(CASE WHEN failurereason <> '' THEN failurereason end) testcasecount from testcase where timestamp > now() - interval '48 hours' and subscriptionkey=${subscriptionkey} group by failurereason having  COUNT(failurereason) >= 1 order by testcasecount desc Limit 10`;
     try {
       const requestOptions = {
         method: "POST",
