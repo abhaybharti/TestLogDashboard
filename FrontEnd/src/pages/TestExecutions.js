@@ -499,8 +499,11 @@ const TestExecutions = () => {
         let timestampVal = params.row.timestamp;
         const finalTimeStamp =
           typeof timestampVal === "string" ? timestampVal.slice(0, 16) : "";
+        let newDate = moment(params.row.timestamp)
+          .utc()
+          .format("DD-MM-YYYY");
         // let istDate = moment(params.row.timestamp).tz("Asia/Kolkata");
-        return <ListItem>{params.row.timestamp}</ListItem>;
+        return <ListItem>{newDate}</ListItem>;
       },
     },
     {

@@ -128,7 +128,7 @@ const getTestHistory = (request, response) => {
   console.log("getTestHistory", request.body);
   const { suite, testcasename, subscriptionkey } = request.body;
   console.log("suite", suite, ", testcasename", testcasename);
-  let query = `select * from testcase where testcasename = '${testcasename}' and suite='${suite}' and subscriptionkey=${subscriptionkey} Limit 10`;
+  let query = `select * from testcase where testcasename = '${testcasename}' and subscriptionkey=${subscriptionkey}`;
   console.log(query);
   try {
     pool.query(query, (error, results) => {
