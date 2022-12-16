@@ -191,6 +191,11 @@ const TestExecutions = () => {
     scriptMaintainList();
   }, []);
 
+  useEffect(() => {
+    getTestTotalPassFailCount();
+    defectList();
+    scriptMaintainList();
+  }, [data]);
   const getTestResultsForGivenDateRange = async (startDate, endDate) => {
     console.log(startDate, endDate, suitename, env, testcasestatus);
     let query =
@@ -499,9 +504,7 @@ const TestExecutions = () => {
         let timestampVal = params.row.timestamp;
         const finalTimeStamp =
           typeof timestampVal === "string" ? timestampVal.slice(0, 16) : "";
-        let newDate = moment(params.row.timestamp)
-          .utc()
-          .format("DD-MM-YYYY");
+        let newDate = moment(params.row.timestamp).utc().format("DD-MM-YYYY");
         // let istDate = moment(params.row.timestamp).tz("Asia/Kolkata");
         return <ListItem>{newDate}</ListItem>;
       },

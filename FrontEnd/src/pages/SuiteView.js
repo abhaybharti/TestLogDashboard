@@ -243,6 +243,10 @@ const SuiteView = () => {
     getTestTotalPassFailCount();
   }, []);
 
+  useEffect(() => {
+    getTestTotalPassFailCount();
+  }, [data]);
+
   const testcasedata = async () => {
     setTestStatus("");
     setEnv("");
