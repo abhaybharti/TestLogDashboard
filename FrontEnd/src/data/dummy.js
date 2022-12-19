@@ -163,8 +163,7 @@ export const testCaseStatus = (props) => {
           </a>
         </button>
       );
-    }
-    else if (props.status === "defect") {
+    } else if (props.status === "defect") {
       return (
         <button
           type="button"
