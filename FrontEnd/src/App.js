@@ -1,55 +1,161 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { ThemeProvider } from "@material-ui/core";
+import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { FiSettings } from "react-icons/fi";
+import { TooltipComponent } from "@syncfusion/ej2-react-popups";
+
+import { Navbar, Footer, Sidebar, ThemeSettings } from "./components";
+import {
+  Ecommerce,
+  Orders,
+  Calendar,
+  Employees,
+  Stacked,
+  Pyramid,
+  Customers,
+  Kanban,
+  Area,
+  Bar,
+  Pie,
+  Financial,
+  ColorMapping,
+  Editor,
+  ColorPicker,
+  Line,
+  Suite,
+} from "./pages";
+import {
+  Checkbox,
+  Grid,
+  TextField,
+  FormControlLabel,
+  Paper,
+  Button,
+} from "@material-ui/core";
+
+import { useStateContext } from "./contexts/ContextProvider";
+
 import "./App.css";
-import Navbar from "./components/Navbar";
-import Sidebar from "./components/Sidebar";
-import SimpleModal from "./components/SimpleModal";
-import Analytics from "./pages/Analytics";
-import DefectList from "./pages/DefectList";
+import TestCaseExecution from "./pages/TestCaseExecution";
 import Home from "./pages/Home";
-import LoginPage from "./pages/LoginPage";
-import MaintenanceTasks from "./pages/MaintenanceTasks";
-import NewDefect from "./pages/NewDefect";
-import NewProduct from "./pages/NewProduct";
-import NewUser from "./pages/NewUser";
-import Product from "./pages/Product";
-import ProductList from "./pages/ProductList";
-import TestExecutions from "./pages/TestExecutions";
-import User from "./pages/User";
-import UserList from "./pages/UserList";
-import { theme } from "./pages/Theme";
+import Defects from "./pages/Defects";
+import ScriptIssues from "./pages/ScriptIssues";
 
-function App() {
-  return (
-    <ThemeProvider theme={theme}>
-      <LoginPage />
-    </ThemeProvider>
+const App = () => {
+  // const activeMenu = true;
+  const {
+    activeMenu,
+    setActiveMenu,
+    loginStatus,
+    setLoginStatus,
+    userNameChange,
+    passwordChange,
+    handleChange,
+    checked,
+    setChecked,
+    loginClicked,
+  } = useStateContext();
 
-    // <Router>
-    //
-    //   <Navbar />
-    //   <div className="container">
-    //     <Sidebar />
-    //     <Switch>
-    //       <Route exact path="/">
-    //         <Home />
-    //       </Route>
-    //       <Route path="/defects">
-    //         <DefectList />
-    //       </Route>
-    //       <Route path="/maintenanceTasks">
-    //         <MaintenanceTasks />
-    //       </Route>
-    //       <Route path="/testExecution">
-    //         <TestExecutions />
-    //       </Route>
-    //       <Route path="/analytics">
-    //         <Analytics />
-    //       </Route>
-    //     </Switch>
-    //   </div>
-    // </Router>
-  );
-}
+  if (!loginStatus) {
+    console.log("login loginStatus " + loginStatus);
+    return (
+      <div style={{ padding: 30 }}>
+        <Paper>
+          <Grid
+            container
+            spacing={3}
+            direction={"column"}
+            justify-content={"center"}
+            alignItems={"center"}
+          >
+            <Grid item xs={12}>
+              <TextField label="Username" onChange={userNameChange}></TextField>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Password"
+                type={"password"}
+                onChange={passwordChange}
+              ></TextField>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={checked}
+                    onChange={handleChange}
+                    label={"Keep me logged in"}
+                    inputProps={{ "aria-label": "primary checkbox" }}
+                  />
+                }
+                label="Keep me logged in"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button fullWidth onClick={loginClicked}>
+                {" "}
+                Login{" "}
+              </Button>
+            </Grid>
+          </Grid>
+        </Paper>
+      </div>
+    );
+  } else {
+    console.log("login loginStatus " + loginStatus);
+    return (
+      <div>
+        <BrowserRouter>
+          <div className="flex relative dark:bg-main-dark-bg">
+            <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>
+              <TooltipComponent content="Settings" position="Top">
+                <button
+                  type="button"
+                  className="text-3xl p-3 hover:drop-shadow-xl hover:bg-light-gray text-white"
+                  style={{ background: "blue", borderRadius: "50%" }}
+                >
+                  <FiSettings />
+                </button>
+              </TooltipComponent>
+            </div>
+            {activeMenu ? (
+              <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white">
+                <Sidebar />
+              </div>
+            ) : (
+              <div className="w-0 dark:bg-secondary-dark-bg">
+                <Sidebar />
+              </div>
+            )}
+            <div
+              className={`dark:bg-main-bg bg-main-bg min-h-screen w-full ${
+                activeMenu ? "md:ml-72" : "flex:2"
+              }`}
+            >
+              <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full">
+                <Navbar />
+              </div>
+
+              <div>
+                <Routes>
+                  /* Dashboard */
+                  <Route path="/" element={<Home />} />
+                  <Route path="/home" element={<Home />} />
+                  {/* Pages */}
+                  <Route path="/testsuite" element={<Suite />} />
+                  <Route path="/testcases" element={<TestCaseExecution />} />
+                  <Route path="/defects" element={<Defects />} />
+                  <Route path="/scriptissue" element={<ScriptIssues />} />
+                  {/* Apps */}
+                  <Route path="/kanban" element={<Kanban />} />
+                  <Route path="/Calendar" element={<Calendar />} />
+                </Routes>
+              </div>
+            </div>
+          </div>
+        </BrowserRouter>
+      </div>
+    );
+  }
+};
 
 export default App;

@@ -70,6 +70,7 @@ const getMaintenanceTracker = (request, response) => {
 const updateTestCaseExecution = (request, response) => {
   console.log("updateTestCaseExecution start --- ", request.body);
   const {
+    runid,
     suite,
     testcasename,
     status,
@@ -80,6 +81,8 @@ const updateTestCaseExecution = (request, response) => {
     subscriptionkey,
   } = request.body;
   console.log(
+    "runid",
+    runid,
     "suite",
     suite,
     "testcasename",
@@ -99,8 +102,9 @@ const updateTestCaseExecution = (request, response) => {
   );
   try {
     pool.query(
-      "INSERT INTO testcase(suite, testcasename, status, env, failurereason, duration,reportpath,subscriptionkey) VALUES ($1,$2, $3, $4,$5,$6, $7, $8) Returning *",
+      "INSERT INTO testcase(runid,suite, testcasename, status, env, failurereason, duration,reportpath,subscriptionkey) VALUES ($1,$2, $3, $4,$5,$6, $7, $8,$9) Returning *",
       [
+        runid,
         suite,
         testcasename,
         status,
@@ -128,7 +132,7 @@ const getTestHistory = (request, response) => {
   console.log("getTestHistory", request.body);
   const { suite, testcasename, subscriptionkey } = request.body;
   console.log("suite", suite, ", testcasename", testcasename);
-  let query = `select * from testcase where testcasename = '${testcasename}' and subscriptionkey=${subscriptionkey}`;
+  let query = `select * from testcase where testcasename = '${testcasename}' and suite='${suite}' and subscriptionkey=${subscriptionkey} Limit 10`;
   console.log(query);
   try {
     pool.query(query, (error, results) => {
@@ -141,6 +145,29 @@ const getTestHistory = (request, response) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+const getTestResultsForGivenDateRangeOrRunId = (request, response) => {
+  console.log(
+    "getTestResultsForGivenDateRangeOrRunId() start ---",
+    request.body
+  );
+  const { query } = request.body;
+
+  console.log(query);
+  try {
+    pool.query(query, (error, results) => {
+      if (error) {
+        console.log(error);
+        throw error;
+      }
+      response.status(200).json(results.rows);
+      //console.log(results.rows);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  console.log("getTestResultsForGivenDateRangeOrRunId() end ---", request.body);
 };
 
 const getTestResultsForGivenDateRange = (request, response) => {
@@ -429,4 +456,5 @@ module.exports = {
   getSuiteSummary,
   getTestSuiteDataForGivenDateRange,
   getTopFailureReason,
+  getTestResultsForGivenDateRangeOrRunId,
 };

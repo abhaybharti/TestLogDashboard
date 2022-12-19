@@ -46,6 +46,10 @@ app.post(
   db.getTestSuiteDataForGivenDateRange
 );
 app.post("/getTopFailureReason", db.getTopFailureReason);
+app.post(
+  "/getTestResultsForGivenDateRangeOrRunId",
+  db.getTestResultsForGivenDateRangeOrRunId
+);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);
