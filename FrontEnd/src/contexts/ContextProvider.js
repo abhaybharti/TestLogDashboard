@@ -26,13 +26,8 @@ const initialState = {
   suiteRows: [{}],
   defectRows: [{}],
   scriptIssueRows: [{}],
-  failureReasonRows: [
-    {
-      id: 1,
-      failurereason: "Hawa Singh",
-      testcasecount: "3",
-    },
-  ],
+  failureReasonRows: [{}],
+  testHistoryDummy: [{}],
 };
 
 export const ContextProvider = ({ children }) => {
@@ -70,6 +65,7 @@ export const ContextProvider = ({ children }) => {
     initialState.topFailureReason
   );
   const [runid, setRunIdName] = useState("");
+  const [testHistory, setTestHistory] = useState(initialState.testHistoryDummy);
 
   const verifyLoginStatus = () => {
     if (localStorage.getItem("loginStatus") == "true") {
@@ -166,6 +162,8 @@ export const ContextProvider = ({ children }) => {
 
   const getTestCaseData = async () => {
     console.log("--- ContextProvider->getTestCaseData() start ---");
+    //setTestCaseData(initialState.productRows);
+    setRunIdName("");
     try {
       const requestOptions = {
         method: "POST",
@@ -469,6 +467,9 @@ export const ContextProvider = ({ children }) => {
         handleRunIdChange,
         failureAnalysis,
         suiteCount,
+        getTestCaseData,
+        testHistory,
+        setTestHistory,
       }}
     >
       {children}

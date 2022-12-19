@@ -43,6 +43,7 @@ import product5 from "./product5.jpg";
 import product6 from "./product6.jpg";
 import product7 from "./product7.jpg";
 import product8 from "./product8.jpg";
+import SimpleModal from "../components/SimpleModal.js";
 
 export const gridOrderImage = (props) => (
   <div>
@@ -101,6 +102,28 @@ export const gridOrderStatus = (props) => {
 export const actionOnTestCase = (props) => {
   return <div></div>;
 };
+
+export const testHistoryShowInSimpleModal = (props) => {
+  console.log("inside testHistoryShowInSimpleModal", props);
+  return (
+    <SimpleModal
+      testcasename={props.testcasename}
+      suite={props.suite}
+      env={props.env}
+    ></SimpleModal>
+  );
+};
+export const testHistorySimpleModal = (props) => {
+  console.log("inside click");
+  return (
+    <SimpleModal
+      testcasename={props.testcasename}
+      suite={props.suite}
+      env={props.env}
+    ></SimpleModal>
+  );
+};
+
 export const testCaseStatus = (props) => {
   if (typeof props !== "undefined") {
     if (props.status === "FAIL") {
@@ -600,6 +623,7 @@ export const testcasedetailGrid = [
     headerText: "Test Case Name",
     width: "300",
     textAlign: "Left",
+    template: testHistorySimpleModal,
   },
 
   {
@@ -639,6 +663,55 @@ export const testcasedetailGrid = [
     field: "duration",
     headerText: "Duration",
     width: "140",
+    textAlign: "Left",
+  },
+];
+
+export const testcaseHistoryGrid = [
+  {
+    field: "runid",
+    headerText: "Run ID",
+    width: "150",
+    textAlign: "Left",
+  },
+
+  {
+    field: "suite",
+    headerText: "Suite",
+    width: "200",
+    textAlign: "Left",
+  },
+  {
+    field: "testcasename",
+    headerText: "Test Case Name",
+    width: "300",
+    textAlign: "Left",
+  },
+
+  {
+    field: "status",
+    headerText: "Status",
+    width: "100",
+    textAlign: "Left",
+    template: testCaseStatus,
+  },
+
+  {
+    field: "env",
+    headerText: "Env",
+    width: "100",
+    textAlign: "Left",
+  },
+  {
+    field: "timestamp",
+    headerText: "Date",
+    width: "150",
+    textAlign: "Left",
+  },
+  {
+    field: "failurereason",
+    headerText: "Failure Reason",
+    width: "300",
     textAlign: "Left",
   },
 ];
