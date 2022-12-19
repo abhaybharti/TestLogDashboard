@@ -151,6 +151,31 @@ export const testCaseStatus = (props) => {
           </a>
         </button>
       );
+    } else if (props.status === "script") {
+      return (
+        <button
+          type="button"
+          style={{ background: "#8BE78B" }}
+          className="text-black py-1 px-2 capitalize rounded-2xl text-md"
+        >
+          <a href={props.reportpath} target="_blank" rel="noreferrer">
+            {props.status}
+          </a>
+        </button>
+      );
+    }
+    else if (props.status === "defect") {
+      return (
+        <button
+          type="button"
+          style={{ background: "#8BE78B" }}
+          className="text-black py-1 px-2 capitalize rounded-2xl text-md"
+        >
+          <a href={props.reportpath} target="_blank" rel="noreferrer">
+            {props.status}
+          </a>
+        </button>
+      );
     }
   }
 };
@@ -963,16 +988,18 @@ export const userProfileData = [
 ];
 
 export const executedTestCaseCount = (props) => {
-  let totalExecuted = Number(props.pass)+Number(props.fail)+Number(props.skip)+Number(props.defect)+Number(props.maintainance);
+  let totalExecuted =
+    Number(props.pass) +
+    Number(props.fail) +
+    Number(props.skip) +
+    Number(props.defect) +
+    Number(props.maintainance);
   return (
     <button
       type="button"
       className="text-black py-1 px-2 capitalize rounded-2xl text-md"
     >
-     {totalExecuted}
-      
-        
-      
+      {totalExecuted}
     </button>
   );
 };
