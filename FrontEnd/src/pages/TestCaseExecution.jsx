@@ -15,6 +15,7 @@ import {
   Search,
   Toolbar,
   toolbarClick,
+  Group,
 } from "@syncfusion/ej2-react-grids";
 import { Input } from "@syncfusion/ej2-inputs";
 import { getValue } from "@syncfusion/ej2-base";
@@ -160,13 +161,16 @@ const TestCaseExecution = () => {
           pageSettings={pageSettings}
           allowExcelExport={true}
           toolbarClick={toolbarClick}
+          allowGrouping={true}
         >
           <ColumnsDirective>
             {testcasedetailGrid.map((item, index) => (
               <ColumnDirective key={index} {...item} />
             ))}
           </ColumnsDirective>
-          <Inject services={[Page, Search, Toolbar, ExcelExport, PdfExport]} />
+          <Inject
+            services={[Page, Search, Toolbar, ExcelExport, PdfExport, Group]}
+          />
         </GridComponent>
       </div>
     </>

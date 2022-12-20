@@ -61,3 +61,16 @@
   margin-left: 10px;
   column-gap: 10px;
 }
+
+.e-grid .e-headercell {
+  background-color: #2382c3;
+  color: white;
+}
+
+.e-grid tr:nth-child(even) {
+  background-color: #bde4f1;
+}
+
+.e-grid tr:nth-child(odd) {
+  background-color: #f5f0f0;
+}

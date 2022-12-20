@@ -413,6 +413,11 @@ export const ContextProvider = ({ children }) => {
     getTestTotalPassFailCount();
   }, [testCaseData]);
 
+  // useEffect(() => {
+  //   getMaintenanceList();
+  //   getDefectList();
+  // }, [defectData, scriptIssueData]);
+
   return (
     <StateContext.Provider
       value={{

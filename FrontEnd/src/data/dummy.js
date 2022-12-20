@@ -44,6 +44,15 @@ import product6 from "./product6.jpg";
 import product7 from "./product7.jpg";
 import product8 from "./product8.jpg";
 import SimpleModal from "../components/SimpleModal.js";
+import { TooltipComponent } from "@syncfusion/ej2-react-popups";
+import {
+  MyBugOutline,
+  MyFixOutline,
+  MyIntermittentOutline,
+  MyDeleteOutline,
+} from "../styles/styled-element";
+import "../App.css";
+import { BASE_API_URL } from "../Utils/Config";
 
 export const gridOrderImage = (props) => (
   <div>
@@ -54,6 +63,87 @@ export const gridOrderImage = (props) => (
     />
   </div>
 );
+
+const deleteDefectFromDb = async (suite, testCaseName, env) => {
+  console.log(suite, testCaseName, env);
+  let subscriptionkey = localStorage.getItem("subscriptionkey");
+  const requestOptions = {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      suite: suite,
+      testcasename: testCaseName,
+      env: env,
+      subscriptionkey: subscriptionkey,
+    }),
+  };
+
+  const response = await fetch(
+    BASE_API_URL + "/deleteDefect",
+    requestOptions
+  );  
+};
+
+export const deleteDefect = (props) => {
+  let suite = props.suite;
+  let testcasename = props.testcasename;
+  let env = props.env;
+  let failurereason = props.failurereason;
+  return (
+    <div className="singleRow">
+      <TooltipComponent content="Add to Script Maintenannce tracker list">
+        <MyDeleteOutline
+          onClick={() =>
+            deleteDefectFromDb(suite, testcasename, env, failurereason)
+          }
+        />
+      </TooltipComponent>
+    </div>
+  );
+};
+
+const deleteMaintenanceTaskFromDb = async (suite, testCaseName, env) => {
+  console.log(suite, testCaseName, env);
+  let subscriptionkey = localStorage.getItem("subscriptionkey");
+  const requestOptions = {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      suite: suite,
+      testcasename: testCaseName,
+      env: env,
+      subscriptionkey: subscriptionkey,
+    }),
+  };
+
+  const response = await fetch(
+    BASE_API_URL + "/deleteMaintenance",
+    requestOptions
+  );
+  const json = await response.json();
+  console.log("json", json);
+ 
+};
+
+export const deleteMaintenance = (props) => {
+  let suite = props.suite;
+  let testcasename = props.testcasename;
+  let env = props.env;
+  let failurereason = props.failurereason;
+  return (
+    <div className="singleRow">
+      <TooltipComponent content="Add to Script Maintenannce tracker list">
+        <MyDeleteOutline
+          onClick={() =>
+            deleteMaintenanceTaskFromDb(suite, testcasename, env, failurereason)
+          }
+        />
+      </TooltipComponent>
+    </div>
+  );
+};
+
+
 
 export const gridOrderStatus = (props) => {
   if (props.Status === "FAIL") {
@@ -99,8 +189,123 @@ export const gridOrderStatus = (props) => {
   }
 };
 
+const addToMaintenanceTracker = (
+  runid,
+  suite,
+  testcasename,
+  env,
+  failureReason
+) => {
+  console.log(runid, suite, testcasename, env, failureReason);
+  let subscriptionkey = localStorage.getItem("subscriptionkey");
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      runid: runid,
+      suite: suite,
+      testcasename: testcasename,
+      env: env,
+      failurereason: failureReason,
+      subscriptionkey: subscriptionkey,
+    }),
+  };
+  fetch(BASE_API_URL + "/createMaintenance", requestOptions)
+    .then((response) => response.json())
+    .then((data) => console.log("successfully added in maintenanceTracker "));
+};
+
+const addToProductDefectTracker = (
+  runid,
+  suite,
+  testcasename,
+  env,
+  failureReason
+) => {
+  const jirakey = "XIOCloud-123";
+  console.log(
+    "runid",
+    runid,
+    "suite : ",
+    suite,
+    "testcasname : ",
+    testcasename,
+    "jirakey",
+    jirakey,
+    "env",
+    env,
+    "failureason",
+    failureReason
+  );
+
+  let subscriptionkey = localStorage.getItem("subscriptionkey");
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      runid: runid,
+      suite: suite,
+      testcasename: testcasename,
+      jirakey: jirakey,
+      env: env,
+      failurereason: failureReason,
+      subscriptionkey: subscriptionkey,
+    }),
+  };
+  fetch(BASE_API_URL + "/createDefect", requestOptions)
+    .then((response) => response.json())
+    .then((data) => console.log("successfully added in defectList "));
+};
+
 export const actionOnTestCase = (props) => {
-  return <div></div>;
+  let runid = props.runid;
+  let suite = props.suite;
+  let testcasename = props.testcasename;
+  let env = props.env;
+  let failurereason = props.failurereason;
+  return (
+    <div className="singleRow">
+      <TooltipComponent content="Add to Script Maintenannce tracker list">
+        <MyFixOutline
+          onClick={() =>
+            addToMaintenanceTracker(
+              runid,
+              suite,
+              testcasename,
+              env,
+              failurereason
+            )
+          }
+        />
+      </TooltipComponent>
+      <TooltipComponent content="Add to product defect">
+        <MyBugOutline
+          onClick={() =>
+            addToProductDefectTracker(
+              runid,
+              suite,
+              testcasename,
+              env,
+              failurereason
+            )
+          }
+        />
+      </TooltipComponent>
+      <TooltipComponent content="Mark as intermittent failure scripts">
+        <MyIntermittentOutline
+          onClick={() =>
+            addToMaintenanceTracker(
+              runid,
+              suite,
+              testcasename,
+              env,
+              failurereason
+            )
+          }
+        />
+      </TooltipComponent>
+    </div>
+  );
 };
 
 export const testHistoryShowInSimpleModal = (props) => {
@@ -610,6 +815,7 @@ export const testcasedetailGrid = [
     headerText: "Run ID",
     width: "150",
     textAlign: "Left",
+    fontSize: "200px",
   },
 
   {
@@ -1176,6 +1382,7 @@ export const defectGrid = [
     headerText: "Action",
     width: "100",
     textAlign: "Left",
+    template: deleteDefect,
   },
   {
     field: "failurereason",
@@ -1236,6 +1443,7 @@ export const maintenanceGrid = [
     headerText: "Action",
     width: "100",
     textAlign: "Left",
+    template: deleteMaintenance,
   },
   {
     field: "failurereason",

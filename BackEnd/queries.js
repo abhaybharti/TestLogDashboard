@@ -218,13 +218,28 @@ const getTestResultsForGivenDateRange = (request, response) => {
 
 const createDefect = (request, response) => {
   console.log("createDefect start");
-  const { suite, testcasename, jirakey, env, failurereason, subscriptionkey } =
-    request.body;
+  const {
+    runid,
+    suite,
+    testcasename,
+    jirakey,
+    env,
+    failurereason,
+    subscriptionkey,
+  } = request.body;
 
   try {
     pool.query(
-      "INSERT INTO defects(suite, testcasename, jirakey, env, failurereason,subscriptionkey) VALUES ($1,$2, $3, $4,$5,$6) Returning *",
-      [suite, testcasename, jirakey, env, failurereason, subscriptionkey],
+      "INSERT INTO defects(runid,suite, testcasename, jirakey, env, failurereason,subscriptionkey) VALUES ($1,$2, $3, $4,$5,$6,$7) Returning *",
+      [
+        runid,
+        suite,
+        testcasename,
+        jirakey,
+        env,
+        failurereason,
+        subscriptionkey,
+      ],
       (error, results) => {
         if (error) {
           throw error;
@@ -240,14 +255,15 @@ const createDefect = (request, response) => {
 
 const createMaintenance = (request, response) => {
   console.log("createMaintenance start", request.body);
-  const { suite, testcasename, env, failurereason, subscriptionkey } =
+  const { runid, suite, testcasename, env, failurereason, subscriptionkey } =
     request.body;
   let queryString =
-    "INSERT INTO maintenance(suite, testcasename,  env, failurereason,subscriptionkey) VALUES ($1,$2, $3, $4,$5) Returning *";
+    "INSERT INTO maintenance(runid,suite, testcasename,  env, failurereason,subscriptionkey) VALUES ($1,$2, $3, $4,$5,$6) Returning *";
+  console.log(queryString);
   try {
     pool.query(
       queryString,
-      [suite, testcasename, env, failurereason, subscriptionkey],
+      [runid, suite, testcasename, env, failurereason, subscriptionkey],
       (error, results) => {
         if (error) {
           throw error;
