@@ -14,10 +14,15 @@ const getTestCaseExecution = (request, response) => {
   console.log("getTestCaseExecution start");
   const { subscriptionkey } = request.body;
   //where order_date > now() - interval '24 hours';
+  // let queryString =
+  //   "select * from testcase where timestamp > now() - interval '48 hours' and subscriptionkey=" +
+  //   subscriptionkey +
+  //   " order by timestamp desc limit 1";
+
   let queryString =
-    "select * from testcase where timestamp > now() - interval '48 hours' and subscriptionkey=" +
+    "select * from testcase A INNER JOIN (select testid, max(timestamp) as timestamp from testcase group by testid) B ON  A.timestamp=B.timestamp AND A.testid=B.testid where A.timestamp > now() - interval '48 hours' and subscriptionkey=" +
     subscriptionkey +
-    " order by timestamp desc limit 1";
+    " order by A.timestamp desc;";
   console.log("queryString : ", queryString);
   try {
     pool.query(queryString, (error, results) => {
