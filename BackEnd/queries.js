@@ -17,7 +17,7 @@ const getTestCaseExecution = (request, response) => {
   let queryString =
     "select * from testcase where timestamp > now() - interval '48 hours' and subscriptionkey=" +
     subscriptionkey +
-    " order by timestamp desc";
+    " order by timestamp desc limit 1";
   console.log("queryString : ", queryString);
   try {
     pool.query(queryString, (error, results) => {
@@ -79,6 +79,7 @@ const updateTestCaseExecution = (request, response) => {
     duration,
     reportpath,
     subscriptionkey,
+    testid,
   } = request.body;
   console.log(
     "runid",
@@ -98,11 +99,13 @@ const updateTestCaseExecution = (request, response) => {
     "reportpath",
     reportpath,
     "subscriptionkey",
-    subscriptionkey
+    subscriptionkey,
+    "testid",
+    testid
   );
   try {
     pool.query(
-      "INSERT INTO testcase(runid,suite, testcasename, status, env, failurereason, duration,reportpath,subscriptionkey) VALUES ($1,$2, $3, $4,$5,$6, $7, $8,$9) Returning *",
+      "INSERT INTO testcase(runid,suite, testcasename, status, env, failurereason, duration,reportpath,subscriptionkey,testid) VALUES ($1,$2, $3, $4,$5,$6, $7, $8,$9,$10) Returning *",
       [
         runid,
         suite,
@@ -113,6 +116,7 @@ const updateTestCaseExecution = (request, response) => {
         duration,
         reportpath,
         subscriptionkey,
+        testid,
       ],
       (error, results) => {
         if (error) {
@@ -402,7 +406,7 @@ const getSuiteSummary = (request, response) => {
   console.log("getSuiteSummary start", request.body);
   const { subscriptionkey } = request.body;
   console.log("subscriptionkey", subscriptionkey);
-  let query = `select row_number() OVER () as id, suite, count(CASE WHEN status = 'PASS' THEN status end) as PASS, count(CASE WHEN status = 'FAIL' THEN status end) as FAIL, count(CASE WHEN status = 'SKIPPED' THEN status end) as SKIP, count(CASE WHEN status = 'defect' THEN status end) as DEFECT, count(CASE WHEN status = 'script' THEN status end) as MAINTAINANCE from testcase where subscriptionkey=${subscriptionkey} and timestamp > now() - interval '48 hours' group by suite;`;
+  let query = `select row_number() OVER () as id,runid, suite, count(CASE WHEN status = 'PASS' THEN status end) as PASS, count(CASE WHEN status = 'FAIL' THEN status end) as FAIL, count(CASE WHEN status = 'SKIPPED' THEN status end) as SKIP, count(CASE WHEN status = 'defect' THEN status end) as DEFECT, count(CASE WHEN status = 'script' THEN status end) as MAINTAINANCE from testcase where subscriptionkey=${subscriptionkey} and timestamp > now() - interval '48 hours' group by suite,runid;`;
   console.log(query);
   try {
     pool.query(query, (error, results) => {
