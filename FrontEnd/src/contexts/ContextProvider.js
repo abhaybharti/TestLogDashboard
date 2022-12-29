@@ -401,7 +401,7 @@ export const ContextProvider = ({ children }) => {
           requestOptions
         );
         const json = await response.json();
-        setTestCaseData(json);
+        setSuiteData(json);
       } catch (error) {
         console.log(error);
       }
