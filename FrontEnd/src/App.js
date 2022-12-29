@@ -146,8 +146,8 @@ const App = () => {
                   <Route path="/defects" element={<Defects />} />
                   <Route path="/scriptissue" element={<ScriptIssues />} />
                   {/* Apps */}
-                  <Route path="/kanban" element={<Kanban />} />
-                  <Route path="/Calendar" element={<Calendar />} />
+                  <Route path="/Tasks" element={<Kanban />} />
+                  <Route path="/schedule" element={<Calendar />} />
                 </Routes>
               </div>
             </div>

@@ -15,42 +15,36 @@ import {
   Search,
 } from "@syncfusion/ej2-react-grids";
 
-import { contextMenuItems, suiteGrid } from "../data/dummy";
+import { suiteGrid } from "../data/dummy";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Header } from "../components";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import Button from "@material-ui/core/Button";
-import { TextField, Tooltip } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import DateRangeFilter from "../components/DateRangeFilter";
 import "../App.css";
 
 const Suite = () => {
   const {
     suiteData,
-    testCaseData,
-    setTestCaseData,
     pass,
-    setPass,
+
     total,
-    setTotal,
+
     fail,
-    setFail,
+
     skip,
-    setSkip,
+
     maintainance,
-    setMaintainance,
+
     defect,
-    setDefect,
-    defectlist,
-    setDefectList,
-    scriptmaintainlist,
-    setScriptMaintainList,
+
     openDateRageFilter,
     setOpenDateRageFilter,
     onDateFilterChange,
     handleRunIdChange,
     getTestCaseData,
-    failureAnalysis,
+    onDateFilterChangeForSuite,
     suiteCount,
   } = useStateContext();
 
@@ -67,7 +61,7 @@ const Suite = () => {
         />
         <TooltipComponent content="Select Date range & get results">
           <DateRangeFilter
-            onChange={onDateFilterChange}
+            onChange={onDateFilterChangeForSuite}
             open={openDateRageFilter}
             setOpen={setOpenDateRageFilter}
             className="size"

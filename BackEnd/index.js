@@ -42,8 +42,8 @@ app.post(
 app.post("/getDailyTestExecutionCount", db.getDailyTestExecutionCount);
 app.post("/getSuiteSummary", db.getSuiteSummary);
 app.post(
-  "/getTestSuiteDataForGivenDateRange",
-  db.getTestSuiteDataForGivenDateRange
+  "/getTestSuiteDataForGivenDateRangeOrRunId",
+  db.getTestSuiteDataForGivenDateRangeOrRunId
 );
 app.post("/getTopFailureReason", db.getTopFailureReason);
 app.post(

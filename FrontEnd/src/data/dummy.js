@@ -53,6 +53,7 @@ import {
 } from "../styles/styled-element";
 import "../App.css";
 import { BASE_API_URL } from "../Utils/Config";
+import moment from "moment";
 
 export const gridOrderImage = (props) => (
   <div>
@@ -78,10 +79,7 @@ const deleteDefectFromDb = async (suite, testCaseName, env) => {
     }),
   };
 
-  const response = await fetch(
-    BASE_API_URL + "/deleteDefect",
-    requestOptions
-  );  
+  const response = await fetch(BASE_API_URL + "/deleteDefect", requestOptions);
 };
 
 export const deleteDefect = (props) => {
@@ -122,7 +120,6 @@ const deleteMaintenanceTaskFromDb = async (suite, testCaseName, env) => {
   );
   const json = await response.json();
   console.log("json", json);
- 
 };
 
 export const deleteMaintenance = (props) => {
@@ -142,8 +139,6 @@ export const deleteMaintenance = (props) => {
     </div>
   );
 };
-
-
 
 export const gridOrderStatus = (props) => {
   if (props.Status === "FAIL") {
@@ -326,6 +321,91 @@ export const testHistorySimpleModal = (props) => {
       suite={props.suite}
       env={props.env}
     ></SimpleModal>
+  );
+};
+
+export const formateDate = (props) => {
+  let executionDate = moment(props.timestamp).utc().format("DD-MM-YYYY hh:mm");
+  return <span>{executionDate}</span>;
+};
+export const suiteFail = (props) => {
+  return (
+    <button
+      type="button"
+      style={{ background: "#ff0000" }}
+      className="text-white py-1 px-2 capitalize rounded-2xl text-md"
+    >
+      {props.fail}
+    </button>
+  );
+};
+
+export const suiteSkip = (props) => {
+  return (
+    <button
+      type="button"
+      style={{ background: "#FB9678" }}
+      className="text-black py-1 px-2 capitalize rounded-2xl text-md"
+    >
+      <a href={props.reportpath} target="_blank" rel="noreferrer">
+        {props.skip}
+      </a>
+    </button>
+  );
+};
+
+export const suiteMaintenance = (props) => {
+  return (
+    <button
+      type="button"
+      style={{ background: "#FB9111" }}
+      className="text-black py-1 px-2 capitalize rounded-2xl text-md"
+    >
+      {props.maintainance}
+    </button>
+  );
+};
+
+export const suiteWarn = (props) => {
+  let warning = 0;
+  if (typeof suitename !== "undefined" && props.warning.length !== 0) {
+    warning = props.warning;
+  }
+
+  return (
+    <button
+      type="button"
+      style={{ background: "#FB9678" }}
+      className="text-black py-1 px-2 capitalize rounded-2xl text-md"
+    >
+      {warning}
+    </button>
+  );
+};
+export const suiteDefect = (props) => {
+  return (
+    <button
+      type="button"
+      style={{ background: "#ff7777" }}
+      className="text-black py-1 px-2 capitalize rounded-2xl text-md"
+    >
+      <a href={props.reportpath} target="_blank" rel="noreferrer">
+        {props.defect}
+      </a>
+    </button>
+  );
+};
+export const suitePass = (props) => {
+  return (
+    <button
+      type="button"
+      style={{ background: "#8BE78B" }}
+      className="text-black py-1 px-2 capitalize rounded-2xl text-md"
+    >
+      <a href={props.reportpath} target="_blank" rel="noreferrer">
+        {props.pass}
+      </a>
+    </button>
   );
 };
 
@@ -851,6 +931,7 @@ export const testcasedetailGrid = [
     headerText: "Date",
     width: "150",
     textAlign: "Left",
+    template: formateDate,
   },
   {
     field: "action",
@@ -1307,36 +1388,42 @@ export const suiteGrid = [
     headerText: "Pass",
     width: "100",
     textAlign: "Left",
+    template: suitePass,
   },
   {
     field: "fail",
     headerText: "FAIL",
     width: "100",
     textAlign: "Left",
+    template: suiteFail,
   },
   {
     field: "skip",
     headerText: "SKIP",
     width: "100",
     textAlign: "Left",
+    template: suiteSkip,
   },
   {
     field: "warning",
     headerText: "WARNING",
     width: "140",
     textAlign: "Left",
+    template: suiteWarn,
   },
   {
     field: "defect",
     headerText: "Known Defect",
     width: "150",
     textAlign: "Left",
+    template: suiteDefect,
   },
   {
     field: "maintainance",
     headerText: "Script Issues",
     width: "170",
     textAlign: "Left",
+    template: suiteMaintenance,
   },
 ];
 
@@ -1376,6 +1463,7 @@ export const defectGrid = [
     headerText: "Date",
     width: "150",
     textAlign: "Left",
+    template: formateDate,
   },
   {
     field: "action",
@@ -1437,6 +1525,7 @@ export const maintenanceGrid = [
     headerText: "Date",
     width: "150",
     textAlign: "Left",
+    template: formateDate,
   },
   {
     field: "action",
@@ -3236,8 +3325,8 @@ export const scheduleData = [
     Id: 1,
     Subject: "Explosion of Betelgeuse Star",
     Location: "Space Center USA",
-    StartTime: "2021-01-10T04:00:00.000Z",
-    EndTime: "2021-01-10T05:30:00.000Z",
+    StartTime: "2022-12-10T04:00:00.000Z",
+    EndTime: "2022-12-28T05:30:00.000Z",
     CategoryColor: "#1aaa55",
   },
   {

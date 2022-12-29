@@ -56,7 +56,7 @@ const DateRangeFilter = ({ onChange, open, setOpen }) => {
           color="secondary"
           onClick={() => setOpen(!open)}
         >
-          Open Date
+          Get Results
         </Button>
         {state[0].startDate !== "" && state[0].endDate !== "" && (
           <p>

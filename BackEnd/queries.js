@@ -428,8 +428,8 @@ const getSuiteSummary = (request, response) => {
   console.log("getSuiteSummary stop");
 };
 
-const getTestSuiteDataForGivenDateRange = (request, response) => {
-  console.log("getTestSuiteDataForGivenDateRange start", request.body);
+const getTestSuiteDataForGivenDateRangeOrRunId = (request, response) => {
+  console.log("getTestSuiteDataForGivenDateRangeOrRunId start", request.body);
   const { query, subscriptionkey } = request.body;
   try {
     pool.query(query, (error, results) => {
@@ -438,12 +438,11 @@ const getTestSuiteDataForGivenDateRange = (request, response) => {
         throw error;
       }
       response.status(200).json(results.rows);
-      //console.log(results.rows);
     });
   } catch (error) {
     console.log(error);
   }
-  console.log("getTestSuiteDataForGivenDateRange stop");
+  console.log("getTestSuiteDataForGivenDateRangeOrRunId stop");
 };
 
 const getTopFailureReason = (request, response) => {
@@ -479,7 +478,7 @@ module.exports = {
   getTestResultsForGivenDateRange,
   getDailyTestExecutionCount,
   getSuiteSummary,
-  getTestSuiteDataForGivenDateRange,
+  getTestSuiteDataForGivenDateRangeOrRunId,
   getTopFailureReason,
   getTestResultsForGivenDateRangeOrRunId,
 };

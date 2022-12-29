@@ -3,13 +3,8 @@ import {
   GridComponent,
   ColumnsDirective,
   ColumnDirective,
-  Resize,
-  Sort,
-  ContextMenu,
-  Filter,
   Page,
   ExcelExport,
-  Edit,
   PdfExport,
   Inject,
   Search,
@@ -17,15 +12,14 @@ import {
   toolbarClick,
   Group,
 } from "@syncfusion/ej2-react-grids";
-import { Input } from "@syncfusion/ej2-inputs";
-import { getValue } from "@syncfusion/ej2-base";
-import { contextMenuItems, testcasedetailGrid } from "../data/dummy";
+
+import { testcasedetailGrid } from "../data/dummy";
 import { Header } from "../components";
-import { PDFExport } from "@syncfusion/ej2/pivotview";
+
 import { useStateContext } from "../contexts/ContextProvider";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import Button from "@material-ui/core/Button";
-import { TextField, Tooltip } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 
 import DateRangeFilter from "../components/DateRangeFilter";
 import "../App.css";
@@ -33,23 +27,19 @@ import "../App.css";
 const TestCaseExecution = () => {
   const {
     testCaseData,
-    setTestCaseData,
+
     pass,
-    setPass,
+
     total,
-    setTotal,
+
     fail,
-    setFail,
+
     skip,
-    setSkip,
+
     maintainance,
-    setMaintainance,
+
     defect,
-    setDefect,
-    defectlist,
-    setDefectList,
-    scriptmaintainlist,
-    setScriptMaintainList,
+
     openDateRageFilter,
     setOpenDateRageFilter,
     onDateFilterChange,
@@ -59,10 +49,6 @@ const TestCaseExecution = () => {
   } = useStateContext();
   const pageSettings = { pageSize: 50 };
 
-  function toolbarClick(ClickEventArgs) {
-    let grid = document.getElementById("gridcomp");
-    grid.excelExport();
-  }
   return (
     <>
       <Header title="Test Execution Details" />

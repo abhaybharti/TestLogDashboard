@@ -348,9 +348,68 @@ export const ContextProvider = ({ children }) => {
     getTestResultsForGivenDateRangeOrRunId(startDate, endDate);
   };
 
+  const onDateFilterChangeForSuite = (ranges) => {
+    let startDate;
+    let endDate;
+    if (
+      moment(ranges.startDate).format("MM-DD-YYYY") !==
+      moment(ranges.endDate).format("MM-DD-YYYY")
+    ) {
+      setOpenDateRageFilter(false);
+    } else if (ranges.startDate === "" && ranges.endDate === "") {
+      setOpenDateRageFilter(false);
+    }
+    startDate = moment(ranges.startDate).format("MM-DD-YYYY");
+    endDate = moment(ranges.endDate).format("MM-DD-YYYY");
+    console.log(startDate, endDate);
+    if (endDate === "Invalid date") {
+      endDate = startDate;
+    }
+    getTestSuiteForGivenDateRangeOrRunId(startDate, endDate);
+  };
+
   const handleRunIdChange = (event) => {
     console.log(event.target.value);
     setRunIdName(event.target.value);
+  };
+
+  const getTestSuiteForGivenDateRangeOrRunId = async (startDate, endDate) => {
+    console.log("TestExections->getTestSuiteForGivenDateRangeOrRunId() start");
+    console.log(startDate, endDate);
+    let queryPartOne = `select row_number() OVER () as id,runid, suite, count(CASE WHEN status = 'PASS' THEN status end) as PASS, count(CASE WHEN status = 'FAIL' THEN status end) as FAIL, count(CASE WHEN status = 'SKIPPED' THEN status end) as SKIP, count(CASE WHEN status = 'defect' THEN status end) as DEFECT, count(CASE WHEN status = 'script' THEN status end) as MAINTAINANCE from testcase where subscriptionkey=${subscriptionkey}`;
+    let queryPartTwo = ` and timestamp > now() - interval '48 hours' group by suite,runid;`;
+
+    if (typeof runid !== "undefined" && runid.length !== 0) {
+      queryPartOne = queryPartOne + " and runid ='" + runid + "'";
+    }
+
+    let query = queryPartOne + queryPartTwo;
+
+    console.log("final query", query);
+    try {
+      try {
+        const requestOptions = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            query: query,
+            subscriptionkey: subscriptionkey,
+          }),
+        };
+        const response = await fetch(
+          BASE_API_URL + "/getTestSuiteDataForGivenDateRangeOrRunId",
+          requestOptions
+        );
+        const json = await response.json();
+        setTestCaseData(json);
+      } catch (error) {
+        console.log(error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    console.log("TestExections->getTestSuiteForGivenDateRangeOrRunId() stop");
   };
 
   const getTestResultsForGivenDateRangeOrRunId = async (startDate, endDate) => {
@@ -475,6 +534,7 @@ export const ContextProvider = ({ children }) => {
         getTestCaseData,
         testHistory,
         setTestHistory,
+        onDateFilterChangeForSuite,
       }}
     >
       {children}
