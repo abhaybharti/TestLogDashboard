@@ -14,7 +14,7 @@ import {
   Inject,
 } from "@syncfusion/ej2-react-grids";
 
-import { contextMenuItems, maintenanceGrid } from "../data/dummy";
+import { maintenanceGrid } from "../data/dummy";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Header } from "../components";
 

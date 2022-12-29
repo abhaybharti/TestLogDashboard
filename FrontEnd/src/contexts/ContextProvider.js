@@ -28,6 +28,7 @@ const initialState = {
   scriptIssueRows: [{}],
   failureReasonRows: [{}],
   testHistoryDummy: [{}],
+  dailyTestRunCount: [{}],
 };
 
 export const ContextProvider = ({ children }) => {
@@ -53,6 +54,9 @@ export const ContextProvider = ({ children }) => {
 
   const [pass, setPass] = useState(0);
   const [total, setTotal] = useState(0);
+  const [dailyTestRunCount, setDailyTestRunCount] = useState(
+    initialState.dailyTestRunCount
+  );
   const [fail, setFail] = useState(0);
   const [skip, setSkip] = useState(0);
   const [maintainance, setMaintainance] = useState(0);
@@ -76,6 +80,26 @@ export const ContextProvider = ({ children }) => {
     }
     if (typeof localStorage.getItem("subscriptionkey") !== "undefined") {
       setSubscriptionKey(localStorage.getItem("subscriptionkey"));
+    }
+  };
+
+  const getDailyTestExecutionCount = async () => {
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subscriptionkey: subscriptionkey,
+        }),
+      };
+      const response = await fetch(
+        BASE_API_URL + "/getDailyTestExecutionCount",
+        requestOptions
+      );
+      const json = await response.json();
+      setDailyTestRunCount(json);
+    } catch (error) {
+      console.log("error", error);
     }
   };
 
@@ -463,6 +487,7 @@ export const ContextProvider = ({ children }) => {
       getTestCaseData();
       getTestSuiteData();
       getTestTotalPassFailCount();
+      getDailyTestExecutionCount();
     }
   }, [loginStatus, subscriptionkey]);
 
@@ -537,6 +562,7 @@ export const ContextProvider = ({ children }) => {
         testHistory,
         setTestHistory,
         onDateFilterChangeForSuite,
+        dailyTestRunCount,
       }}
     >
       {children}

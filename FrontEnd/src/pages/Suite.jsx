@@ -41,7 +41,7 @@ const Suite = () => {
 
     openDateRageFilter,
     setOpenDateRageFilter,
-    onDateFilterChange,
+
     handleRunIdChange,
     getTestCaseData,
     onDateFilterChangeForSuite,
