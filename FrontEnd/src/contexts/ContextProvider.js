@@ -346,6 +346,7 @@ export const ContextProvider = ({ children }) => {
       endDate = startDate;
     }
     getTestResultsForGivenDateRangeOrRunId(startDate, endDate);
+    getTestSuiteForGivenDateRangeOrRunId(startDate, endDate);
   };
 
   const onDateFilterChangeForSuite = (ranges) => {
