@@ -403,6 +403,7 @@ export const ContextProvider = ({ children }) => {
         );
         const json = await response.json();
         setSuiteData(json);
+        setSuiteCount(suiteData.length);
       } catch (error) {
         console.log(error);
       }
