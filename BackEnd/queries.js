@@ -390,7 +390,7 @@ const getDailyTestExecutionCount = (request, response) => {
   console.log("getDailyTestExecutionCount start", request.body);
   const { subscriptionkey } = request.body;
   console.log("subscriptionkey", subscriptionkey);
-  let query = `SELECT Date(timestamp) as "Date",COUNT("timestamp") AS "TestCaseExecuted" FROM testcase where subscriptionkey=${subscriptionkey} GROUP BY timestamp limit 10;`;
+  let query = `SELECT executiondate,COUNT(id) AS "TestCaseExecuted" FROM testcase where subscriptionkey==${subscriptionkey} GROUP BY executiondate order by executiondate limit 10;`;
   console.log(query);
   try {
     pool.query(query, (error, results) => {
