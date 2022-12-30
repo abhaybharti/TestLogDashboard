@@ -35,8 +35,8 @@ const DailyTestExecutionCount = () => {
         <SeriesCollectionDirective>
           <SeriesDirective
             dataSource={dailyTestRunCount}
-            xName="Date"
-            yName="TestCaseExecuted"
+            xName="executiondate"
+            yName="testcaseexecuted"
             name="Sales"
             marker={marker}
           />
