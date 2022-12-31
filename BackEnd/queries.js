@@ -1,6 +1,7 @@
 const { response, request } = require("express");
 require("log-timestamp");
 const Pool = require("pg").Pool;
+var types = require("pg").types;
 
 const pool = new Pool({
   user: "testloguser",
@@ -462,6 +463,10 @@ const getTopFailureReason = (request, response) => {
   }
   console.log("getTopFailureReason stop");
 };
+
+types.setTypeParser(1082, function (stringValue) {
+  return stringValue;
+});
 
 module.exports = {
   getTestCaseExecution,
