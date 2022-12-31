@@ -20,13 +20,14 @@ const DailyTestExecutionCount = () => {
   const legendSettings = { visible: true };
   const marker = { dataLabel: { visible: true } };
   const { dailyTestRunCount } = useStateContext();
+
   return (
     <div className="m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl">
       <ChartComponent
         id="charts"
         primaryXAxis={primaryxAxis}
         legendSettings={legendSettings}
-        title="Last 10 Days Daily Test Execution Count"
+        title="Test Execution Trend"
         height="350"
       >
         <Inject
