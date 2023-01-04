@@ -29,6 +29,7 @@ const initialState = {
   failureReasonRows: [{}],
   testHistoryDummy: [{}],
   dailyTestRunCount: [{}],
+  suiteRunningStatus: [{}],
 };
 
 export const ContextProvider = ({ children }) => {
@@ -70,6 +71,9 @@ export const ContextProvider = ({ children }) => {
   );
   const [runid, setRunIdName] = useState("");
   const [testHistory, setTestHistory] = useState(initialState.testHistoryDummy);
+  const [suiteRunningStatus, setSuiteRunningStatus] = useState(
+    initialState.suiteRunningStatus
+  );
 
   const verifyLoginStatus = () => {
     if (localStorage.getItem("loginStatus") == "true") {
@@ -98,6 +102,26 @@ export const ContextProvider = ({ children }) => {
       );
       const json = await response.json();
       setDailyTestRunCount(json);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const getSuiteRunningStatus = async () => {
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subscriptionkey: subscriptionkey,
+        }),
+      };
+      const response = await fetch(
+        BASE_API_URL + "/getSuiteRunningStatus",
+        requestOptions
+      );
+      const json = await response.json();
+      setSuiteRunningStatus(json);
     } catch (error) {
       console.log("error", error);
     }
@@ -488,6 +512,7 @@ export const ContextProvider = ({ children }) => {
       getTestSuiteData();
       getTestTotalPassFailCount();
       getDailyTestExecutionCount();
+      getSuiteRunningStatus();
     }
   }, [loginStatus, subscriptionkey]);
 
@@ -563,6 +588,7 @@ export const ContextProvider = ({ children }) => {
         setTestHistory,
         onDateFilterChangeForSuite,
         dailyTestRunCount,
+        suiteRunningStatus,
       }}
     >
       {children}

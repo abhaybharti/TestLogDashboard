@@ -328,6 +328,30 @@ export const formateDate = (props) => {
   let executionDate = moment(props.timestamp).utc().format("DD-MM-YYYY hh:mm");
   return <span>{executionDate}</span>;
 };
+
+export const formateSuiteStartDate = (props) => {
+  let executionDate = "";
+  if (props.startdate !== null) {
+    executionDate = moment(props.startdate).utc().format("DD-MM-YYYY hh:mm");
+  }
+  return <span>{executionDate}</span>;
+};
+export const formateSuiteEndDate = (props) => {
+  let executionDate = "";
+  if (props.enddate !== null) {
+    executionDate = moment(props.enddate).utc().format("DD-MM-YYYY hh:mm");
+  }
+  return <span>{executionDate}</span>;
+};
+
+export const suiteRunDuration = (props) => {
+  let enddate = new Date(props.enddate);
+  let startdate = new Date(props.startdate);
+
+  let hours = (enddate - startdate) / 1000 / (60 * 60);
+  return <span>{hours}</span>;
+};
+
 export const suiteFail = (props) => {
   return (
     <button
@@ -1018,6 +1042,10 @@ export const links = [
     title: "Automation",
     links: [
       {
+        name: "suiterunsummary",
+        text: "Running Suite",
+      },
+      {
         name: "testsuite",
         text: "Test Suite",
       },
@@ -1032,6 +1060,10 @@ export const links = [
       {
         name: "scriptissue",
         text: "Script Issue",
+      },
+      {
+        name: "devicestatus",
+        text: "Device Status",
       },
     ],
   },
@@ -1424,6 +1456,49 @@ export const suiteGrid = [
     width: "170",
     textAlign: "Left",
     template: suiteMaintenance,
+  },
+];
+
+export const suiteRunningStatusGrid = [
+  {
+    field: "suite",
+    headerText: "Suite",
+    width: "200",
+    textAlign: "Left",
+  },
+  {
+    field: "status",
+    headerText: "Status",
+    width: "150",
+    textAlign: "Left",
+  },
+  {
+    field: "env",
+    headerText: "Env",
+    width: "100",
+    textAlign: "Left",
+  },
+
+  {
+    field: "startdate",
+    headerText: "Start Date",
+    width: "100",
+    textAlign: "Left",
+    template: formateSuiteStartDate,
+  },
+  {
+    field: "enddate",
+    headerText: "End Date",
+    width: "140",
+    textAlign: "Left",
+    template: formateSuiteEndDate,
+  },
+  {
+    field: "duration",
+    headerText: "Duration (In Hrs)",
+    width: "150",
+    textAlign: "Left",
+    template: suiteRunDuration,
   },
 ];
 

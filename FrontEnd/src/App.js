@@ -39,6 +39,7 @@ import TestCaseExecution from "./pages/TestCaseExecution";
 import Home from "./pages/Home";
 import Defects from "./pages/Defects";
 import ScriptIssues from "./pages/ScriptIssues";
+import SuiteRunningStatus from "./pages/SuiteRunningStatus";
 
 const App = () => {
   // const activeMenu = true;
@@ -143,6 +144,10 @@ const App = () => {
                   <Route path="/" element={<Home />} />
                   <Route path="/home" element={<Home />} />
                   {/* Pages */}
+                  <Route
+                    path="/suiterunsummary"
+                    element={<SuiteRunningStatus />}
+                  />
                   <Route path="/testsuite" element={<Suite />} />
                   <Route path="/testcases" element={<TestCaseExecution />} />
                   <Route path="/defects" element={<Defects />} />

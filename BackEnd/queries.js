@@ -21,7 +21,7 @@ const getTestCaseExecution = (request, response) => {
   //   " order by timestamp desc limit 1";
 
   let queryString =
-    "select * from testcase A INNER JOIN (select testid, max(timestamp) as timestamp from testcase group by testid) B ON  A.timestamp=B.timestamp AND A.testid=B.testid where A.timestamp > now() - interval '48 hours' and subscriptionkey=" +
+    "select * from testcase A INNER JOIN (select testid, max(timestamp) as timestamp from testcase group by testid) B ON  A.timestamp=B.timestamp AND A.testid=B.testid where A.timestamp > now() - interval '480 hours' and subscriptionkey=" +
     subscriptionkey +
     " order by A.timestamp desc;";
   console.log("queryString : ", queryString);
@@ -31,7 +31,7 @@ const getTestCaseExecution = (request, response) => {
         throw error;
       }
       response.status(200).json(results.rows);
-      //console.log(results.rows);
+      console.log(results.rows);
     });
   } catch (error) {
     console.log(error);
@@ -464,6 +464,57 @@ const getTopFailureReason = (request, response) => {
   console.log("getTopFailureReason stop");
 };
 
+const getSuiteRunningStatus = (request, response) => {
+  console.log("getSuiteSummary start", request.body);
+  const { subscriptionkey } = request.body;
+  console.log("subscriptionkey", subscriptionkey);
+  let query = `select suite,status,env,startdate,enddate from suitestatus where subscriptionkey=${subscriptionkey};`;
+  console.log(query);
+  try {
+    pool.query(query, (error, results) => {
+      if (error) {
+        console.log(error);
+        throw error;
+      }
+      response.status(200).json(results.rows);
+      //console.log(results.rows);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  console.log("getSuiteSummary stop");
+};
+
+const updateSuiteRunningStatus = (request, response) => {
+  console.log("getSuiteSummary start", request.body);
+  const { subscriptionkey, suite, status, env, startdate, enddate } =
+    request.body;
+  let query = `select suite,status,env,startdate,enddate from suitestatus where status='Running' and subscriptionkey=${subscriptionkey};`;
+
+  if (typeof startdate !== "undefined" && startdate.length !== 0) {
+    query = `UPDATE suitestatus SET status='${status}', startdate = '${startdate}' WHERE suite = '${suite}' and env='${env}' and subscriptionkey=${subscriptionkey};`;
+  }
+
+  if (typeof enddate !== "undefined" && enddate.length !== 0) {
+    query = `UPDATE suitestatus SET status='${status}', enddate = '${enddate}' WHERE suite = '${suite}' and env='${env}' and subscriptionkey=${subscriptionkey};`;
+  }
+
+  console.log(query);
+  try {
+    pool.query(query, (error, results) => {
+      if (error) {
+        console.log(error);
+        throw error;
+      }
+      response.status(200).json(results.rows);
+      //console.log(results.rows);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  console.log("getSuiteSummary stop");
+};
+
 types.setTypeParser(1082, function (stringValue) {
   return stringValue;
 });
@@ -486,4 +537,6 @@ module.exports = {
   getTestSuiteDataForGivenDateRangeOrRunId,
   getTopFailureReason,
   getTestResultsForGivenDateRangeOrRunId,
+  getSuiteRunningStatus,
+  updateSuiteRunningStatus,
 };
