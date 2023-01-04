@@ -440,19 +440,19 @@ export const ContextProvider = ({ children }) => {
 
   const getTestResultsForGivenDateRangeOrRunId = async (startDate, endDate) => {
     console.log(startDate, endDate);
-    let query =
-      "select * from testcase where timestamp between '" +
+    let queryPartOne =
+      "select * from testcase A INNER JOIN (select testid, max(timestamp) as timestamp from testcase group by testid) B ON  A.timestamp=B.timestamp AND A.testid=B.testid where A.timestamp between '" +
       startDate +
       "' and '" +
       endDate +
       "' and subscriptionkey=" +
       subscriptionkey;
-    console.log("Initial query", query);
+    let queryPartTwo = " order by A.timestamp desc;";
 
     if (typeof runid !== "undefined" && runid.length !== 0) {
-      query = query + " and runid ='" + runid + "'";
+      queryPartOne = queryPartOne + " and runid ='" + runid + "'";
     }
-
+    let query = queryPartOne + queryPartTwo;
     console.log("final query", query);
     try {
       try {
