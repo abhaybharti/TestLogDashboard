@@ -14,14 +14,9 @@ const pool = new Pool({
 const getTestCaseExecution = (request, response) => {
   console.log("getTestCaseExecution start");
   const { subscriptionkey } = request.body;
-  //where order_date > now() - interval '24 hours';
-  // let queryString =
-  //   "select * from testcase where timestamp > now() - interval '48 hours' and subscriptionkey=" +
-  //   subscriptionkey +
-  //   " order by timestamp desc limit 1";
 
   let queryString =
-    "select * from testcase A INNER JOIN (select testid, max(timestamp) as timestamp from testcase group by testid) B ON  A.timestamp=B.timestamp AND A.testid=B.testid where A.timestamp > now() - interval '480 hours' and subscriptionkey=" +
+    "select * from testcase A INNER JOIN (select testid, max(timestamp) as timestamp from testcase group by testid) B ON  A.timestamp=B.timestamp AND A.testid=B.testid where A.timestamp > now() - interval '48 hours' and subscriptionkey=" +
     subscriptionkey +
     " order by A.timestamp desc;";
   console.log("queryString : ", queryString);
@@ -31,7 +26,7 @@ const getTestCaseExecution = (request, response) => {
         throw error;
       }
       response.status(200).json(results.rows);
-      console.log(results.rows);
+      // console.log(results.rows);
     });
   } catch (error) {
     console.log(error);

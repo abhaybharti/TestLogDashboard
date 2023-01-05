@@ -1039,11 +1039,11 @@ export const links = [
   },
 
   {
-    title: "Automation",
+    title: "Execution",
     links: [
       {
         name: "suiterunsummary",
-        text: "Running Suite",
+        text: "Job Trends",
       },
       {
         name: "testsuite",
@@ -1060,10 +1060,20 @@ export const links = [
       {
         name: "scriptissue",
         text: "Script Issue",
+      }
+     
+    ],
+  },
+  {
+    title: "Hardware",
+    links: [
+      {
+        name: "deviceinfo",
+        text: "Device Health",
       },
       {
-        name: "devicestatus",
-        text: "Device Status",
+        name: "simulator",
+        text: "Simulator Health",
       },
     ],
   },

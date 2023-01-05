@@ -30,6 +30,7 @@ const initialState = {
   testHistoryDummy: [{}],
   dailyTestRunCount: [{}],
   suiteRunningStatus: [{}],
+  pageSettings: { pageSize: 50 },
 };
 
 export const ContextProvider = ({ children }) => {
@@ -74,6 +75,8 @@ export const ContextProvider = ({ children }) => {
   const [suiteRunningStatus, setSuiteRunningStatus] = useState(
     initialState.suiteRunningStatus
   );
+  const [firstDate, setFirstDate] = useState();
+  const [secondDate, setSecondDate] = useState();
 
   const verifyLoginStatus = () => {
     if (localStorage.getItem("loginStatus") == "true") {
@@ -393,8 +396,10 @@ export const ContextProvider = ({ children }) => {
     if (endDate === "Invalid date") {
       endDate = startDate;
     }
-    getTestResultsForGivenDateRangeOrRunId(startDate, endDate);
-    getTestSuiteForGivenDateRangeOrRunId(startDate, endDate);
+    setFirstDate(startDate);
+    setSecondDate(endDate);
+    //getTestResultsForGivenDateRangeOrRunId(startDate, endDate);
+    //getTestSuiteForGivenDateRangeOrRunId(startDate, endDate);
   };
 
   const onDateFilterChangeForSuite = (ranges) => {
@@ -425,14 +430,20 @@ export const ContextProvider = ({ children }) => {
   const getTestSuiteForGivenDateRangeOrRunId = async (startDate, endDate) => {
     console.log("TestExections->getTestSuiteForGivenDateRangeOrRunId() start");
     console.log(startDate, endDate);
-    let queryPartOne = `select row_number() OVER () as id,runid, suite, count(CASE WHEN status = 'PASS' THEN status end) as PASS, count(CASE WHEN status = 'FAIL' THEN status end) as FAIL, count(CASE WHEN status = 'SKIPPED' THEN status end) as SKIP, count(CASE WHEN status = 'defect' THEN status end) as DEFECT, count(CASE WHEN status = 'script' THEN status end) as MAINTAINANCE from testcase where subscriptionkey=${subscriptionkey}`;
-    let queryPartTwo = ` and timestamp > now() - interval '48 hours' group by suite,runid;`;
+    let queryPartOne =
+      "select * from testcase A INNER JOIN (select testid, max(timestamp) as timestamp from testcase group by testid) B ON  A.timestamp=B.timestamp AND A.testid=B.testid where A.timestamp between '" +
+      startDate +
+      "' and '" +
+      endDate +
+      "' and subscriptionkey=" +
+      subscriptionkey;
+    let queryPartTwo = " order by A.timestamp desc;";
 
     if (typeof runid !== "undefined" && runid.length !== 0) {
       queryPartOne = queryPartOne + " and runid ='" + runid + "'";
     }
-
     let query = queryPartOne + queryPartTwo;
+    console.log("final query", query);
 
     console.log("final query", query);
     try {
@@ -462,20 +473,32 @@ export const ContextProvider = ({ children }) => {
     console.log("TestExections->getTestSuiteForGivenDateRangeOrRunId() stop");
   };
 
-  const getTestResultsForGivenDateRangeOrRunId = async (startDate, endDate) => {
-    console.log(startDate, endDate);
+  const getTestResultsForGivenDateRangeOrRunId = async () => {
+    console.log(firstDate, secondDate);
     let queryPartOne =
-      "select * from testcase A INNER JOIN (select testid, max(timestamp) as timestamp from testcase group by testid) B ON  A.timestamp=B.timestamp AND A.testid=B.testid where A.timestamp between '" +
-      startDate +
-      "' and '" +
-      endDate +
-      "' and subscriptionkey=" +
+      "select * from testcase A INNER JOIN (select testid, max(timestamp) as timestamp from testcase group by testid) B ON  A.timestamp=B.timestamp AND A.testid=B.testid where subscriptionkey=" +
       subscriptionkey;
     let queryPartTwo = " order by A.timestamp desc;";
 
     if (typeof runid !== "undefined" && runid.length !== 0) {
       queryPartOne = queryPartOne + " and runid ='" + runid + "'";
     }
+
+    if (
+      typeof firstDate !== "undefined" &&
+      firstDate.length !== 0 &&
+      typeof secondDate !== "undefined" &&
+      secondDate.length !== 0
+    ) {
+      queryPartOne =
+        queryPartOne +
+        " and A.executiondate between '" +
+        firstDate +
+        "' and '" +
+        secondDate +
+        "'";
+    }
+
     let query = queryPartOne + queryPartTwo;
     console.log("final query", query);
     try {
@@ -495,6 +518,8 @@ export const ContextProvider = ({ children }) => {
         const json = await response.json();
         console.log("ApiCall->getApiResponse() end :", json);
         setTestCaseData(json);
+        setSuiteData(json);
+        setSuiteCount(suiteData.length);
       } catch (error) {
         console.log(error);
       }
@@ -503,6 +528,19 @@ export const ContextProvider = ({ children }) => {
     }
 
     console.log("TestExections->getTestResultsForGivenDateRange() stop");
+  };
+
+  const getSuiteRunningCount = (status, env) => {
+    let suiteRunningCount = 0;
+    for (let iLoop = 0; iLoop < suiteRunningStatus.length; iLoop++) {
+      if (
+        suiteRunningStatus[iLoop].status === status &&
+        suiteRunningStatus[iLoop].env === env
+      ) {
+        suiteRunningCount++;
+      }
+    }
+    return suiteRunningCount;
   };
 
   useEffect(() => {
@@ -589,6 +627,8 @@ export const ContextProvider = ({ children }) => {
         onDateFilterChangeForSuite,
         dailyTestRunCount,
         suiteRunningStatus,
+        getTestResultsForGivenDateRangeOrRunId,
+        getSuiteRunningCount,
       }}
     >
       {children}

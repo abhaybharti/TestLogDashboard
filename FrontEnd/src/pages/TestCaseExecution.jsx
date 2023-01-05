@@ -46,6 +46,7 @@ const TestCaseExecution = () => {
     handleRunIdChange,
     getTestCaseData,
     failureAnalysis,
+    getTestResultsForGivenDateRangeOrRunId,
   } = useStateContext();
   const pageSettings = { pageSize: 50 };
 
@@ -72,6 +73,18 @@ const TestCaseExecution = () => {
             id="clearfilter"
             variant="contained"
             color="primary"
+            onClick={getTestResultsForGivenDateRangeOrRunId}
+            // size="small"
+            style={{ maxWidth: "130px", maxHeight: "43px" }}
+          >
+            Get Results
+          </Button>
+        </TooltipComponent>
+        <TooltipComponent content="Clear current filter and fetch results test case executed in last 48 hour">
+          <Button
+            id="clearfilter"
+            variant="contained"
+            color="green"
             onClick={getTestCaseData}
             // size="small"
             style={{ maxWidth: "130px", maxHeight: "43px" }}

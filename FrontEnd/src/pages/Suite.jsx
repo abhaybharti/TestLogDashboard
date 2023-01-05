@@ -50,8 +50,8 @@ const Suite = () => {
 
   return (
     <>
-      <div className="singleRow">
-        <TextField
+      <div className="centerRow">
+        {/* <TextField
           id="runid"
           label="Run ID"
           variant="outlined"
@@ -78,57 +78,57 @@ const Suite = () => {
           >
             Clear Filter
           </Button>
-        </TooltipComponent>
+        </TooltipComponent> */}
 
-        <h5
+        <h4
           style={{
             color: "gray",
           }}
         >
           Suite : {suiteCount}
-        </h5>
-        <h5
+        </h4>
+        <h4
           style={{
             color: "gray",
           }}
         >
           Run: {total}
-        </h5>
-        <h5
+        </h4>
+        <h4
           style={{
             color: "green",
           }}
         >
           Pass: {pass}
-        </h5>
-        <h5
+        </h4>
+        <h4
           style={{
             color: "red",
           }}
         >
           Fail: {fail}
-        </h5>
-        <h5
+        </h4>
+        <h4
           style={{
             color: "Violet",
           }}
         >
           Skipped: {skip}
-        </h5>
-        <h5
+        </h4>
+        <h4
           style={{
             color: "IndianRed",
           }}
         >
           Defect: {defect}
-        </h5>
-        <h5
+        </h4>
+        <h4
           style={{
             color: "LightSalmon",
           }}
         >
           Script Issue: {maintainance}
-        </h5>
+        </h4>
       </div>
       <div className="m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl">
         <Header title="Suite Execution Details" />
