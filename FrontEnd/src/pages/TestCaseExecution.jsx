@@ -84,7 +84,7 @@ const TestCaseExecution = () => {
           <Button
             id="clearfilter"
             variant="contained"
-            color="green"
+            color="primary"
             onClick={getTestCaseData}
             // size="small"
             style={{ maxWidth: "130px", maxHeight: "43px" }}
