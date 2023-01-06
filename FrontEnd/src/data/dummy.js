@@ -326,21 +326,22 @@ export const testHistorySimpleModal = (props) => {
 };
 
 export const formateDate = (props) => {
-  let executionDate = moment(props.timestamp).utc().format("DD-MM-YYYY hh:mm");
+  
+    let executionDate = momenttimezone(props.timestamp).format("DD-MM-YYYY hh:mm");
   return <span>{executionDate}</span>;
 };
+
+function convertDateTimeIntoLocalFormat  (timestamp,targetFormat){
+  const time = momenttimezone.tz(timestamp);
+  const localtz = momenttimezone.tz.guess();
+  const date = time.clone().tz(localtz);
+  return momenttimezone(date).format(targetFormat);
+}
 
 export const formateSuiteStartDate = (props) => {
   let executionDate = "";
   if (props.startdate !== null) {
-    //executionDate = moment(props.startdate).utc().format("DD-MM-YYYY hh:mm");
-    // executionDate = new Date(props.startdate).toLocaleString(undefined, {
-    //   timeZone: "Asia/Kolkata",
-    // });
-    const time = momenttimezone.tz(props.startdate);
-    const localtz = momenttimezone.tz.guess();
-    const date = time.clone().tz(localtz);
-    executionDate = momenttimezone(date).format("DD-MM-YYYY hh:mm");
+    executionDate = convertDateTimeIntoLocalFormat(props.startdate,"DD-MM-YYYY hh:mm");
   }
   return <span>{executionDate}</span>;
 };
