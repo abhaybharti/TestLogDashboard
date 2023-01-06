@@ -489,7 +489,7 @@ const updateSuiteRunningStatus = (request, response) => {
   let query = `select suite,status,env,startdate,enddate from suitestatus where status='Running' and subscriptionkey=${subscriptionkey};`;
 
   if (typeof startdate !== "undefined" && startdate.length !== 0) {
-    query = `UPDATE suitestatus SET status='${status}', startdate = '${startdate}', enddate = '9999-01-01 01:01:01:01' WHERE suite = '${suite}' and env='${env}' and subscriptionkey=${subscriptionkey};`;
+    query = `UPDATE suitestatus SET status='${status}', startdate = '${startdate}', enddate = '9999-01-01 01:01:01.010' WHERE suite = '${suite}' and env='${env}' and subscriptionkey=${subscriptionkey};`;
   }
 
   if (typeof enddate !== "undefined" && enddate.length !== 0) {
