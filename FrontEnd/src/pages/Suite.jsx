@@ -13,6 +13,7 @@ import {
   PdfExport,
   Inject,
   Search,
+  Group
 } from "@syncfusion/ej2-react-grids";
 
 import { suiteGrid } from "../data/dummy";
@@ -138,6 +139,7 @@ const Suite = () => {
           allowPaging
           allowSorting
           allowTextWrap
+          allowGrouping={true}
           toolbar={["Search", "ExcelExport", "PdfExport"]}
         >
           <ColumnsDirective>
@@ -156,6 +158,7 @@ const Suite = () => {
               Edit,
               PdfExport,
               Search,
+              Group
             ]}
           />
         </GridComponent>

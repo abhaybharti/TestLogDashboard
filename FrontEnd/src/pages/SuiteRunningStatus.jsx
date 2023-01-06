@@ -13,6 +13,7 @@ import {
   PdfExport,
   Inject,
   Search,
+  Group
 } from "@syncfusion/ej2-react-grids";
 
 import { suiteRunningStatusGrid } from "../data/dummy";
@@ -36,6 +37,7 @@ const SuiteRunningStatus = () => {
           allowSorting
           allowTextWrap
           pageSettings={pageSettings}
+          allowGrouping={true}
           toolbar={["Search", "ExcelExport", "PdfExport"]}
         >
           <ColumnsDirective>
@@ -54,6 +56,7 @@ const SuiteRunningStatus = () => {
               Edit,
               PdfExport,
               Search,
+              Group
             ]}
           />
         </GridComponent>
