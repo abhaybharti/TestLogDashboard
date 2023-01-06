@@ -338,8 +338,19 @@ export const formateSuiteStartDate = (props) => {
 };
 export const formateSuiteEndDate = (props) => {
   let executionDate = "";
-  if (props.enddate !== null) {
+
+  if (props.enddate == null && typeof props.enddate == "undefined") {
+    executionDate = "";
+  } else if (
+    props.enddate !== null &&
+    typeof props.enddate !== "undefined" &&
+    props.enddate.includes("9998")
+  ) {
+    executionDate = "";
+  } else if (props.enddate !== null) {
     executionDate = moment(props.enddate).utc().format("DD-MM-YYYY hh:mm");
+  } else {
+    executionDate = "";
   }
   return <span>{executionDate}</span>;
 };
@@ -348,8 +359,18 @@ export const suiteRunDuration = (props) => {
   let enddate = new Date(props.enddate);
   let startdate = new Date(props.startdate);
   let hours = "";
-  if (enddate.toString().includes("9999")) {
+  if (typeof props.enddate == "undefined") {
     enddate = "";
+    hours = "";
+  } else if (
+    props.enddate !== null &&
+    typeof props.enddate !== "undefined" &&
+    props.enddate.includes("9998")
+  ) {
+    enddate = new Date();
+    hours =
+      "Running since " +
+      Number((enddate - startdate) / 1000 / (60 * 60)).toFixed(2);
   } else {
     hours = Number((enddate - startdate) / 1000 / (60 * 60)).toFixed(2);
   }
