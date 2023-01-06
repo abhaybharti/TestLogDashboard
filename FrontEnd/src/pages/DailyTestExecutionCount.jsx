@@ -2,6 +2,7 @@ import React from "react";
 
 import { useStateContext } from "../contexts/ContextProvider";
 
+import _ from "lodash";
 import {
   Category,
   ChartComponent,
@@ -40,7 +41,7 @@ const DailyTestExecutionCount = () => {
           />
           <SeriesCollectionDirective>
             <SeriesDirective
-              dataSource={dailyTestRunCount}
+              dataSource={_.sortBy(dailyTestRunCount, "executiondate")}
               xName="executiondate"
               yName="testcaseexecuted"
               name="Sales"

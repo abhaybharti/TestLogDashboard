@@ -54,6 +54,7 @@ import {
 import "../App.css";
 import { BASE_API_URL } from "../Utils/Config";
 import moment from "moment";
+import momenttimezone from "moment-timezone";
 
 export const gridOrderImage = (props) => (
   <div>
@@ -332,7 +333,14 @@ export const formateDate = (props) => {
 export const formateSuiteStartDate = (props) => {
   let executionDate = "";
   if (props.startdate !== null) {
-    executionDate = moment(props.startdate).utc().format("DD-MM-YYYY hh:mm");
+    //executionDate = moment(props.startdate).utc().format("DD-MM-YYYY hh:mm");
+    // executionDate = new Date(props.startdate).toLocaleString(undefined, {
+    //   timeZone: "Asia/Kolkata",
+    // });
+    const time = momenttimezone.tz(props.startdate);
+    const localtz = momenttimezone.tz.guess();
+    const date = time.clone().tz(localtz);
+    executionDate = momenttimezone(date).format("DD-MM-YYYY hh:mm");
   }
   return <span>{executionDate}</span>;
 };
@@ -355,6 +363,18 @@ export const formateSuiteEndDate = (props) => {
   return <span>{executionDate}</span>;
 };
 
+function msToTime(duration) {
+  var milliseconds = Math.floor((duration % 1000) / 100),
+    seconds = Math.floor((duration / 1000) % 60),
+    minutes = Math.floor((duration / (1000 * 60)) % 60),
+    hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+  // hours = hours < 10 ? "0" + hours : hours;
+  // minutes = minutes < 10 ? "0" + minutes : minutes;
+  // seconds = seconds < 10 ? "0" + seconds : seconds;
+
+  return hours + ":" + minutes;
+}
 export const suiteRunDuration = (props) => {
   let enddate = new Date(props.enddate);
   let startdate = new Date(props.startdate);
@@ -368,11 +388,13 @@ export const suiteRunDuration = (props) => {
     props.enddate.includes("9998")
   ) {
     enddate = new Date();
-    hours =
-      "Running since " +
-      Number((enddate - startdate) / 1000 / (60 * 60)).toFixed(2);
+    // hours =
+    //   "Running since " +
+    //   Number((enddate - startdate) / 1000 / (60 * 60)).toFixed(2);
+    hours = msToTime(enddate - startdate);
   } else {
-    hours = Number((enddate - startdate) / 1000 / (60 * 60)).toFixed(2);
+    // hours = Number((enddate - startdate) / 1000 / (60 * 60)).toFixed(2);
+    hours = msToTime(enddate - startdate);
   }
   return <span>{hours}</span>;
 };
