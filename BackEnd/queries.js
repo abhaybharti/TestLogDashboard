@@ -2,6 +2,8 @@ const { response, request } = require("express");
 require("log-timestamp");
 const Pool = require("pg").Pool;
 var types = require("pg").types;
+const ping = require("ping");
+const { deviceIpData } = require("./DeviceList");
 
 const pool = new Pool({
   user: "testloguser",
@@ -487,7 +489,7 @@ const updateSuiteRunningStatus = (request, response) => {
   let query = `select suite,status,env,startdate,enddate from suitestatus where status='Running' and subscriptionkey=${subscriptionkey};`;
 
   if (typeof startdate !== "undefined" && startdate.length !== 0) {
-    query = `UPDATE suitestatus SET status='${status}', startdate = '${startdate}' WHERE suite = '${suite}' and env='${env}' and subscriptionkey=${subscriptionkey};`;
+    query = `UPDATE suitestatus SET status='${status}', startdate = '${startdate}', enddate = '' WHERE suite = '${suite}' and env='${env}' and subscriptionkey=${subscriptionkey};`;
   }
 
   if (typeof enddate !== "undefined" && enddate.length !== 0) {
@@ -508,6 +510,86 @@ const updateSuiteRunningStatus = (request, response) => {
     console.log(error);
   }
   console.log("getSuiteSummary stop");
+};
+
+// const pingDevice = () => {
+//   let hostIPs = [];
+//   try {
+//     pool.query("select deviceip from devicestatus", (error, results) => {
+//       if (error) {
+//         console.log(error);
+//         throw error;
+//       }
+//       //response.status(200).json(results.rows);
+//       console.log(results.rows);
+//       for (let iLoop = 0; iLoop < results.rows.length; iLoop++) {
+//         hostIP = results.rows[iLoop].deviceip;
+//         console.log("hostIP", hostIP);
+//         hostIPs.push(hostIP);
+
+//         //console.log(results.rows);
+//       }
+
+//       if (typeof hostIPs !== "undefined") {
+//         hostIPs.forEach(function (host) {
+//           ping.sys.probe(host, function (isAlive) {
+//             var msg = isAlive
+//               ? "host " + host + " is alive"
+//               : "host " + host + " is dead";
+//             console.log(msg);
+//             if (msg.includes("alive")) {
+//               console.log("host by AB " + host + " is alive");
+
+//               let query = `update devicestatus set status = 'ONLINE' where deviceip='${host}'`;
+
+//               console.log(query);
+//               pool.query(query, (error, results) => {
+//                 if (error) {
+//                   console.log(error);
+//                   throw error;
+//                 }
+//                 response.status(200).json(results.rows);
+//                 //console.log(results.rows);
+//               });
+//             } else {
+//               let query = `update devicestatus set status = 'OFFLINE' where deviceip='${host}'`;
+//               console.log(query);
+//               pool.query(query, (error, results) => {
+//                 if (error) {
+//                   console.log(error);
+//                   throw error;
+//                 }
+//                 response.status(200).json(results.rows);
+//                 //console.log(results.rows);
+//               });
+//             }
+//           });
+//         });
+//       }
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+const pingDevice = () => {
+  try {
+    deviceIpData.forEach(
+      (value, key) =>
+        function (key) {
+          ping.sys.probe(key, function (isAlive) {
+            var msg = isAlive
+              ? "host " + key + " is alive"
+              : "host " + key + " is dead";
+            console.log(msg);
+            let result = msg.includes("alive");
+            console.log(result);
+          });
+        }
+    );
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 types.setTypeParser(1082, function (stringValue) {
@@ -534,4 +616,5 @@ module.exports = {
   getTestResultsForGivenDateRangeOrRunId,
   getSuiteRunningStatus,
   updateSuiteRunningStatus,
+  pingDevice,
 };

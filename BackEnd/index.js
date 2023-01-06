@@ -4,7 +4,6 @@ const { request } = require("express");
 const db = require("./queries");
 const cors = require("cors");
 const router = express.Router();
-const ping = require("ping");
 
 const app = express();
 const port = 5000;
@@ -26,25 +25,8 @@ app.get("/", (request, response) => {
   response.json({ info: "node.JS, Express and PostGres API" });
 });
 
-function pingDevice() {
-  var hosts = [
-    "10.253.32.192",
-    "10.253.32.180",
-    "10.253.32.212",
-    "10.253.61.29",
-  ];
-  hosts.forEach(function (host) {
-    ping.sys.probe(host, function (isAlive) {
-      var msg = isAlive
-        ? "host " + host + " is alive"
-        : "host " + host + " is dead";
-      console.log(msg);
-    });
-  });
-}
-
-// setInterval(pingDevice, 10800000);
-// setInterval(pingDevice, 1000);
+//setInterval(db.pingDevice, 60000 * 60);
+//setInterval(db.pingDevice, 10000);
 
 app.post("/getTestCaseExecution", db.getTestCaseExecution);
 app.post("/getDefectList", db.getDefectList);
