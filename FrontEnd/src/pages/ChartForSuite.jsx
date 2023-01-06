@@ -22,7 +22,7 @@ const ChartForSuite = () => {
         />
         <ReactSpeedometer
           maxValue={231}
-          value={getSuiteRunningCount("Running", "PRE")}
+          value={getSuiteRunningCount("Running", "PREPROD")}
           needleColor="steelblue"
           segmentColors={["#1e90ff"]}
           valueFormat={"d"}
