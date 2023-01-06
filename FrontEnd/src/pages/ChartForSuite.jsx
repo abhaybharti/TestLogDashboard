@@ -29,7 +29,7 @@ const ChartForSuite = () => {
           currentValueText="PreProd : ${value}"
         />
         <ReactSpeedometer
-          maxValue={231}
+          maxValue={52}
           value={getSuiteRunningCount("Running", "PRE")}
           needleColor="steelblue"
           segmentColors={["#e6e6fa"]}
@@ -37,7 +37,7 @@ const ChartForSuite = () => {
           currentValueText="PreProd CheckList : ${value}"
         />
         <ReactSpeedometer
-          maxValue={231}
+          maxValue={48}
           value={getSuiteRunningCount("Running", "PRE")}
           needleColor="steelblue"
           segmentColors={["#ffb6c1"]}
