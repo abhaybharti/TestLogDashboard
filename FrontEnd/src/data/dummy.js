@@ -347,8 +347,12 @@ export const formateSuiteEndDate = (props) => {
 export const suiteRunDuration = (props) => {
   let enddate = new Date(props.enddate);
   let startdate = new Date(props.startdate);
-
-  let hours = (enddate - startdate) / 1000 / (60 * 60);
+  let hours = "";
+  if (enddate.toString().includes("9999")) {
+    enddate = "";
+  } else {
+    hours = Number((enddate - startdate) / 1000 / (60 * 60)).toFixed(2);
+  }
   return <span>{hours}</span>;
 };
 
@@ -1060,8 +1064,7 @@ export const links = [
       {
         name: "scriptissue",
         text: "Script Issue",
-      }
-     
+      },
     ],
   },
   {
