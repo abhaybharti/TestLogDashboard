@@ -409,7 +409,7 @@ const getSuiteSummary = (request, response) => {
   console.log("getSuiteSummary start", request.body);
   const { subscriptionkey } = request.body;
   console.log("subscriptionkey", subscriptionkey);
-  let query = `select row_number() OVER () as id,runid, suite, count(CASE WHEN status = 'PASS' THEN status end) as PASS, count(CASE WHEN status = 'FAIL' THEN status end) as FAIL, count(CASE WHEN status = 'SKIPPED' THEN status end) as SKIP, count(CASE WHEN status = 'defect' THEN status end) as DEFECT, count(CASE WHEN status = 'script' THEN status end) as MAINTAINANCE from testcase where subscriptionkey=${subscriptionkey} and timestamp > now() - interval '48 hours' group by suite,runid;`;
+  let query = `select A.*,B.reportpath from (select row_number() OVER () as id,runid, suite, count(CASE WHEN status = 'PASS' THEN status end) as PASS, count(CASE WHEN status = 'FAIL' THEN status end) as FAIL, count(CASE WHEN status = 'SKIPPED' THEN status end) as SKIP, count(CASE WHEN status = 'defect' THEN status end) as DEFECT, count(CASE WHEN status = 'script' THEN status end) as MAINTAINANCE from testcase where subscriptionkey=${subscriptionkey} and timestamp > now() - interval '48 hours' group by suite,runid) as A LEFT JOIN suitestatus as B ON A.suite=B.suite;`;
   console.log(query);
   try {
     pool.query(query, (error, results) => {
@@ -462,7 +462,7 @@ const getTopFailureReason = (request, response) => {
 };
 
 const getSuiteRunningStatus = (request, response) => {
-  console.log("getSuiteSummary start", request.body);
+  console.log("getSuiteRunningStatus start", request.body);
   const { subscriptionkey } = request.body;
   console.log("subscriptionkey", subscriptionkey);
   let query = `select suite,status,env,startdate,enddate,reportpath from suitestatus where subscriptionkey=${subscriptionkey};`;
@@ -479,7 +479,7 @@ const getSuiteRunningStatus = (request, response) => {
   } catch (error) {
     console.log(error);
   }
-  console.log("getSuiteSummary stop");
+  console.log("getSuiteRunningStatus stop");
 };
 
 const updateSuiteRunningStatus = (request, response) => {

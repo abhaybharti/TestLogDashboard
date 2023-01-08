@@ -13,7 +13,7 @@ import {
   PdfExport,
   Inject,
   Search,
-  Group
+  Group,
 } from "@syncfusion/ej2-react-grids";
 
 import { suiteGrid } from "../data/dummy";
@@ -47,12 +47,13 @@ const Suite = () => {
     getTestCaseData,
     onDateFilterChangeForSuite,
     suiteCount,
+    getTestSuiteForGivenDateRangeOrRunId,
   } = useStateContext();
 
   return (
     <>
-      <div className="centerRow">
-        {/* <TextField
+      <div className="singleRow">
+        <TextField
           id="runid"
           label="Run ID"
           variant="outlined"
@@ -60,7 +61,7 @@ const Suite = () => {
           style={{ maxWidth: "250px", maxHeight: "35px" }}
           onChange={handleRunIdChange}
         />
-        <TooltipComponent content="Select Date range & get results">
+        <TooltipComponent content="Select Date range, get results for desired date range">
           <DateRangeFilter
             onChange={onDateFilterChangeForSuite}
             open={openDateRageFilter}
@@ -73,13 +74,25 @@ const Suite = () => {
             id="clearfilter"
             variant="contained"
             color="primary"
+            onClick={getTestSuiteForGivenDateRangeOrRunId}
+            // size="small"
+            style={{ maxWidth: "130px", maxHeight: "43px" }}
+          >
+            Get Results
+          </Button>
+        </TooltipComponent>
+        <TooltipComponent content="Clear current filter and fetch results test case executed in last 48 hour">
+          <Button
+            id="clearfilter"
+            variant="contained"
+            color="primary"
             onClick={getTestCaseData}
             // size="small"
             style={{ maxWidth: "130px", maxHeight: "43px" }}
           >
             Clear Filter
           </Button>
-        </TooltipComponent> */}
+        </TooltipComponent>
 
         <h4
           style={{
@@ -158,7 +171,7 @@ const Suite = () => {
               Edit,
               PdfExport,
               Search,
-              Group
+              Group,
             ]}
           />
         </GridComponent>

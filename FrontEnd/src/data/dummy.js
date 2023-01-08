@@ -83,6 +83,19 @@ const deleteDefectFromDb = async (suite, testCaseName, env) => {
   const response = await fetch(BASE_API_URL + "/deleteDefect", requestOptions);
 };
 
+const addLinkOfReportPath = (props) => {
+  return (
+    <a
+      href={props.reportpath}
+      target="_blank"
+      rel="noreferrer"
+      className="underline text-blue-600 hover:text-blue-800 visited:text-purple-900"
+    >
+      {props.suite}
+    </a>
+  );
+};
+
 export const deleteDefect = (props) => {
   let suite = props.suite;
   let testcasename = props.testcasename;
@@ -326,12 +339,13 @@ export const testHistorySimpleModal = (props) => {
 };
 
 export const formateDate = (props) => {
-  
-    let executionDate = momenttimezone(props.timestamp).format("DD-MM-YYYY hh:mm");
+  let executionDate = momenttimezone(props.timestamp).format(
+    "DD-MM-YYYY hh:mm"
+  );
   return <span>{executionDate}</span>;
 };
 
-function convertDateTimeIntoLocalFormat  (timestamp,targetFormat){
+function convertDateTimeIntoLocalFormat(timestamp, targetFormat) {
   const time = momenttimezone.tz(timestamp);
   const localtz = momenttimezone.tz.guess();
   const date = time.clone().tz(localtz);
@@ -341,7 +355,10 @@ function convertDateTimeIntoLocalFormat  (timestamp,targetFormat){
 export const formateSuiteStartDate = (props) => {
   let executionDate = "";
   if (props.startdate !== null) {
-    executionDate = convertDateTimeIntoLocalFormat(props.startdate,"DD-MM-YYYY hh:mm");
+    executionDate = convertDateTimeIntoLocalFormat(
+      props.startdate,
+      "DD-MM-YYYY hh:mm"
+    );
   }
   return <span>{executionDate}</span>;
 };
@@ -1458,6 +1475,7 @@ export const suiteGrid = [
     headerText: "Run ID",
     width: "150",
     textAlign: "Left",
+    template:addLinkOfReportPath
   },
   {
     field: "suite",
@@ -1516,12 +1534,14 @@ export const suiteGrid = [
   },
 ];
 
+
 export const suiteRunningStatusGrid = [
   {
     field: "suite",
     headerText: "Suite",
     width: "200",
     textAlign: "Left",
+    template: addLinkOfReportPath,
   },
   {
     field: "status",

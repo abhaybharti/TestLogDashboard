@@ -419,7 +419,7 @@ export const ContextProvider = ({ children }) => {
     if (endDate === "Invalid date") {
       endDate = startDate;
     }
-    getTestSuiteForGivenDateRangeOrRunId(startDate, endDate);
+    //getTestSuiteForGivenDateRangeOrRunId(startDate, endDate);
   };
 
   const handleRunIdChange = (event) => {
@@ -431,20 +431,31 @@ export const ContextProvider = ({ children }) => {
     console.log("TestExections->getTestSuiteForGivenDateRangeOrRunId() start");
     console.log(startDate, endDate);
     let queryPartOne =
-      "select * from testcase A INNER JOIN (select testid, max(timestamp) as timestamp from testcase group by testid) B ON  A.timestamp=B.timestamp AND A.testid=B.testid where A.timestamp between '" +
-      startDate +
-      "' and '" +
-      endDate +
-      "' and subscriptionkey=" +
+      "select A.*,B.reportpath from (select row_number() OVER () as id,runid, suite, count(CASE WHEN status = 'PASS' THEN status end) as PASS, count(CASE WHEN status = 'FAIL' THEN status end) as FAIL, count(CASE WHEN status = 'SKIPPED' THEN status end) as SKIP, count(CASE WHEN status = 'defect' THEN status end) as DEFECT, count(CASE WHEN status = 'script' THEN status end) as MAINTAINANCE from testcase where subscriptionkey=" +
       subscriptionkey;
-    let queryPartTwo = " order by A.timestamp desc;";
+    let queryPartTwo =
+      " group by suite,runid) as A LEFT JOIN suitestatus as B ON A.suite=B.suite;";
 
     if (typeof runid !== "undefined" && runid.length !== 0) {
       queryPartOne = queryPartOne + " and runid ='" + runid + "'";
     }
-    let query = queryPartOne + queryPartTwo;
-    console.log("final query", query);
 
+    if (
+      typeof firstDate !== "undefined" &&
+      firstDate.length !== 0 &&
+      typeof secondDate !== "undefined" &&
+      secondDate.length !== 0
+    ) {
+      queryPartOne =
+        queryPartOne +
+        " and executiondate between '" +
+        firstDate +
+        "' and '" +
+        secondDate +
+        "'";
+    }
+
+    let query = queryPartOne + queryPartTwo;
     console.log("final query", query);
     try {
       try {
@@ -520,6 +531,7 @@ export const ContextProvider = ({ children }) => {
         setTestCaseData(json);
         setSuiteData(json);
         setSuiteCount(suiteData.length);
+        getTestTotalPassFailCount();
       } catch (error) {
         console.log(error);
       }
@@ -561,11 +573,6 @@ export const ContextProvider = ({ children }) => {
     getTopFailureReason();
     getTestTotalPassFailCount();
   }, [testCaseData]);
-
-  // useEffect(() => {
-  //   getMaintenanceList();
-  //   getDefectList();
-  // }, [defectData, scriptIssueData]);
 
   return (
     <StateContext.Provider
@@ -629,6 +636,7 @@ export const ContextProvider = ({ children }) => {
         suiteRunningStatus,
         getTestResultsForGivenDateRangeOrRunId,
         getSuiteRunningCount,
+        getTestSuiteForGivenDateRangeOrRunId,
       }}
     >
       {children}
