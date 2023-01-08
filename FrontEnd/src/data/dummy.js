@@ -992,6 +992,7 @@ export const testcasedetailGrid = [
     headerText: "Suite",
     width: "200",
     textAlign: "Left",
+    template: addLinkOfReportPath,
   },
   {
     field: "testcasename",
@@ -1475,13 +1476,13 @@ export const suiteGrid = [
     headerText: "Run ID",
     width: "150",
     textAlign: "Left",
-    template:addLinkOfReportPath
   },
   {
     field: "suite",
     headerText: "Suite",
     width: "200",
     textAlign: "Left",
+    template: addLinkOfReportPath,
   },
   {
     field: "executed",
@@ -1533,7 +1534,6 @@ export const suiteGrid = [
     template: suiteMaintenance,
   },
 ];
-
 
 export const suiteRunningStatusGrid = [
   {
