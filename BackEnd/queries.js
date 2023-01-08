@@ -3,7 +3,9 @@ require("log-timestamp");
 const Pool = require("pg").Pool;
 var types = require("pg").types;
 const ping = require("ping");
-const { deviceIpData } = require("./DeviceList");
+const { deviceDetails } = require("./DeviceList");
+var Ping = require("ping-lite");
+const e = require("express");
 
 const pool = new Pool({
   user: "testloguser",
@@ -512,81 +514,61 @@ const updateSuiteRunningStatus = (request, response) => {
   console.log("getSuiteSummary stop");
 };
 
-// const pingDevice = () => {
-//   let hostIPs = [];
-//   try {
-//     pool.query("select deviceip from devicestatus", (error, results) => {
-//       if (error) {
-//         console.log(error);
-//         throw error;
-//       }
-//       //response.status(200).json(results.rows);
-//       console.log(results.rows);
-//       for (let iLoop = 0; iLoop < results.rows.length; iLoop++) {
-//         hostIP = results.rows[iLoop].deviceip;
-//         console.log("hostIP", hostIP);
-//         hostIPs.push(hostIP);
-
-//         //console.log(results.rows);
-//       }
-
-//       if (typeof hostIPs !== "undefined") {
-//         hostIPs.forEach(function (host) {
-//           ping.sys.probe(host, function (isAlive) {
-//             var msg = isAlive
-//               ? "host " + host + " is alive"
-//               : "host " + host + " is dead";
-//             console.log(msg);
-//             if (msg.includes("alive")) {
-//               console.log("host by AB " + host + " is alive");
-
-//               let query = `update devicestatus set status = 'ONLINE' where deviceip='${host}'`;
-
-//               console.log(query);
-//               pool.query(query, (error, results) => {
-//                 if (error) {
-//                   console.log(error);
-//                   throw error;
-//                 }
-//                 response.status(200).json(results.rows);
-//                 //console.log(results.rows);
-//               });
-//             } else {
-//               let query = `update devicestatus set status = 'OFFLINE' where deviceip='${host}'`;
-//               console.log(query);
-//               pool.query(query, (error, results) => {
-//                 if (error) {
-//                   console.log(error);
-//                   throw error;
-//                 }
-//                 response.status(200).json(results.rows);
-//                 //console.log(results.rows);
-//               });
-//             }
-//           });
-//         });
-//       }
-//     });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-const pingDevice = () => {
+const getDeviceHealth = () => {
+  console.log("getDeviceHealth start");
   try {
-    deviceIpData.forEach(
-      (value, key) =>
-        function (key) {
-          ping.sys.probe(key, function (isAlive) {
-            var msg = isAlive
-              ? "host " + key + " is alive"
-              : "host " + key + " is dead";
-            console.log(msg);
-            let result = msg.includes("alive");
-            console.log(result);
-          });
+    const arr = Array.from(deviceDetails, ([key, value]) => ({
+      [key]: value,
+    }));
+    return arr;
+  } catch (error) {
+    console.log(error);
+  }
+  console.log("getDeviceHealth stop");
+};
+
+const pingDevice = async () => {
+  try {
+    for (let [key, value] of deviceDetails) {
+      let env = "";
+      if (value.includes("QE")) {
+        env = "QE";
+      } else if (value.includes("PREPROD")) {
+        env = "PREPROD";
+      }
+      let device = "";
+      if (value.includes("Device")) {
+        device = "Device";
+      } else if (value.includes("SIMULATOR")) {
+        device = "SIMULATOR";
+      }
+
+      try {
+        let isAlive = await ping.promise.probe(key, { timeout: 10 });
+        // console.log("isAlive", isAlive);
+        let msg = isAlive.alive
+          ? "host " + key + " is alive"
+          : "host " + key + " is dead";
+        if (msg.includes("alive")) {
+          deviceDetails.set(
+            key,
+            "ONLINE|" + env + "|" + device + "|" + new Date()
+          );
+        } else {
+          deviceDetails.set(
+            key,
+            "OFFLINE|" + env + "|" + device + "|" + new Date()
+          );
         }
-    );
+        // console.log(msg);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    console.log("for loop complete");
+    for (let [key, value] of deviceDetails) {
+      console.log(key, value);
+    }
   } catch (error) {
     console.log(error);
   }
@@ -617,4 +599,5 @@ module.exports = {
   getSuiteRunningStatus,
   updateSuiteRunningStatus,
   pingDevice,
+  getDeviceHealth,
 };

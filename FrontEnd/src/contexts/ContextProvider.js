@@ -31,6 +31,7 @@ const initialState = {
   dailyTestRunCount: [{}],
   suiteRunningStatus: [{}],
   pageSettings: { pageSize: 50 },
+  deviceHealth: [{}],
 };
 
 export const ContextProvider = ({ children }) => {
@@ -77,6 +78,7 @@ export const ContextProvider = ({ children }) => {
   );
   const [firstDate, setFirstDate] = useState();
   const [secondDate, setSecondDate] = useState();
+  const [deviceHealth, setDeviceHealth] = useState(initialState.deviceHealth);
 
   const verifyLoginStatus = () => {
     if (localStorage.getItem("loginStatus") == "true") {
@@ -379,6 +381,26 @@ export const ContextProvider = ({ children }) => {
     }
   };
 
+  const getDeviceHealth = async () => {
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subscriptionkey: subscriptionkey,
+        }),
+      };
+      const response = await fetch(
+        BASE_API_URL + "/getDeviceHealth",
+        requestOptions
+      );
+      const json = await response.json();
+      setDeviceHealth(json);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const onDateFilterChange = (ranges) => {
     let startDate;
     let endDate;
@@ -555,6 +577,20 @@ export const ContextProvider = ({ children }) => {
     return suiteRunningCount;
   };
 
+  const getDeviceHealthCount = (status, env, devicetype) => {
+    let suiteRunningCount = 0;
+    for (let iLoop = 0; iLoop < deviceHealth.length; iLoop++) {
+      if (
+        deviceHealth[iLoop].status === status &&
+        deviceHealth[iLoop].env === env &&
+        deviceHealth[iLoop].devicetype === devicetype
+      ) {
+        suiteRunningCount++;
+      }
+    }
+    return suiteRunningCount;
+  };
+
   useEffect(() => {
     verifyLoginStatus();
     if (loginStatus) {
@@ -563,6 +599,7 @@ export const ContextProvider = ({ children }) => {
       getTestTotalPassFailCount();
       getDailyTestExecutionCount();
       getSuiteRunningStatus();
+      getDeviceHealth();
     }
   }, [loginStatus, subscriptionkey]);
 
@@ -637,6 +674,9 @@ export const ContextProvider = ({ children }) => {
         getTestResultsForGivenDateRangeOrRunId,
         getSuiteRunningCount,
         getTestSuiteForGivenDateRangeOrRunId,
+        deviceHealth,
+        getDeviceHealth,
+        getDeviceHealthCount,
       }}
     >
       {children}

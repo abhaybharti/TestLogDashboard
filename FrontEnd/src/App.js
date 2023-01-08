@@ -40,6 +40,8 @@ import Home from "./pages/Home";
 import Defects from "./pages/Defects";
 import ScriptIssues from "./pages/ScriptIssues";
 import SuiteRunningStatus from "./pages/SuiteRunningStatus";
+import DeviceHealth from "./pages/DeviceHealth";
+import SimulatorHealth from "./pages/SimulatorHealth";
 
 const App = () => {
   // const activeMenu = true;
@@ -152,6 +154,8 @@ const App = () => {
                   <Route path="/testcases" element={<TestCaseExecution />} />
                   <Route path="/defects" element={<Defects />} />
                   <Route path="/scriptissue" element={<ScriptIssues />} />
+                  <Route path="/deviceinfo" element={<DeviceHealth />} />
+                  <Route path="/simulator" element={<SimulatorHealth />} />
                   {/* Apps */}
                   <Route path="/Tasks" element={<Kanban />} />
                   <Route path="/schedule" element={<Calendar />} />

@@ -1559,6 +1559,40 @@ export const suiteGrid = [
   },
 ];
 
+export const deviceHealthGrid = [
+  {
+    field: "ip",
+    headerText: "Device IP",
+    width: "200",
+    textAlign: "Left",    
+  },
+  {
+    field: "status",
+    headerText: "Status",
+    width: "200",
+    textAlign: "Left",    
+  },
+  {
+    field: "env",
+    headerText: "Env",
+    width: "200",
+    textAlign: "Left",    
+  },
+  {
+    field: "devicetype",
+    headerText: "Type",
+    width: "200",
+    textAlign: "Left",    
+  },{
+    field: "timestamp",
+    headerText: "Last Cheked",
+    width: "200",
+    textAlign: "Left", 
+    template:formateDate
+
+  },
+  
+]
 export const suiteRunningStatusGrid = [
   {
     field: "suite",

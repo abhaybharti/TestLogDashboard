@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const { request } = require("express");
 const db = require("./queries");
 const cors = require("cors");
+const { deviceDetails } = require("./DeviceList");
+
 const router = express.Router();
 
 const app = express();
@@ -25,8 +27,8 @@ app.get("/", (request, response) => {
   response.json({ info: "node.JS, Express and PostGres API" });
 });
 
-//setInterval(db.pingDevice, 60000 * 60);
-//setInterval(db.pingDevice, 10000);
+setInterval(db.pingDevice, 3600000);
+//setInterval(db.getDeviceHealth, 1000);
 
 app.post("/getTestCaseExecution", db.getTestCaseExecution);
 app.post("/getDefectList", db.getDefectList);
@@ -55,6 +57,17 @@ app.post(
 );
 app.post("/getSuiteRunningStatus", db.getSuiteRunningStatus);
 app.post("/updateSuiteRunningStatus", db.updateSuiteRunningStatus);
+app.post("/getDeviceHealth", (req, res) => {
+  console.log("getDeviceHealth start");
+  const arr = Array.from(deviceDetails, ([key, value]) => ({
+    ip: key,
+    status: value.split("|")[0],
+    env: value.split("|")[1],
+    devicetype: value.split("|")[2],
+    tiemstamp: value.split("|")[3],
+  }));
+  res.send(arr);
+});
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);
