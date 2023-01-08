@@ -96,6 +96,30 @@ const addLinkOfReportPath = (props) => {
   );
 };
 
+const addLinkOfReportPathInTest = (props) => {
+  let report = "";
+  let resultPath = "";
+
+  if (
+    props.reportpath.length !== 0 &&
+    props.reportpath !== null &&
+    typeof props.reportpath !== "undefined"
+  ) {
+    report = props.reportpath.split("Results");
+    resultPath = report[0] + "/Results/";
+  }
+  return (
+    <a
+      href={resultPath}
+      target="_blank"
+      rel="noreferrer"
+      className="underline text-blue-600 hover:text-blue-800 visited:text-purple-900"
+    >
+      {props.suite}
+    </a>
+  );
+};
+
 export const deleteDefect = (props) => {
   let suite = props.suite;
   let testcasename = props.testcasename;
@@ -992,7 +1016,7 @@ export const testcasedetailGrid = [
     headerText: "Suite",
     width: "200",
     textAlign: "Left",
-    template: addLinkOfReportPath,
+    template: addLinkOfReportPathInTest,
   },
   {
     field: "testcasename",
