@@ -48,6 +48,7 @@ const Suite = () => {
     onDateFilterChangeForSuite,
     suiteCount,
     getTestSuiteForGivenDateRangeOrRunId,
+    getTestSuiteData,
   } = useStateContext();
 
   return (
@@ -86,7 +87,7 @@ const Suite = () => {
             id="clearfilter"
             variant="contained"
             color="primary"
-            onClick={getTestCaseData}
+            onClick={getTestSuiteData}
             // size="small"
             style={{ maxWidth: "130px", maxHeight: "43px" }}
           >
