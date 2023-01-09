@@ -467,7 +467,7 @@ const getSuiteRunningStatus = (request, response) => {
   console.log("getSuiteRunningStatus start", request.body);
   const { subscriptionkey } = request.body;
   console.log("subscriptionkey", subscriptionkey);
-  let query = `select suite,status,env,startdate,enddate,reportpath from suitestatus where subscriptionkey=${subscriptionkey};`;
+  let query = `select suite,status,env,startdate,enddate,reportpath from suitestatus where subscriptionkey=${subscriptionkey} and startdate is NOT NULL order by startdate DESC;`;
   console.log(query);
   try {
     pool.query(query, (error, results) => {
