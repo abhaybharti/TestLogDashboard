@@ -23,12 +23,11 @@ import ReactSpeedometer from "react-d3-speedometer";
 import "../App.css";
 import ChartForSuite from "./ChartForSuite";
 import ChartForDeviceHealth from "./ChartForDeviceHealth";
-import ChartForSimulatorHealth from "./ChartForSimulator";
+import ChartForSimulatorHealth from "./ChartForSimulatorHealth";
 
 const SimulatorHealth = () => {
   const { deviceHealth } = useStateContext();
   const pageSettings = { pageSize: 50 };
-  console.log("aaaaaaaaaaaaaaa", typeof deviceHealth);
 
   const tempDeviceHealth = deviceHealth.filter(
     (deviceHealt) => deviceHealt.devicetype === "SIMULATOR"

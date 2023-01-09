@@ -5,13 +5,13 @@ import TopFailure from "./TopFailure";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Header } from "../components";
 import ChartForSuite from "./ChartForSuite";
+import ChartForDeviceHealth from "./ChartForDeviceHealth";
+import ChartForSimulatorHealth from "./ChartForSimulatorHealth";
 
 const Home = () => {
   const { total, pass, fail, skip } = useStateContext();
   return (
     <div className="mt-12">
-      <ChartForSuite />
-      <hr />
       <div>
         <div className="singleRow">
           <Header title="Test Summary" />
@@ -56,6 +56,12 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <ChartForSuite />
+      <hr />
+      <ChartForDeviceHealth />
+      <hr />
+      <ChartForSimulatorHealth />
+      <hr />
 
       <DailyTestExecutionCount />
       <TopFailure />

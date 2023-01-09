@@ -9,7 +9,7 @@ const ChartForSuite = () => {
   return (
     <div>
       <div className="singleRow">
-        <Header title="Running Suite Info" />
+        <Header title="Suite Execution Live Stats" />
       </div>
       <div className="chartRow">
         <ReactSpeedometer
