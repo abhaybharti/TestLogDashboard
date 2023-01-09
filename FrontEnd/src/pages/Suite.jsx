@@ -49,6 +49,7 @@ const Suite = () => {
     suiteCount,
     getTestSuiteForGivenDateRangeOrRunId,
     getTestSuiteData,
+    getResultsForTestAndSuite,
   } = useStateContext();
 
   return (

@@ -420,8 +420,6 @@ export const ContextProvider = ({ children }) => {
     }
     setFirstDate(startDate);
     setSecondDate(endDate);
-    //getTestResultsForGivenDateRangeOrRunId(startDate, endDate);
-    //getTestSuiteForGivenDateRangeOrRunId(startDate, endDate);
   };
 
   const onDateFilterChangeForSuite = (ranges) => {
@@ -447,6 +445,11 @@ export const ContextProvider = ({ children }) => {
   const handleRunIdChange = (event) => {
     console.log(event.target.value);
     setRunIdName(event.target.value);
+  };
+
+  const getResultsForTestAndSuite = async () => {
+    getTestResultsForGivenDateRangeOrRunId();
+    getTestSuiteForGivenDateRangeOrRunId();
   };
 
   const getTestSuiteForGivenDateRangeOrRunId = async (startDate, endDate) => {
@@ -553,7 +556,7 @@ export const ContextProvider = ({ children }) => {
         setTestCaseData(json);
         setSuiteData(json);
         setSuiteCount(suiteData.length);
-        getTestTotalPassFailCount();
+        getTestSuiteForGivenDateRangeOrRunId();
       } catch (error) {
         console.log(error);
       }
@@ -596,10 +599,10 @@ export const ContextProvider = ({ children }) => {
     if (loginStatus) {
       getTestCaseData();
       getTestSuiteData();
-      getTestTotalPassFailCount();
       getDailyTestExecutionCount();
       getSuiteRunningStatus();
       getDeviceHealth();
+      getTestTotalPassFailCount();
     }
   }, [loginStatus, subscriptionkey]);
 
