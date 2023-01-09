@@ -16,7 +16,7 @@ const ChartForSuite = () => {
           maxValue={84}
           value={getSuiteRunningCount("Running", "QE")}
           needleColor="steelblue"
-          segmentColors={["#8fbc8f"]}
+          segmentColors={["#F0F6F0", "#C5DDC5", "#A5C9A5"]}
           valueFormat={"d"}
           currentValueText="QE : ${value}"
         />
@@ -24,7 +24,7 @@ const ChartForSuite = () => {
           maxValue={231}
           value={getSuiteRunningCount("Running", "PREPROD")}
           needleColor="steelblue"
-          segmentColors={["#1e90ff"]}
+          segmentColors={["#e6f5ff", "#80ccff", "#1e90ff", "#004d80"]}
           valueFormat={"d"}
           currentValueText="PreProd : ${value}"
         />

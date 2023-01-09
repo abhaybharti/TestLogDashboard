@@ -16,7 +16,7 @@ const ChartForSimulatorHealth = () => {
           maxValue={20}
           value={getDeviceHealthCount("ONLINE", "QE", "SIMULATOR")}
           needleColor="steelblue"
-          segmentColors={["#8fbc8f"]}
+          segmentColors={["#F0F6F0", "#C5DDC5", "#A5C9A5"]}
           valueFormat={"d"}
           currentValueText="QE : ${value}"
         />

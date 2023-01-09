@@ -16,7 +16,7 @@ const ChartForDeviceHealth = () => {
           maxValue={20}
           value={getDeviceHealthCount("ONLINE", "QE", "Device")}
           needleColor="steelblue"
-          segmentColors={["#8fbc8f"]}
+          segmentColors={["#F0F6F0", "#C5DDC5", "#A5C9A5"]}
           valueFormat={"d"}
           currentValueText="QE : ${value}"
         />
