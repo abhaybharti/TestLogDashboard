@@ -64,7 +64,7 @@ app.post("/getDeviceHealth", (req, res) => {
     status: value.split("|")[0],
     env: value.split("|")[1],
     devicetype: value.split("|")[2],
-    tiemstamp: value.split("|")[3],
+    timestamp: value.split("|")[3],
   }));
   res.send(arr);
 });
