@@ -83,6 +83,36 @@ const deleteDefectFromDb = async (suite, testCaseName, env) => {
   const response = await fetch(BASE_API_URL + "/deleteDefect", requestOptions);
 };
 
+export const deviceHealthStatus = (props) => {
+  if (typeof props !== "undefined") {
+    if (props.status === "OFFLINE") {
+      return (
+        <button
+          type="button"
+          style={{ background: "#ff0000" }}
+          className="text-white py-1 px-2 capitalize rounded-2xl text-md"
+        >
+          <a href={props.reportpath} target="_blank" rel="noreferrer">
+            {props.status}
+          </a>
+        </button>
+      );
+    } else if (props.status === "ONLINE") {
+      return (
+        <button
+          type="button"
+          style={{ background: "#8BE78B" }}
+          className="text-black py-1 px-2 capitalize rounded-2xl text-md"
+        >
+          <a href={props.reportpath} target="_blank" rel="noreferrer">
+            {props.status}
+          </a>
+        </button>
+      );
+    }
+  }
+};
+
 const addLinkOfReportPath = (props) => {
   return (
     <a
@@ -1571,6 +1601,7 @@ export const deviceHealthGrid = [
     headerText: "Status",
     width: "200",
     textAlign: "Left",
+    template:deviceHealthStatus
   },
   {
     field: "env",
