@@ -460,9 +460,6 @@ export const suiteRunDuration = (props) => {
     props.enddate.includes("9998")
   ) {
     enddate = new Date();
-    // hours =
-    //   "Running since " +
-    //   Number((enddate - startdate) / 1000 / (60 * 60)).toFixed(2);
     hours = msToTime(enddate - startdate);
   } else {
     // hours = Number((enddate - startdate) / 1000 / (60 * 60)).toFixed(2);
@@ -1591,6 +1588,18 @@ export const suiteGrid = [
 
 export const deviceHealthGrid = [
   {
+    field: "devicename",
+    headerText: "Device Name",
+    width: "200",
+    textAlign: "Left",
+  },
+  {
+    field: "suitename",
+    headerText: "Suite",
+    width: "200",
+    textAlign: "Left",
+  },
+  {
     field: "ip",
     headerText: "Device IP",
     width: "200",
@@ -1601,7 +1610,7 @@ export const deviceHealthGrid = [
     headerText: "Status",
     width: "200",
     textAlign: "Left",
-    template:deviceHealthStatus
+    template: deviceHealthStatus,
   },
   {
     field: "env",
